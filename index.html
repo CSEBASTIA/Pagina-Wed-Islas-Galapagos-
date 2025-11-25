@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isabela Tours - Galápagos</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS propio -->
+    <link rel="stylesheet" href="../css/estilos.css">
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-cyan-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo (Clickeable para ir a Inicio) -->
+                <div class="flex items-center gap-2 cursor-pointer" onclick="showHome()">
+                    <i data-lucide="anchor" class="h-8 w-8 text-cyan-600"></i>
+                    <span class="text-2xl font-bold text-gray-800 tracking-tight">Isabela<span class="text-cyan-600">Tours</span></span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8">
+                    <button onclick="showHome()" class="text-gray-600 hover:text-cyan-600 font-medium transition focus:outline-none">Inicio</button>
+                    <button onclick="showTours()" class="text-gray-600 hover:text-cyan-600 font-medium transition focus:outline-none">Tours</button>
+                    <button onclick="showBlog()" class="text-gray-600 hover:text-cyan-600 font-medium transition focus:outline-none">Blog</button>
+                    <button onclick="showContact()" class="text-gray-600 hover:text-cyan-600 font-medium transition focus:outline-none">Contacto</button>
+                </div>
+                
+                <!-- Auth & Bookings Buttons -->
+                <div class="hidden md:flex items-center gap-3" id="desktop-auth-container">
+                    <!-- Injected by JS based on auth state -->
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-600">
+                        <i data-lucide="menu" class="h-7 w-7"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu (Hidden by default) -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-gray-200 p-4 absolute w-full z-40 shadow-lg">
+        <div class="flex flex-col space-y-4">
+            <button onclick="showHome(); toggleMobileMenu()" class="text-left text-gray-800 font-medium">Inicio</button>
+            <button onclick="showTours(); toggleMobileMenu()" class="text-left text-gray-800 font-medium">Tours & Galería</button>
+            <button onclick="showBlog(); toggleMobileMenu()" class="text-left text-gray-800 font-medium">Blog - Islas Secretas</button>
+            <button onclick="showContact(); toggleMobileMenu()" class="text-left text-gray-800 font-medium">Contacto</button>
+            <div id="mobile-auth-container" class="flex flex-col gap-2 pt-2 border-t border-gray-100">
+                <!-- Injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= VIEW: HOME ================= -->
+    <div id="home-view">
+        <!-- Hero Section -->
+        <div class="relative h-[600px] flex items-center justify-center overflow-hidden">
+            <div class="absolute inset-0 z-0">
+                <img 
+                    src="https://images.unsplash.com/photo-1612435282688-c670e4a80775?auto=format&fit=crop&q=80&w=1920" 
+                    alt="Galapagos Background" 
+                    class="w-full h-full object-cover"
+                />
+                <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60"></div>
+            </div>
+            
+            <div class="relative z-10 text-center px-4 max-w-5xl mx-auto mt-8 w-full">
+                <span class="inline-block py-1 px-3 rounded-full bg-cyan-500/20 text-cyan-200 border border-cyan-400/30 text-sm font-semibold mb-4 backdrop-blur-sm">
+                    Descubre el Paraíso Encantado
+                </span>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight shadow-sm drop-shadow-lg">
+                    Explora la Magia de <br/> Isla Isabela
+                </h1>
+                <p class="text-lg md:text-xl text-gray-100 mb-10 max-w-2xl mx-auto drop-shadow-md">
+                    Vive experiencias únicas en los islotes más exclusivos de Galápagos.
+                </p>
+                
+                <!-- Modern Centered Search Bar -->
+                <div class="bg-white p-2 md:p-3 rounded-3xl md:rounded-full shadow-2xl max-w-4xl mx-auto flex flex-col md:flex-row gap-2 items-center transform hover:scale-[1.01] transition duration-300">
+                    
+                    <!-- Date Field -->
+                    <div class="flex-1 w-full md:w-auto px-4 py-2 group cursor-pointer hover:bg-gray-50 rounded-full transition">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-cyan-50 p-3 rounded-full text-cyan-600 shrink-0">
+                                <i data-lucide="calendar" class="h-6 w-6"></i>
+                            </div>
+                            <div class="flex flex-col text-left w-full">
+                                <label class="text-xs font-bold text-gray-400 tracking-wider uppercase mb-0.5">Fecha</label>
+                                <input type="date" class="text-gray-800 font-bold outline-none bg-transparent text-sm cursor-pointer w-full p-0 border-none focus:ring-0" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Divider (Desktop) -->
+                    <div class="hidden md:block w-px h-10 bg-gray-200 mx-2"></div>
+                    <!-- Divider (Mobile) -->
+                    <div class="md:hidden w-full h-px bg-gray-100 my-1"></div>
+
+                    <!-- Guests Field -->
+                    <div class="flex-1 w-full md:w-auto px-4 py-2 group cursor-pointer hover:bg-gray-50 rounded-full transition">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-cyan-50 p-3 rounded-full text-cyan-600 shrink-0">
+                                <i data-lucide="users" class="h-6 w-6"></i>
+                            </div>
+                            <div class="flex flex-col text-left w-full relative">
+                                <label class="text-xs font-bold text-gray-400 tracking-wider uppercase mb-0.5">Viajeros</label>
+                                <select class="text-gray-800 font-bold outline-none bg-transparent text-sm cursor-pointer w-full appearance-none p-0 border-none focus:ring-0 z-10 relative">
+                                    <option>2 Adultos</option>
+                                    <option>1 Adulto</option>
+                                    <option>Familia (4)</option>
+                                    <option>Grupo (5+)</option>
+                                </select>
+                                <!-- Custom Arrow -->
+                                <div class="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                                    <i data-lucide="chevron-down" class="h-4 w-4"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search Button -->
+                    <div class="p-1 w-full md:w-auto">
+                        <button class="bg-cyan-600 hover:bg-cyan-700 text-white h-14 w-full md:w-14 rounded-2xl md:rounded-full shadow-lg hover:shadow-cyan-500/50 transition-all duration-300 flex justify-center items-center">
+                            <i data-lucide="search" class="h-6 w-6"></i>
+                            <span class="md:hidden ml-2 font-bold">Buscar Aventura</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Info Section: Galapagos Description -->
+        <section class="bg-white py-16 border-b border-gray-100">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <span class="text-cyan-600 font-bold tracking-wider text-sm uppercase">El Archipiélago Encantado</span>
+                    <h2 class="text-3xl font-bold text-gray-900 mt-2 mb-4">Galápagos: Un Laboratorio Viviente</h2>
+                    <p class="text-gray-600 text-lg leading-relaxed">
+                        Las Islas Galápagos son un patrimonio natural de la humanidad, famosas por inspirar la teoría de la evolución de Darwin. Este archipiélago volcánico es uno de los lugares con mayor biodiversidad y endemismo del planeta.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Card 1: Fauna -->
+                    <div class="bg-gray-50 p-8 rounded-2xl hover:shadow-lg transition text-center group">
+                        <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition">
+                            <i data-lucide="bug" class="w-8 h-8 text-orange-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Fauna Única</h3>
+                        <p class="text-gray-600 text-sm">
+                            Hogar de las famosas tortugas gigantes centenarias, iguanas marinas prehistóricas y piqueros de patas azules que no temen a la presencia humana.
+                        </p>
+                    </div>
+
+                    <!-- Card 2: Flora -->
+                    <div class="bg-gray-50 p-8 rounded-2xl hover:shadow-lg transition text-center group">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition">
+                            <i data-lucide="flower-2" class="w-8 h-8 text-green-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Flora Adaptativa</h3>
+                        <p class="text-gray-600 text-sm">
+                            Desde los bosques de Scalesia en las tierras altas hasta los cactus de lava y manglares rojos en la costa, la vegetación ha evolucionado para sobrevivir.
+                        </p>
+                    </div>
+
+                    <!-- Card 3: Marine Life -->
+                    <div class="bg-gray-50 p-8 rounded-2xl hover:shadow-lg transition text-center group">
+                        <div class="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition">
+                            <i data-lucide="waves" class="w-8 h-8 text-cyan-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Reserva Marina</h3>
+                        <p class="text-gray-600 text-sm">
+                            Nuestras aguas son un santuario para tiburones martillo, mantarrayas gigantes, ballenas y delfines. Un paraíso mundial para el snorkel y buceo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Home (Exploration) -->
+        <main class="max-w-7xl mx-auto px-4 py-16">
+            
+            <!-- Section Header -->
+            <div class="flex flex-col md:flex-row justify-between items-end mb-10">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Nuestros Destinos Exclusivos</h2>
+                    <p class="text-gray-600">Las joyas ocultas de Isabela que debes conocer.</p>
+                </div>
+                <div class="hidden md:flex gap-2 mt-4 md:mt-0">
+                    <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition text-sm font-medium">Todos</button>
+                    <button class="px-4 py-2 bg-white border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition text-sm font-medium">Snorkel</button>
+                    <button class="px-4 py-2 bg-white border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition text-sm font-medium">Aventura</button>
+                </div>
+            </div>
+
+            <!-- Tours Grid (Populated by JS) -->
+            <div id="tours-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Tour cards will be injected here -->
+            </div>
+
+            <!-- Feature Section -->
+            <div class="mt-24 bg-white rounded-3xl p-8 md:p-12 shadow-xl flex flex-col md:flex-row gap-12 items-center overflow-hidden relative">
+               <div class="absolute top-0 right-0 w-64 h-64 bg-cyan-50 rounded-full -mr-16 -mt-16 z-0"></div>
+               <div class="relative z-10 flex-1">
+                 <span class="text-cyan-600 font-bold tracking-wider text-sm uppercase mb-2 block">¿Por qué elegir Mermelada20?</span>
+                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Experiencia Local Auténtica</h2>
+                 <div class="space-y-4">
+                   <div class="flex gap-4">
+                     <div class="w-12 h-12 bg-cyan-100 rounded-full flex items-center justify-center text-cyan-600 shrink-0">
+                       <i data-lucide="users" class="h-6 w-6"></i>
+                     </div>
+                     <div>
+                       <h4 class="font-bold text-gray-800">Guías Nativos</h4>
+                       <p class="text-sm text-gray-600">Nacimos aquí, conocemos cada corriente y cada rincón secreto de las islas.</p>
+                     </div>
+                   </div>
+                   <div class="flex gap-4">
+                     <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 shrink-0">
+                       <i data-lucide="map-pin" class="h-6 w-6"></i>
+                     </div>
+                     <div>
+                       <h4 class="font-bold text-gray-800">Destinos Preservados</h4>
+                       <p class="text-sm text-gray-600">Te llevamos a los sitios más prístinos con el máximo respeto por la naturaleza.</p>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+               <div class="flex-1 w-full h-64 md:h-auto relative">
+                 <img 
+                   src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800" 
+                   alt="Playa Isabela" 
+                   class="w-full h-full object-cover rounded-2xl shadow-lg"
+                 />
+               </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ================= VIEW: TOURS (INFO + GALLERY) ================= -->
+    <div id="tours-view" class="hidden-section fade-in-up">
+        <div class="bg-white">
+            <!-- Personal Info Section -->
+            <div class="max-w-7xl mx-auto px-4 py-16 md:py-24">
+                <div class="flex flex-col md:flex-row items-center gap-12">
+                    <div class="flex-1 relative">
+                        <div class="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/3] group">
+                            <img src="https://images.unsplash.com/photo-1520939817895-060bdaf4de1e?auto=format&fit=crop&q=80&w=800" alt="Lancha Mermelada20" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                            <div class="absolute bottom-6 left-6 text-white">
+                                <p class="font-bold text-xl">Mermelada20</p>
+                                <p class="text-cyan-200 text-sm">Nuestra Lancha Insignia</p>
+                            </div>
+                        </div>
+                        <!-- Decorative circle -->
+                        <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-cyan-100 rounded-full -z-10"></div>
+                    </div>
+                    
+                    <div class="flex-1 space-y-6">
+                        <span class="inline-block py-1 px-3 rounded-full bg-cyan-100 text-cyan-700 text-xs font-bold uppercase tracking-wide">
+                            Tu Anfitrión Local
+                        </span>
+                        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+                            ¡Hola! Soy <span class="text-cyan-600">Sebastián</span>.
+                        </h2>
+                        <p class="text-lg text-gray-600 leading-relaxed">
+                            Nací y crecí aquí, en la maravillosa Isla Isabela. Mi pasión es compartir los secretos mejor guardados de mi hogar contigo.
+                        </p>
+                        <div class="bg-gray-50 p-6 rounded-2xl border-l-4 border-cyan-500">
+                            <h3 class="text-xl font-bold text-gray-800 mb-2 flex items-center gap-2">
+                                <i data-lucide="ship" class="w-5 h-5 text-cyan-600"></i> Mermelada20
+                            </h3>
+                            <p class="text-gray-600 text-sm">
+                                Mi lancha rápida, la <strong>"Mermelada20"</strong>, está equipada para brindarte confort y seguridad. Ofrecemos tours diarios con total disponibilidad y flexibilidad. ¡Nosotros nos encargamos de todo para que tú solo disfrutes!
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-6 pt-4">
+                            <div class="text-center">
+                                <p class="text-3xl font-bold text-gray-900">10+</p>
+                                <p class="text-xs text-gray-500 uppercase">Años Experiencia</p>
+                            </div>
+                            <div class="w-px h-10 bg-gray-200"></div>
+                            <div class="text-center">
+                                <p class="text-3xl font-bold text-gray-900">100%</p>
+                                <p class="text-xs text-gray-500 uppercase">Clientes Felices</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gallery Section -->
+            <div class="bg-gray-50 py-16">
+                <div class="max-w-7xl mx-auto px-4">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold text-gray-900">Nuestra Galería</h2>
+                        <p class="text-gray-600 mt-2">Momentos inolvidables a bordo de la Mermelada20 y en Isabela.</p>
+                    </div>
+                    <div class="gallery-grid">
+                        <div class="gallery-item wide"><img src="https://images.unsplash.com/photo-1544552866-d3ed42536cfd?auto=format&fit=crop&q=80&w=800" alt="Túneles"></div>
+                        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1582967788606-a171f1080cae?auto=format&fit=crop&q=80&w=800" alt="Tintoreras"></div>
+                        <div class="gallery-item tall"><img src="https://images.unsplash.com/photo-1504233529578-6d46b50d347e?auto=format&fit=crop&q=80&w=800" alt="Sierra Negra"></div>
+                        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=800" alt="León Marino"></div>
+                        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1621863603286-e71b5c775370?auto=format&fit=crop&q=80&w=800" alt="Cuatro Hermanos"></div>
+                        <div class="gallery-item wide"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800" alt="Playa"></div>
+                        <div class="gallery-item"><img src="https://images.unsplash.com/photo-1588392382834-a891154bca4d?auto=format&fit=crop&q=80&w=800" alt="Tortuga"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= VIEW: BLOG ================= -->
+    <div id="blog-view" class="hidden-section fade-in-up">
+        <!-- Blog Header -->
+        <div class="bg-cyan-900 py-20 px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-3xl md:text-5xl font-bold text-white mb-4">Explorando lo Desconocido</h1>
+                <p class="text-cyan-100 text-lg">Descubre las joyas ocultas de Isla Isabela y sus alrededores. Guías completas de los Cuatro Hermanos, Cormorant y la mítica Isla Tortuga.</p>
+            </div>
+        </div>
+
+        <div class="max-w-5xl mx-auto px-4 py-16 space-y-24">
+            <!-- Blog Posts -->
+             <article class="flex flex-col md:flex-row gap-8 items-center">
+                <div class="flex-1 w-full h-[400px] rounded-2xl overflow-hidden shadow-xl relative group">
+                    <img src="https://images.unsplash.com/photo-1621863603286-e71b5c775370?auto=format&fit=crop&q=80&w=800" alt="Cuatro Hermanos" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                    <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-lg">
+                        <p class="font-bold text-cyan-800">Islotes Cuatro Hermanos</p>
+                    </div>
+                </div>
+                <div class="flex-1 space-y-4">
+                    <span class="text-cyan-600 font-bold tracking-wider text-sm uppercase">Snorkel Avanzado</span>
+                    <h2 class="text-3xl font-bold text-gray-900">Tour Cuatro Hermanos</h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        Conocidos localmente como "Los 4 Hermanos", este grupo de islotes es un paraíso para el buceo.
+                    </p>
+                    <button onclick="openModal(101, true)" class="inline-flex items-center gap-2 text-cyan-600 font-bold hover:text-cyan-800 transition mt-2">
+                        Consultar disponibilidad <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </article>
+
+            <article class="flex flex-col md:flex-row-reverse gap-8 items-center">
+                <div class="flex-1 w-full h-[400px] rounded-2xl overflow-hidden shadow-xl relative group">
+                    <img src="https://images.unsplash.com/photo-1534534852980-2a49976436f1?auto=format&fit=crop&q=80&w=800" alt="Punta Cormorant" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                    <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-lg">
+                        <p class="font-bold text-cyan-800">Punta Cormorant</p>
+                    </div>
+                </div>
+                <div class="flex-1 space-y-4">
+                    <span class="text-cyan-600 font-bold tracking-wider text-sm uppercase">Playa y Laguna</span>
+                    <h2 class="text-3xl font-bold text-gray-900">Tour Cormorant</h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        Punta Cormorant ofrece una de las playas más inusuales de Galápagos.
+                    </p>
+                    <button onclick="openModal(102, true)" class="inline-flex items-center gap-2 text-cyan-600 font-bold hover:text-cyan-800 transition mt-2">
+                        Consultar disponibilidad <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </article>
+
+            <article class="flex flex-col md:flex-row gap-8 items-center">
+                <div class="flex-1 w-full h-[400px] rounded-2xl overflow-hidden shadow-xl relative group">
+                    <img src="https://images.unsplash.com/photo-1588392382834-a891154bca4d?auto=format&fit=crop&q=80&w=800" alt="Isla Tortuga" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                    <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-lg">
+                        <p class="font-bold text-cyan-800">Isla Tortuga</p>
+                    </div>
+                </div>
+                <div class="flex-1 space-y-4">
+                    <span class="text-cyan-600 font-bold tracking-wider text-sm uppercase">Santuario de Aves</span>
+                    <h2 class="text-3xl font-bold text-gray-900">Tour Isla Tortuga</h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        Con forma de media luna, Isla Tortuga es un sitio protegido espectacular.
+                    </p>
+                    <button onclick="openModal(103, true)" class="inline-flex items-center gap-2 text-cyan-600 font-bold hover:text-cyan-800 transition mt-2">
+                        Consultar disponibilidad <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </article>
+
+            <div class="text-center pt-12">
+                <button onclick="showHome()" class="bg-gray-800 text-white px-8 py-3 rounded-full hover:bg-gray-700 transition">
+                    Volver a los Tours Principales
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= VIEW: CONTACT ================= -->
+    <div id="contact-view" class="hidden-section fade-in-up">
+        <!-- Contact Header -->
+        <div class="bg-gray-900 py-20 px-4 relative overflow-hidden">
+             <div class="absolute inset-0 opacity-20">
+                <img src="https://images.unsplash.com/photo-1504233529578-6d46b50d347e?auto=format&fit=crop&q=80&w=1920" class="w-full h-full object-cover" alt="Background">
+            </div>
+            <div class="max-w-4xl mx-auto text-center relative z-10">
+                <h1 class="text-3xl md:text-5xl font-bold text-white mb-4">¡Hablemos de tu Aventura!</h1>
+                <p class="text-gray-300 text-lg">Estamos listos para planear tu experiencia en Isabela. Contáctanos por cualquiera de nuestros canales.</p>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 py-16">
+            <!-- Contact Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
+                <a href="https://wa.me/593978988445" target="_blank" class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2 border border-gray-100 group text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-green-200 transition">
+                        <i data-lucide="message-circle" class="w-8 h-8 text-green-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">WhatsApp</h3>
+                    <p class="text-gray-500 mb-4">Chat directo y rápido</p>
+                    <p class="text-green-600 font-bold text-lg">+593 97 898 8445</p>
+                </a>
+                <a href="#" class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2 border border-gray-100 group text-center">
+                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-pink-200 transition">
+                        <i data-lucide="instagram" class="w-8 h-8 text-pink-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Instagram</h3>
+                    <p class="text-gray-500 mb-4">Síguenos para ver fotos</p>
+                    <p class="text-pink-600 font-bold text-lg">@IsabelaTours</p>
+                </a>
+                <a href="#" class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2 border border-gray-100 group text-center">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 transition">
+                        <i data-lucide="facebook" class="w-8 h-8 text-blue-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Facebook</h3>
+                    <p class="text-gray-500 mb-4">Únete a nuestra comunidad</p>
+                    <p class="text-blue-600 font-bold text-lg">Isabela Tours Oficial</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="contact-section" class="bg-gray-900 text-white pt-16 pb-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <i data-lucide="anchor" class="h-6 w-6 text-cyan-400"></i>
+                        <span class="text-xl font-bold">Isabela<span class="text-cyan-400">Tours</span></span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Tu conexión local experta para descubrir las maravillas de la Isla Isabela. Turismo sostenible y experiencias inolvidables.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Enlaces Rápidos</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><button onclick="showHome()" class="hover:text-cyan-400 transition text-left">Inicio</button></li>
+                        <li><button onclick="showHome()" class="hover:text-cyan-400 transition text-left">Todos los Tours</button></li>
+                        <li><button onclick="showBlog()" class="hover:text-cyan-400 transition text-left">Blog</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Contacto</h4>
+                    <ul class="space-y-3 text-gray-400 text-sm">
+                        <li class="flex items-center gap-2 font-bold text-cyan-400">
+                            <i data-lucide="phone" class="h-4 w-4"></i> 0978988445
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="mail" class="h-4 w-4"></i> info@isabelatours.com
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="map-pin" class="h-4 w-4"></i> Puerto Villamil, Isabela, Galápagos
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-4">Síguenos</h4>
+                    <div class="flex gap-4">
+                        <a href="#" class="bg-gray-808 p-2 rounded-full hover:bg-cyan-600 transition"><i data-lucide="instagram" class="h-5 w-5"></i></a>
+                        <a href="#" class="bg-gray-808 p-2 rounded-full hover:bg-cyan-600 transition"><i data-lucide="facebook" class="h-5 w-5"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-500 text-sm">
+                <p>&copy; 2024 IsabelaTours. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modal (Login / Register) -->
+    <div id="auth-modal" class="fixed inset-0 z-[110] hidden-modal items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeAuthModal()"></div>
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm z-10 overflow-hidden fade-in-up relative p-6">
+             <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i data-lucide="x" class="h-5 w-5"></i>
+            </button>
+            
+            <!-- Login Mode -->
+            <div id="auth-login-mode">
+                <div class="text-center mb-6">
+                    <div class="bg-cyan-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i data-lucide="user" class="text-cyan-600 h-6 w-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800">Iniciar Sesión</h3>
+                    <p class="text-sm text-gray-500">Accede a tu historial de viajes</p>
+                </div>
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nombre</label>
+                        <input type="text" id="login-name" required placeholder="Tu nombre" class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Correo Electrónico</label>
+                        <input type="email" id="login-email" required placeholder="correo@ejemplo.com" class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none text-sm">
+                    </div>
+                    <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 rounded-xl transition shadow-lg">
+                        Entrar
+                    </button>
+                </form>
+                <div class="mt-6 text-center pt-4 border-t border-gray-100 text-sm">
+                    <span class="text-gray-500">¿No tienes una cuenta?</span>
+                    <button onclick="switchAuthMode('register')" class="text-cyan-600 font-bold hover:underline ml-1">Regístrate</button>
+                </div>
+            </div>
+
+            <!-- Register Mode -->
+            <div id="auth-register-mode" class="hidden">
+                <div class="text-center mb-6">
+                    <div class="bg-cyan-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i data-lucide="user-plus" class="text-cyan-600 h-6 w-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800">Registrarse</h3>
+                    <p class="text-sm text-gray-500">Crea una cuenta para reservar</p>
+                </div>
+                <form id="register-form" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nombre Completo</label>
+                        <input type="text" id="reg-name" required placeholder="Tu nombre completo" class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Correo Electrónico</label>
+                        <input type="email" id="reg-email" required placeholder="correo@ejemplo.com" class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Teléfono</label>
+                        <input type="tel" id="reg-phone" required placeholder="099 123 4567" class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Fecha de Nacimiento</label>
+                        <input type="date" id="reg-dob" required class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-cyan-500 outline-none text-sm">
+                    </div>
+                    <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 rounded-xl transition shadow-lg">
+                        Crear Cuenta
+                    </button>
+                </form>
+                 <div class="mt-6 text-center pt-4 border-t border-gray-100 text-sm">
+                    <span class="text-gray-500">¿Ya tienes cuenta?</span>
+                    <button onclick="switchAuthMode('login')" class="text-cyan-600 font-bold hover:underline ml-1">Inicia Sesión</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- History Modal (My Bookings) -->
+    <div id="history-modal" class="fixed inset-0 z-[110] hidden-modal items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeHistoryModal()"></div>
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl z-10 overflow-hidden fade-in-up relative flex flex-col max-h-[80vh]">
+            <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex justify-between items-center sticky top-0">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800">Mis Reservas</h3>
+                    <p class="text-sm text-gray-500" id="history-subtitle">Tu historial de aventuras</p>
+                </div>
+                <button onclick="closeHistoryModal()" class="p-2 hover:bg-gray-200 rounded-full transition">
+                    <i data-lucide="x" class="h-5 w-5 text-gray-500"></i>
+                </button>
+            </div>
+            
+            <div id="history-list" class="p-6 overflow-y-auto space-y-4 bg-white flex-1">
+                <!-- Bookings injected here -->
+                <div class="text-center py-12 text-gray-400">
+                    <i data-lucide="calendar-x" class="h-12 w-12 mx-auto mb-3 opacity-50"></i>
+                    <p>No tienes reservas registradas aún.</p>
+                </div>
+            </div>
+            
+            <div class="p-4 border-t border-gray-100 bg-gray-50 text-center">
+                <button onclick="closeHistoryModal()" class="text-cyan-600 font-medium text-sm hover:underline">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal (Existing) -->
+    <div id="booking-modal" class="fixed inset-0 z-[100] hidden-modal items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal()"></div>
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg z-10 overflow-hidden fade-in-up relative">
+            
+            <!-- Step 0: Tour Details (NEW) -->
+            <div id="modal-step-details" class="hidden">
+                <div class="relative h-48 w-full">
+                    <img id="detail-tour-image" src="" alt="Tour Detail" class="w-full h-full object-cover">
+                    <button onclick="closeModal()" class="absolute top-4 right-4 bg-white/80 hover:bg-white p-2 rounded-full transition shadow-sm">
+                        <i data-lucide="x" class="h-5 w-5 text-gray-800"></i>
+                    </button>
+                    <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/70 to-transparent p-4">
+                        <h3 id="detail-tour-title" class="text-2xl font-bold text-white">Nombre del Tour</h3>
+                    </div>
+                </div>
+
+                <div class="p-6 space-y-5 bg-white">
+                    <div>
+                        <h4 class="text-sm font-bold text-cyan-600 uppercase tracking-wide mb-2 flex items-center gap-2">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i> Lo que ofrece
+                        </h4>
+                        <p id="detail-tour-offers" class="text-gray-700 text-sm leading-relaxed">
+                            Descripción de lo que ofrece el tour...
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg border border-gray-100">
+                        <div>
+                            <h4 class="text-xs font-bold text-gray-500 uppercase mb-1">Hora de Salida</h4>
+                            <div class="flex items-center gap-2 text-gray-800 font-semibold">
+                                <i data-lucide="log-out" class="w-4 h-4 text-cyan-500"></i>
+                                <span id="detail-tour-departure">00:00 AM</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-bold text-gray-500 uppercase mb-1">Hora de Llegada</h4>
+                            <div class="flex items-center gap-2 text-gray-800 font-semibold">
+                                <i data-lucide="log-in" class="w-4 h-4 text-cyan-500"></i>
+                                <span id="detail-tour-arrival">00:00 PM</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                        <div>
+                            <p class="text-xs text-gray-500">Precio por persona</p>
+                            <p id="detail-tour-price" class="text-3xl font-bold text-cyan-700">$0</p>
+                        </div>
+                        <button onclick="goToBookingForm()" class="bg-gray-900 hover:bg-cyan-600 text-white px-8 py-3 rounded-xl font-bold transition-colors duration-300 shadow-lg hover:shadow-cyan-500/30">
+                            Reserva Ya
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 1: Form -->
+            <div id="modal-step-1">
+                <div class="bg-gray-50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800">Finalizar Reserva</h3>
+                        <p id="modal-tour-title" class="text-sm text-gray-500">Nombre del Tour</p>
+                    </div>
+                    <button onclick="closeModal()" class="p-2 hover:bg-gray-200 rounded-full transition">
+                        <i data-lucide="x" class="h-5 w-5 text-gray-500"></i>
+                    </button>
+                </div>
+                
+                <form id="booking-form" class="p-6 space-y-4">
+                    <input type="hidden" id="modal-tour-price" value="0">
+                    
+                    <div class="flex items-center gap-4 mb-6 bg-cyan-50 p-4 rounded-lg border border-cyan-100">
+                        <img id="modal-tour-image" src="" alt="Tour" class="w-16 h-16 rounded-lg object-cover" />
+                        <div>
+                            <p id="modal-total-price" class="text-cyan-800 font-bold text-lg">$0</p>
+                            <p id="modal-guests-text" class="text-cyan-600 text-sm">Total estimado para 2 personas</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Fecha del Tour</label>
+                            <input required type="date" id="input-date" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Personas</label>
+                            <input id="input-guests" required type="number" min="1" value="2" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nombre Completo</label>
+                        <input required type="text" id="input-name" placeholder="Ej. María Rodríguez" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none" />
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                        <input required type="tel" id="input-phone" placeholder="Ej. 099 123 4567" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none" />
+                    </div>
+
+                    <button type="submit" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-cyan-500/30 transition duration-300 mt-4">
+                        Confirmar Reserva
+                    </button>
+                    <p class="text-center text-xs text-gray-400 mt-2">Nos pondremos en contacto al 0978988445</p>
+                </form>
+            </div>
+
+            <!-- Step 2: Success -->
+            <div id="modal-step-2" class="hidden p-12 flex-col items-center justify-center text-center space-y-4">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-2 animate-bounce">
+                    <i data-lucide="check" class="h-8 w-8 text-green-600"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800">¡Solicitud Recibida!</h3>
+                <p class="text-gray-600">
+                    Reserva guardada en tu historial. Hemos enviado los detalles a tu correo.
+                </p>
+                <button onclick="openHistoryModal(); closeModal()" class="text-cyan-600 font-bold hover:underline">Ver en Mis Reservas</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ====== SCRIPTS SEPARADOS ====== -->
+    <script src="../js/datos_tours.js"></script>
+    <script src="../js/Reservas.js"></script>
+    <script src="../js/autenticacion.js"></script>
+    <script src="../js/navegacion.js"></script>
+    <script src="../js/inicializacion.js"></script>
+</body>
+</html>
