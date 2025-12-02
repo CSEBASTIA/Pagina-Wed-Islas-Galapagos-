@@ -7,21 +7,28 @@ body {
 }
 
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.hidden-modal { 
-    display: none; 
+.hidden-modal {
+    display: none;
 }
 
-.flex-modal { 
-    display: flex; 
+.flex-modal {
+    display: flex;
 }
 
 /* Utility for hiding sections */
-.hidden-section { 
-    display: none; 
+.hidden-section {
+    display: none;
 }
 
 /* Gallery Grid Styles */
@@ -50,23 +57,29 @@ body {
     transform: scale(1.1);
 }
 
-.gallery-item.wide { 
-    grid-column: span 2; 
+.gallery-item.wide {
+    grid-column: span 2;
 }
 
-.gallery-item.tall { 
-    grid-row: span 2; 
+.gallery-item.tall {
+    grid-row: span 2;
 }
 
 /* Badge Styles for History (equivalentes a las clases Tailwind que pusiste) */
 .badge-confirmed {
-    background-color: #dcfce7;   /* bg-green-100 */
-    color: #166534;              /* text-green-800 */
-    border: 1px solid #bbf7d0;   /* border-green-200 */
+    background-color: #dcfce7;
+    /* bg-green-100 */
+    color: #166534;
+    /* text-green-800 */
+    border: 1px solid #bbf7d0;
+    /* border-green-200 */
 }
 
 .badge-pending {
-    background-color: #fef9c3;   /* bg-yellow-100 */
-    color: #854d0e;              /* text-yellow-800 */
-    border: 1px solid #fef3c7;   /* border-yellow-200 */
+    background-color: #fef9c3;
+    /* bg-yellow-100 */
+    color: #854d0e;
+    /* text-yellow-800 */
+    border: 1px solid #fef3c7;
+    /* border-yellow-200 */
 }
