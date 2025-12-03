@@ -45,6 +45,8 @@ Este proyecto utiliza un stack moderno y eficiente:
 /
 ├── css/
 │   └── estilos.css       # Estilos personalizados y utilidades
+├── base de datos/
+│   └── intento.txt       # Diagrama de la base de datos
 ├── js/
 │   ├── datos_tours.js    # Array de objetos con la info de los tours
 │   ├── Reservas.js       # Conexión con Supabase y lógica de guardado
