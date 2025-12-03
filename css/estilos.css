@@ -83,3 +83,15 @@ body {
     border: 1px solid #fef3c7;
     /* border-yellow-200 */
 }
+
+/* Efecto de Vidrio (Glassmorphism) */
+.glass-card {
+    background-color: rgba(255, 255, 255, 0.85);
+    /* Blanco al 85% */
+    backdrop-filter: blur(8px);
+    /* Desenfoca el fondo marino detrás */
+    -webkit-backdrop-filter: blur(8px);
+    /* Para que funcione en Safari/iPhone */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    /* Un borde blanco sutil */
+}

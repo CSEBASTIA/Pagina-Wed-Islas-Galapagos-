@@ -10,7 +10,7 @@ const TOURS = [
         duration: "5 Horas",
         rating: 4.9,
         reviews: 85,
-        image: "https://images.unsplash.com/photo-1621863603286-e71b5c775370?auto=format&fit=crop&q=80&w=800",
+        image: "file:///C:/Users/sedas/Documents/Isalas Isabelas/imagenes/Cuatro hermanos.jpeg",
         tags: ["Snorkel", "Aventura", "Fauna"],
         difficulty: "Moderado"
     },
@@ -22,7 +22,7 @@ const TOURS = [
         duration: "4 Horas",
         rating: 4.8,
         reviews: 110,
-        image: "https://images.unsplash.com/photo-1534534852980-2a49976436f1?auto=format&fit=crop&q=80&w=800",
+        image: "file:///C:/Users/sedas/Documents/Isalas Isabelas/imagenes/punta cormorant.jpeg",
         tags: ["Playa", "Caminata", "Snorkel"],
         difficulty: "Fácil"
     },
@@ -34,11 +34,15 @@ const TOURS = [
         duration: "3 Horas",
         rating: 4.7,
         reviews: 60,
-        image: "https://images.unsplash.com/photo-1588392382834-a891154bca4d?auto=format&fit=crop&q=80&w=800",
+        image: "file:///C:/Users/sedas/Documents/Isalas Isabelas/imagenes/isla tortuga.jpeg",
         tags: ["Aves", "Paseo", "Relax"],
         difficulty: "Fácil"
     }
 ];
+
+
+
+
 
 const BLOG_TOURS = {
     101: {
@@ -48,7 +52,7 @@ const BLOG_TOURS = {
         departure: "07:30 AM",
         arrival: "12:30 PM",
         price: 160,
-        image: "https://images.unsplash.com/photo-1621863603286-e71b5c775370?auto=format&fit=crop&q=80&w=800"
+        image: "file:///C:/Users/sedas/Documents/Isalas Isabelas/imagenes/cuatro hermano 2.jpeg"
     },
     102: {
         id: 102,
@@ -57,7 +61,7 @@ const BLOG_TOURS = {
         departure: "08:00 AM",
         arrival: "12:00 PM",
         price: 130,
-        image: "https://images.unsplash.com/photo-1534534852980-2a49976436f1?auto=format&fit=crop&q=80&w=800"
+        image: "file:///C:/Users/sedas/Documents/Isalas Isabelas/imagenes/la de los pajaros.jpeg"
     },
     103: {
         id: 103,
@@ -66,7 +70,7 @@ const BLOG_TOURS = {
         departure: "02:00 PM",
         arrival: "05:00 PM",
         price: 90,
-        image: "https://images.unsplash.com/photo-1588392382834-a891154bca4d?auto=format&fit=crop&q=80&w=800"
+        image: "file:///C:/Users/sedas/Documents/Isalas Isabelas/imagenes/tortuga2.jpeg"
     }
 };
 
