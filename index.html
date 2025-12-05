@@ -231,7 +231,7 @@
                     </div>
                 </div>
                 <div class="flex-1 w-full h-64 md:h-auto relative">
-                    <img src="https://github.com/CSEBASTIA/Pagina-Wed-Islas-Galapagos-/blob/main/imagenes/Golden%20RAY.jpeg"
+                    <img src="file:///C:/Users/sedas/Documents/Isalas Isabelas/imagenes/Golden RAY.jpeg"
                         alt="Playa Isabela" class="w-full h-full object-cover rounded-2xl shadow-lg" />
                 </div>
             </div>
@@ -768,19 +768,28 @@
                 <p class="text-gray-600">
                     Reserva guardada en tu historial. Hemos enviado los detalles a tu correo.
                 </p>
-                <button onclick="openHistoryModal(); closeModal()" class="text-cyan-600 font-bold hover:underline">Ver
-                    en Mis Reservas</button>
+                <button onclick="openHistoryModal(); closeModal()" class="text-cyan-600 font-bold hover:underline">
+                    Ver en Mis Reservas
+                </button>
             </div>
-
         </div>
     </div>
-
-    <!-- ====== SCRIPTS SEPARADOS ====== -->
+    <div style="background: #222; color: white; padding: 20px; text-align: center; margin-top: 50px;">
+        <h3>🧪 Test de Base de Datos</h3>
+        <input type="text" id="inputNombre" placeholder="Nombre" style="color: black; padding: 5px;">
+        <input type="text" id="inputTour" placeholder="Tour" style="color: black; padding: 5px;">
+        <button onclick="guardarReserva()"
+            style="background: cyan; color: black; padding: 5px 15px; font-weight: bold; cursor: pointer;">
+            Probar Conexión
+        </button>
+    </div>
     <script src="../js/datos_tours.js"></script>
     <script src="../js/Reservas.js"></script>
     <script src="../js/autenticacion.js"></script>
     <script src="../js/navegacion.js"></script>
     <script src="../js/inicializacion.js"></script>
+
+    <script type="module" src="../base_datos/conexion.js"></script>
 </body>
 
 </html>
