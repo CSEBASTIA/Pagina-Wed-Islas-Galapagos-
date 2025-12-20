@@ -88,10 +88,10 @@ body {
 .glass-card {
     background-color: rgba(255, 255, 255, 0.85);
     /* Blanco al 85% */
-    backdrop-filter: blur(8px);
-    /* Desenfoca el fondo marino detrás */
     -webkit-backdrop-filter: blur(8px);
-    /* Para que funcione en Safari/iPhone */
+    /* Safari/iOS primero */
+    backdrop-filter: blur(8px);
+    /* estándar luego */
     border: 1px solid rgba(255, 255, 255, 0.3);
     /* Un borde blanco sutil */
 }

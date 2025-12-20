@@ -16,15 +16,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- CSS propio -->
-    <link rel="stylesheet" href="../css/estilos.css">
+    <link rel="stylesheet" href="./css/main.css">
 </head>
 
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
     <!-- Fondo -->
     <div class="fixed inset-0 z-[-1]">
         <!-- Tu imagen del mar -->
-        <img src="file:///C:/Users/sedas/Documents/Isalas Isabelas/imagenes/fondo de pagina .png"
-            class="w-full h-full object-cover">
+        <img src="./assets/images/fondo de pagina.png" alt="Fondo de página" class="w-full h-full object-cover">
         <!-- El filtro oscuro para que se lea el texto -->
         <div class="absolute inset-0 bg-black/50"></div>
     </div>
@@ -87,8 +86,8 @@
         <!-- Hero Section -->
         <div class="relative h-[600px] flex items-center justify-center overflow-hidden">
             <div class="absolute inset-0 z-0">
-                <img src="file:///C:/Users/sedas/Documents/Isalas Isabelas/imagenes/GALAPAGOS4.jpeg"
-                    alt="Galapagos Background" class="w-full h-full object-cover" />
+                <img src="./assets/images/galapagos4.jpeg" alt="Paisaje de Galápagos"
+                    class="w-full h-full object-cover" />
                 <div class="absolute inset-0 bg-black/10"></div>
             </div>
             <div class="relative z-10 text-center px-4 max-w-3xl mx-auto mt-8 w-full">
@@ -231,18 +230,12 @@
                     </div>
                 </div>
                 <div class="flex-1 w-full h-64 md:h-auto relative">
-                    <img src="file:///C:/Users/sedas/Documents/Isalas Isabelas/imagenes/Golden RAY.jpeg"
-                        alt="Playa Isabela" class="w-full h-full object-cover rounded-2xl shadow-lg" />
+                    <img src="./assets/images/Golden RAY.jpeg" alt="Lancha Golden Ray" alt="Playa Isabela"
+                        class="w-full h-full object-cover rounded-2xl shadow-lg" />
                 </div>
             </div>
         </main>
     </div>
-
-
-    <!-- ================= VIEW: TOURS (INFO + GALLERY) ================= -->
-
-
-
     <!-- ================= VIEW: TOURS (INFO + GALLERY) ================= -->
     <div id="tours-view" class="hidden-section fade-in-up">
         <div class="bg-white">
@@ -251,8 +244,7 @@
                 <div class="flex flex-col md:flex-row items-center gap-12">
                     <div class="flex-1 relative">
                         <div class="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/3] group">
-                            <img src="file:///C:/Users/sedas/Documents/Isalas Isabelas/imagenes/LANCHA.jpeg"
-                                alt="Lancha Mermelada20"
+                            <img src="./assets/images/lancha.jpeg" alt="Lancha Golden Ray"
                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                             <div class="absolute bottom-6 left-6 text-white">
@@ -309,27 +301,27 @@
                         <p class="text-gray-600 mt-2">Momentos inolvidables a bordo de la Golden Ray I y en Isabela.</p>
                     </div>
                     <div class="gallery-grid">
-                        <div class="gallery-item wide"><img
-                                src="file:///C:/Users/sedas/Documents/Isalas Isabelas/imagenes/GALERIA1.jpg"
-                                alt="Túneles"></div>
-                        <div class="gallery-item"><img
-                                src="file:///C:/Users/sedas/Documents/Isalas Isabelas/imagenes/GALERIA2.jpg"
-                                alt="Tintoreras"></div>
-                        <div class="gallery-item tall"><img
-                                src="file:///C:/Users/sedas/Documents/Isalas Isabelas/imagenes/GALERIA3.jpg"
-                                alt="Sierra Negra"></div>
-                        <div class="gallery-item"><img
-                                src="file:///C:/Users/sedas/Documents/Isalas Isabelas/imagenes/GALERIA4.jpg"
-                                alt="León Marino"></div>
-                        <div class="gallery-item"><img
-                                src="file:///C:/Users/sedas/Documents/Isalas Isabelas/imagenes/GALERIA5.jpg"
-                                alt="Cuatro Hermanos"></div>
-                        <div class="gallery-item wide"><img
-                                src="file:///C:/Users/sedas/Documents/Isalas Isabelas/imagenes/GALERIA6.jpg"
-                                alt="Playa"></div>
-                        <div class="gallery-item"><img
-                                src="file:///C:/Users/sedas/Documents/Isalas Isabelas/imagenes/GALERIA7.jpg"
-                                alt="Tortuga"></div>
+                        <div class="gallery-item wide">
+                            <img src="./assets/images/galeria1.jpg" alt="Túneles">
+                        </div>
+                        <div class="gallery-item">
+                            <img src="./assets/images/galeria2.jpg" alt="Tintoreras">
+                        </div>
+                        <div class="gallery-item tall">
+                            <img src="./assets/images/galeria3.jpg" alt="Sierra Negra">
+                        </div>
+                        <div class="gallery-item">
+                            <img src="./assets/images/galeria4.jpg" alt="León Marino">
+                        </div>
+                        <div class="gallery-item">
+                            <img src="./assets/images/galeria5.jpg" alt="Cuatro Hermanos">
+                        </div>
+                        <div class="gallery-item wide">
+                            <img src="./assets/images/galeria6.jpg" alt="Playa">
+                        </div>
+                        <div class="gallery-item">
+                            <img src="./assets/images/galeria7.jpg" alt="Tortuga">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -337,100 +329,252 @@
     </div>
 
     <!-- ================= VIEW: BLOG ================= -->
-    <div id="blog-view" class="hidden-section fade-in-up">
+    <div id="blog-view" class="hidden-section fade-in-up min-h-screen bg-[#0c0a09]">
+
         <!-- Blog Header -->
-        <div class="bg-cyan-900 py-20 px-4">
+        <div class="py-20 px-4">
             <div class="max-w-4xl mx-auto text-center">
-                <h1 class="text-3xl md:text-5xl font-bold text-white mb-4">Explorando lo Desconocido</h1>
-                <p class="text-cyan-100 text-lg">Descubre las joyas ocultas de Isla Isabela y sus alrededores. Guías
-                    completas de los Cuatro Hermanos, Cormorant y la mítica Isla Tortuga.</p>
+                <span
+                    class="inline-block mb-3 px-3 py-1 rounded-full bg-orange-500/10 text-orange-300 text-xs font-semibold tracking-[0.25em] uppercase">
+                    Ecuador · Galápagos
+                </span>
+                <h1 class="text-3xl md:text-5xl font-bold text-stone-100 mb-4">
+                    Explorando lo Desconocido
+                </h1>
+                <p class="text-stone-300 text-lg">
+                    Descubre las joyas ocultas de Isla Isabela y sus alrededores. Guías
+                    completas de los Cuatro Hermanos, Cormorant y la mítica Isla Tortuga.
+                </p>
             </div>
         </div>
 
         <div class="max-w-5xl mx-auto px-4 py-16 space-y-24">
-            <!-- Blog Posts -->
-            <article class="flex flex-col md:flex-row gap-8 items-center">
-                <div class="flex-1 w-full h-[400px] rounded-2xl overflow-hidden shadow-xl relative group">
-                    <img src="https://images.unsplash.com/photo-1621863603286-e71b5c775370?auto=format&fit=crop&q=80&w=800"
-                        alt="Cuatro Hermanos"
+            <!-- ========== CUATRO HERMANOS ========== -->
+            <article class="flex flex-col md:flex-row gap-8 items-center
+             bg-stone-900/40 p-4 md:p-8 rounded-3xl shadow-2xl
+             border border-stone-800/80 hover:border-orange-500/30
+             transition-colors duration-300">
+                <!-- Imagen + tarjeta flotante -->
+                <div
+                    class="flex-1 w-full h-[400px] rounded-2xl overflow-hidden shadow-xl relative group border border-stone-800/80">
+                    <img src="./assets/images/cuatro hermano 2.jpeg" alt="Islotes Cuatro Hermanos"
                         class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
-                    <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-lg">
-                        <p class="font-bold text-cyan-800">Islotes Cuatro Hermanos</p>
+
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition duration-500"></div>
+
+                    <div class="absolute left-6 top-6 transition-transform group-hover:-translate-y-1 duration-500">
+                        <div class="bg-stone-900/80 backdrop-blur-md
+                   border border-stone-700/80 hover:border-orange-400/40
+                   rounded-2xl shadow-2xl px-6 py-5 max-w-xs
+                   transition-colors duration-300">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span
+                                    class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500/20 text-cyan-300">
+                                    <i data-lucide="waves" class="w-5 h-5"></i>
+                                </span>
+                                <div>
+                                    <p
+                                        class="text-xs font-semibold text-stone-400 tracking-[0.2em] uppercase leading-tight">
+                                        Snorkel Avanzado
+                                    </p>
+                                    <h3 class="text-base font-bold text-stone-50">
+                                        Islotes Cuatro Hermanos
+                                    </h3>
+                                </div>
+                            </div>
+                            <p class="text-sm text-stone-200 leading-snug">
+                                Islotes volcánicos llenos de vida marina, hogar de mantarrayas y tortugas en aguas
+                                profundas.
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <div class="flex-1 space-y-4">
-                    <span class="text-cyan-600 font-bold tracking-wider text-sm uppercase">Snorkel Avanzado</span>
-                    <h2 class="text-3xl font-bold text-gray-900">Tour Cuatro Hermanos</h2>
-                    <p class="text-gray-600 leading-relaxed">
-                        Conocidos localmente como "Los 4 Hermanos", este grupo de islotes es un paraíso para el buceo.
+
+                <!-- Texto lateral -->
+                <div class="flex-1 space-y-5">
+                    <div class="inline-block">
+                        <span class="text-orange-300 font-bold tracking-wider text-xs uppercase px-3 py-1
+                   bg-orange-500/10 border border-orange-500/30 rounded-full">
+                            Snorkel Avanzado
+                        </span>
+                    </div>
+                    <h2 class="text-4xl font-extrabold text-stone-50 leading-tight">
+                        Tour Cuatro Hermanos
+                    </h2>
+                    <p class="text-stone-300 leading-relaxed text-lg">
+                        Conocidos localmente como “Los 4 Hermanos”, este grupo de islotes es un paraíso para el buceo y
+                        el snorkel
+                        avanzado.
                     </p>
-                    <button onclick="openModal(101, true)"
-                        class="inline-flex items-center gap-2 text-cyan-600 font-bold hover:text-cyan-800 transition mt-2">
-                        Consultar disponibilidad <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </button>
+
+                    <div class="pt-2">
+                        <button onclick="openModal(101, true)" class="group inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-400
+                         text-slate-950 px-7 py-3.5 rounded-xl font-bold transition-all
+                         shadow-lg shadow-orange-900/30 active:scale-95">
+                            Consultar disponibilidad
+                            <i data-lucide="arrow-right"
+                                class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
                 </div>
             </article>
 
-            <article class="flex flex-col md:flex-row-reverse gap-8 items-center">
-                <div class="flex-1 w-full h-[400px] rounded-2xl overflow-hidden shadow-xl relative group">
-                    <img src="https://images.unsplash.com/photo-1534534852980-2a49976436f1?auto=format&fit=crop&q=80&w=800"
-                        alt="Punta Cormorant"
+            <!-- ========== PUNTA CORMORANT ========== -->
+            <article class="flex flex-col md:flex-row-reverse gap-8 items-center
+             bg-stone-900/40 p-4 md:p-8 rounded-3xl shadow-2xl
+             border border-stone-800/80 hover:border-orange-500/30
+             transition-colors duration-300">
+                <!-- Imagen + tarjeta flotante -->
+                <div
+                    class="flex-1 w-full h-[400px] rounded-2xl overflow-hidden shadow-xl relative group border border-stone-800/80">
+                    <img src="./assets/images/la de los pajaros.jpeg" alt="Punta Cormorant"
                         class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
-                    <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-lg">
-                        <p class="font-bold text-cyan-800">Punta Cormorant</p>
+
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition duration-500"></div>
+
+                    <div class="absolute left-6 top-6 transition-transform group-hover:-translate-y-1 duration-500">
+                        <div class="bg-stone-900/80 backdrop-blur-md
+                   border border-stone-700/80 hover:border-orange-400/40
+                   rounded-2xl shadow-2xl px-6 py-5 max-w-xs
+                   transition-colors duration-300">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span
+                                    class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-orange-500/20 text-orange-300">
+                                    <i data-lucide="sun" class="w-5 h-5"></i>
+                                </span>
+                                <div>
+                                    <p
+                                        class="text-xs font-semibold text-stone-400 tracking-[0.2em] uppercase leading-tight">
+                                        Playa y Laguna
+                                    </p>
+                                    <h3 class="text-base font-bold text-stone-50">
+                                        Punta Cormorant
+                                    </h3>
+                                </div>
+                            </div>
+                            <p class="text-sm text-stone-200 leading-snug">
+                                Playas de arena verde y blanca, flamencos y snorkel en la Corona del Diablo.
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <div class="flex-1 space-y-4">
-                    <span class="text-cyan-600 font-bold tracking-wider text-sm uppercase">Playa y Laguna</span>
-                    <h2 class="text-3xl font-bold text-gray-900">Tour Cormorant</h2>
-                    <p class="text-gray-600 leading-relaxed">
-                        Punta Cormorant ofrece una de las playas más inusuales de Galápagos.
+
+                <!-- Texto lateral -->
+                <div class="flex-1 space-y-5">
+                    <div class="inline-block">
+                        <span class="text-orange-300 font-bold tracking-wider text-xs uppercase px-3 py-1
+                   bg-orange-500/10 border border-orange-500/30 rounded-full">
+                            Playa y Laguna
+                        </span>
+                    </div>
+                    <h2 class="text-4xl font-extrabold text-stone-50 leading-tight">
+                        Tour Cormorant
+                    </h2>
+                    <p class="text-stone-300 leading-relaxed text-lg">
+                        Punta Cormorant ofrece una de las playas más inusuales de Galápagos. Descubre un ecosistema
+                        vibrante donde la
+                        naturaleza se muestra en su estado más puro bajo el sol ecuatorial.
                     </p>
-                    <button onclick="openModal(102, true)"
-                        class="inline-flex items-center gap-2 text-cyan-600 font-bold hover:text-cyan-800 transition mt-2">
-                        Consultar disponibilidad <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </button>
+
+                    <div class="pt-2">
+                        <button onclick="openModal(102, true)" class="group inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-400
+                         text-slate-950 px-7 py-3.5 rounded-xl font-bold transition-all
+                         shadow-lg shadow-orange-900/30 active:scale-95">
+                            Consultar disponibilidad
+                            <i data-lucide="arrow-right"
+                                class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
                 </div>
             </article>
 
-            <article class="flex flex-col md:flex-row gap-8 items-center">
-                <div class="flex-1 w-full h-[400px] rounded-2xl overflow-hidden shadow-xl relative group">
-                    <img src="https://images.unsplash.com/photo-1588392382834-a891154bca4d?auto=format&fit=crop&q=80&w=800"
-                        alt="Isla Tortuga"
+            <!-- ========== ISLA TORTUGA ========== -->
+            <article class="flex flex-col md:flex-row gap-8 items-center
+             bg-stone-900/40 p-4 md:p-8 rounded-3xl shadow-2xl
+             border border-stone-800/80 hover:border-orange-500/30
+             transition-colors duration-300">
+                <!-- Imagen + tarjeta flotante -->
+                <div
+                    class="flex-1 w-full h-[400px] rounded-2xl overflow-hidden shadow-xl relative group border border-stone-800/80">
+                    <img src="./assets/images/tortuga2.jpeg" alt="Isla Tortuga"
                         class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
-                    <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-lg">
-                        <p class="font-bold text-cyan-800">Isla Tortuga</p>
+
+                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition duration-500"></div>
+
+                    <div class="absolute left-6 top-6 transition-transform group-hover:-translate-y-1 duration-500">
+                        <div class="bg-stone-900/80 backdrop-blur-md
+                   border border-stone-700/80 hover:border-orange-400/40
+                   rounded-2xl shadow-2xl px-6 py-5 max-w-xs
+                   transition-colors duration-300">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span
+                                    class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-300">
+                                    <i data-lucide="bird" class="w-5 h-5"></i>
+                                </span>
+                                <div>
+                                    <p
+                                        class="text-xs font-semibold text-stone-400 tracking-[0.2em] uppercase leading-tight">
+                                        Santuario de Aves
+                                    </p>
+                                    <h3 class="text-base font-bold text-stone-50">
+                                        Isla Tortuga
+                                    </h3>
+                                </div>
+                            </div>
+                            <p class="text-sm text-stone-200 leading-snug">
+                                Cráter colapsado en medio del mar, hogar de aves marinas y paisajes perfectos para
+                                fotografía.
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <div class="flex-1 space-y-4">
-                    <span class="text-cyan-600 font-bold tracking-wider text-sm uppercase">Santuario de Aves</span>
-                    <h2 class="text-3xl font-bold text-gray-900">Tour Isla Tortuga</h2>
-                    <p class="text-gray-600 leading-relaxed">
-                        Con forma de media luna, Isla Tortuga es un sitio protegido espectacular.
+
+                <!-- Texto lateral -->
+                <div class="flex-1 space-y-5">
+                    <div class="inline-block">
+                        <span class="text-orange-300 font-bold tracking-wider text-xs uppercase px-3 py-1
+                   bg-orange-500/10 border border-orange-500/30 rounded-full">
+                            Santuario de Aves
+                        </span>
+                    </div>
+                    <h2 class="text-4xl font-extrabold text-stone-50 leading-tight">
+                        Tour Isla Tortuga
+                    </h2>
+                    <p class="text-stone-300 leading-relaxed text-lg">
+                        Con forma de media luna, Isla Tortuga es un sitio protegido espectacular, perfecto para avistar
+                        aves y
+                        disfrutar del paisaje volcánico.
                     </p>
-                    <button onclick="openModal(103, true)"
-                        class="inline-flex items-center gap-2 text-cyan-600 font-bold hover:text-cyan-800 transition mt-2">
-                        Consultar disponibilidad <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </button>
+
+                    <div class="pt-2">
+                        <button onclick="openModal(103, true)" class="group inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-400
+                         text-slate-950 px-7 py-3.5 rounded-xl font-bold transition-all
+                         shadow-lg shadow-orange-900/30 active:scale-95">
+                            Consultar disponibilidad
+                            <i data-lucide="arrow-right"
+                                class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
                 </div>
             </article>
 
+            <!-- Botón volver -->
             <div class="text-center pt-12">
                 <button onclick="showHome()"
-                    class="bg-gray-800 text-white px-8 py-3 rounded-full hover:bg-gray-700 transition">
+                    class="bg-stone-800 text-stone-100 px-8 py-3 rounded-full hover:bg-stone-700 transition">
                     Volver a los Tours Principales
                 </button>
             </div>
         </div>
     </div>
 
+
     <!-- ================= VIEW: CONTACT ================= -->
     <div id="contact-view" class="hidden-section fade-in-up">
         <!-- Contact Header -->
         <div class="bg-gray-900 py-20 px-4 relative overflow-hidden">
             <div class="absolute inset-0 opacity-20">
-                <img src="https://images.unsplash.com/photo-1504233529578-6d46b50d347e?auto=format&fit=crop&q=80&w=1920"
-                    class="w-full h-full object-cover" alt="Background">
+                <img src="./assets/images/leon marino.jpeg" class="w-full h-full object-cover" alt="Background">
             </div>
             <div class="max-w-4xl mx-auto text-center relative z-10">
                 <h1 class="text-3xl md:text-5xl font-bold text-white mb-4">¡Hablemos de tu Aventura!</h1>
@@ -774,24 +918,33 @@
             </div>
         </div>
     </div>
-    <div style="background: #222; color: white; padding: 20px; text-align: center; margin-top: 50px;">
-        <h3>🧪 Test de Base de Datos</h3>
-        <input type="text" id="inputNombre" placeholder="Nombre" style="color: black; padding: 5px;">
-        <input type="text" id="inputTour" placeholder="Tour" style="color: black; padding: 5px;">
-        <button onclick="guardarReserva()"
-            style="background: cyan; color: black; padding: 5px 15px; font-weight: bold; cursor: pointer;">
-            Probar Conexión
-        </button>
-    </div>
-    <script src="../js/datos_tours.js"></script>
-    <script src="../js/Reservas.js"></script>
-    <script src="../js/autenticacion.js"></script>
-    <script src="../js/navegacion.js"></script>
-    <script src="../js/inicializacion.js"></script>
+    <!-- ====================================== -->
+    <!-- SCRIPTS - ORDEN IMPORTANTE -->
+    <!-- ====================================== -->
 
+    <!-- 1. LIBRERÍAS EXTERNAS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="../base_datos/conexion.js"></script>
+    <!-- 2. CONFIGURACIÓN -->
+    <script src="./js/config/supabase.config.js"></script>
+
+    <!-- 3. SERVICIOS -->
+    <script src="./js/services/tours.service.js"></script>
+    <script src="./js/services/bookings.service.js"></script>
+    <script src="./js/services/auth.service.js"></script>
+
+    <!-- 4. COMPONENTES UI -->
+    <script src="./js/components/navigation.ui.js"></script>
+    <script src="./js/components/tours.ui.js"></script>
+    <script src="./js/components/booking-modal.ui.js"></script>
+    <script src="./js/components/history-modal.ui.js"></script>
+    <script src="./js/components/auth-modal.ui.js"></script>
+    <script src="./js/components/auth.ui.js"></script>
+
+    <!-- 5. INICIALIZACIÓN -->
+    <script src="./js/main.js"></script>
 
 </body>
 
