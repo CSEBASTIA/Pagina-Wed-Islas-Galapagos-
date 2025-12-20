@@ -18,9 +18,9 @@ isabela-tours/
 │   └── fonts/                # Fuentes personalizadas
 │
 ├── css/
-│   ├── main.css             # Estilos principales (antes estilos.css)
-│   ├── base/                # Estilos base (reset, variables)
-│   └── pages/               # Estilos específicos por página
+│   ├── main.css             # Estilos principales (antes estilos.css) 
+│   ├── base/                # Estilos base (reset, variables)// proximamente sera agregado 
+│   └── pages/               # Estilos específicos por página// proximamente sera agregado 
 │
 └── js/
     ├── config/
