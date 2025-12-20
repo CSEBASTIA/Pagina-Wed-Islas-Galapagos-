@@ -1,0 +1,74 @@
+// 🔍 HERRAMIENTA DE DIAGNÓSTICO
+// Copia este código y pégalo en la CONSOLA del navegador (F12)
+// Te dirá qué está funcionando y qué no
+
+console.clear();
+console.log('%c🔍 DIAGNÓSTICO DE ISABELA TOURS', 'color: cyan; font-size: 20px; font-weight: bold');
+console.log('='.repeat(50));
+
+const diagnostics = {
+    services: {
+        '📦 ToursService': typeof ToursService !== 'undefined',
+        '📦 BookingsService': typeof BookingsService !== 'undefined',
+        '📦 AuthService': typeof AuthService !== 'undefined',
+        '📦 SupabaseService': typeof SupabaseService !== 'undefined'
+    },
+    components: {
+        '🎨 Navigation': typeof Navigation !== 'undefined',
+        '🎨 ToursUI': typeof ToursUI !== 'undefined',
+        '🎨 BookingModal': typeof BookingModal !== 'undefined',
+        '🎨 HistoryModal': typeof HistoryModal !== 'undefined',
+        '🎨 AuthModal': typeof AuthModal !== 'undefined',
+        '🎨 AuthUI': typeof AuthUI !== 'undefined'
+    },
+    domElements: {
+        '📋 tours-grid': !!document.getElementById('tours-grid'),
+        '📋 booking-modal': !!document.getElementById('booking-modal'),
+        '📋 history-modal': !!document.getElementById('history-modal'),
+        '📋 auth-modal': !!document.getElementById('auth-modal'),
+        '📋 home-view': !!document.getElementById('home-view')
+    },
+    data: {
+        '💾 Tours disponibles': typeof ToursService !== 'undefined' ? ToursService.getAllTours().length : 0,
+        '💾 Reservas guardadas': typeof BookingsService !== 'undefined' ? BookingsService.getAllBookings().length : 0,
+        '💾 Usuario logueado': typeof AuthService !== 'undefined' ? (AuthService.isLoggedIn() ? '✅' : '❌') : '?'
+    }
+};
+
+// Mostrar resultados
+console.log('\n%c📦 SERVICIOS', 'color: yellow; font-weight: bold');
+Object.entries(diagnostics.services).forEach(([name, status]) => {
+    console.log(`${status ? '✅' : '❌'} ${name}`);
+});
+
+console.log('\n%c🎨 COMPONENTES UI', 'color: yellow; font-weight: bold');
+Object.entries(diagnostics.components).forEach(([name, status]) => {
+    console.log(`${status ? '✅' : '❌'} ${name}`);
+});
+
+console.log('\n%c📋 ELEMENTOS DEL DOM', 'color: yellow; font-weight: bold');
+Object.entries(diagnostics.domElements).forEach(([name, status]) => {
+    console.log(`${status ? '✅' : '❌'} ${name}`);
+});
+
+console.log('\n%c💾 DATOS', 'color: yellow; font-weight: bold');
+Object.entries(diagnostics.data).forEach(([name, value]) => {
+    console.log(`${name}: ${value}`);
+});
+
+// Resumen
+const totalChecks = Object.values(diagnostics.services).length +
+    Object.values(diagnostics.components).length +
+    Object.values(diagnostics.domElements).length;
+const passedChecks = Object.values(diagnostics.services).filter(v => v).length +
+    Object.values(diagnostics.components).filter(v => v).length +
+    Object.values(diagnostics.domElements).filter(v => v).length;
+
+console.log('\n' + '='.repeat(50));
+if (passedChecks === totalChecks) {
+    console.log('%c🎉 ¡TODO ESTÁ FUNCIONANDO PERFECTAMENTE!', 'color: green; font-size: 16px; font-weight: bold');
+} else {
+    console.log(`%c⚠️ ${totalChecks - passedChecks} componentes tienen problemas`, 'color: orange; font-size: 16px; font-weight: bold');
+    console.log('Revisa los ❌ arriba para ver qué falta');
+}
+console.log('='.repeat(50));

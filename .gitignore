@@ -1,0 +1,18 @@
+# Dependencias (por si luego usas npm)
+node_modules/
+
+# Builds (si algún día usas bundler)
+dist/
+build/
+
+# Archivos de entorno / llaves
+.env
+*.local
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Configs del editor/IDE
+.vscode/
+.idea/
