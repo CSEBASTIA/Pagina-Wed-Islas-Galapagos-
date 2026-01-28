@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV - Carlos Sebastian Mendoza Avellan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: #000;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .section-title {
+            letter-spacing: -0.02em;
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-slate-900 selection:text-white">
+
+    <!-- NAVEGACIÓN -->
+    <header class="border-b border-slate-100 sticky top-0 bg-white/90 backdrop-blur-md z-50">
+        <nav class="max-w-5xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-slate-900 rounded flex items-center justify-center text-white text-xs font-bold">
+                    SM</div>
+                <span class="font-bold tracking-tighter text-lg">PORTFOLIO</span>
+            </div>
+
+            <div class="flex items-center gap-8">
+                <div class="hidden md:flex gap-8 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                    <a href="#inicio" class="nav-link text-slate-900 hover:text-black transition-colors">Inicio</a>
+                    <a href="#portafolio" class="nav-link hover:text-black transition-colors">Portafolio</a>
+                    <a href="#certificados" class="nav-link hover:text-black transition-colors">Certificados</a>
+                </div>
+                <a href="/admin"
+                    class="px-4 py-2 border border-slate-200 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-slate-50 transition-colors">Panel
+                    Admin</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 py-16">
+
+        <!-- HEADER / PORTADA -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-20">
+            <!-- Izquierda: Foto y Nombre -->
+            <div class="lg:col-span-8 flex flex-col md:flex-row items-center md:items-center gap-8">
+                <!-- Contenedor de Imagen -->
+                <div
+                    class="w-32 h-32 md:w-44 md:h-44 bg-slate-100 rounded-2xl shrink-0 overflow-hidden border border-slate-100 shadow-sm">
+                    <!--  -->
+                    <div class="w-full h-full flex items-center justify-center bg-slate-50">
+                        <i data-lucide="user" class="w-16 h-16 text-slate-200"></i>
+                    </div>
+                </div>
+
+                <!-- Nombre y Rol -->
+                <div class="text-center md:text-left">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-[0.3em] mb-4">Desarrollador Full Stack
+                    </p>
+                    <h1 class="text-4xl md:text-5xl font-black tracking-tighter text-slate-900 leading-[1.1]">
+                        MENDOZA AVELLAN <br> CARLOS SEBASTIAN
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Derecha: Información de contacto -->
+            <div class="lg:col-span-4 lg:text-right space-y-4">
+                <div class="text-sm font-medium text-slate-500 space-y-1">
+                    <p class="flex items-center lg:justify-end gap-2"><i data-lucide="mail"
+                            class="w-4 h-4 text-slate-400"></i> sedas778@gmail.com</p>
+                    <p class="flex items-center lg:justify-end gap-2"><i data-lucide="phone"
+                            class="w-4 h-4 text-slate-400"></i> +593 123456789</p>
+                    <p class="flex items-center lg:justify-end gap-2 text-slate-900 font-bold"><i data-lucide="map-pin"
+                            class="w-4 h-4 text-slate-400"></i> Manta, Ecuador</p>
+                </div>
+                <div class="flex lg:justify-end gap-4 justify-center">
+                    <a href="https://github.com/CSEBASTIA" target="_blank"
+                        class="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all">
+                        <i data-lucide="github" class="w-5 h-5"></i>
+                    </a>
+                    <a href="https://linkedin.com" target="_blank"
+                        class="w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all">
+                        <i data-lucide="linkedin" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTENIDO -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+
+            <!-- RESUMEN -->
+            <div class="lg:col-span-12">
+                <div class="bg-slate-50 p-8 md:p-10 rounded-3xl border border-slate-100">
+                    <h2 class="text-xs font-black uppercase tracking-[0.4em] text-slate-400 mb-6">Resumen Profesional
+                    </h2>
+                    <p class="text-xl md:text-2xl font-medium tracking-tight text-slate-800 leading-tight">
+                        Desarrollador apasionado por crear soluciones web innovadoras. Experto en el ecosistema <span
+                            class="text-black font-bold">Full Stack</span> con Django y Python. Comprometido con el
+                        código limpio y el aprendizaje constante.
+                    </p>
+                </div>
+            </div>
+
+            <!-- COLUMNA IZQUIERDA: Experiencia y Educación -->
+            <div class="lg:col-span-7 space-y-16">
+                <!-- EXPERIENCIA -->
+                <section id="experiencia">
+                    <div class="flex items-center gap-4 mb-10">
+                        <h2 class="text-sm font-black uppercase tracking-[0.3em] text-black">Experiencia</h2>
+                        <div class="h-px flex-grow bg-slate-100"></div>
+                    </div>
+
+                    <div class="space-y-12">
+                        <div class="relative pl-8 border-l-2 border-slate-100">
+                            <div class="absolute w-3 h-3 bg-black rounded-full -left-[7px] top-1.5"></div>
+                            <h3 class="text-xl font-bold tracking-tight">Desarrollador Web Jr.</h3>
+                            <p class="text-sm font-bold text-slate-400 uppercase tracking-widest mt-1 mb-4">Empresa XYZ
+                                • 2023 - Presente</p>
+                            <p class="text-slate-600 leading-relaxed text-sm">
+                                Desarrollo de aplicaciones web con Django y Python. Diseño de bases de datos PostgreSQL.
+                                Integración de APIs REST y colaboración con Git.
+                            </p>
+                        </div>
+
+                        <div class="relative pl-8 border-l-2 border-slate-100">
+                            <div class="absolute w-3 h-3 bg-slate-200 rounded-full -left-[7px] top-1.5"></div>
+                            <h3 class="text-xl font-bold tracking-tight">Freelancer</h3>
+                            <p class="text-sm font-bold text-slate-400 uppercase tracking-widest mt-1 mb-4">
+                                Independiente • 2022 - 2023</p>
+                            <p class="text-slate-600 leading-relaxed text-sm">
+                                Desarrollo de sitios web personalizados. Mantenimiento, soporte técnico y asesoría
+                                tecnológica a pequeños negocios locales.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- EDUCACIÓN -->
+                <section id="educacion">
+                    <div class="flex items-center gap-4 mb-10">
+                        <h2 class="text-sm font-black uppercase tracking-[0.3em] text-black">Educación</h2>
+                        <div class="h-px flex-grow bg-slate-100"></div>
+                    </div>
+
+                    <div class="space-y-8 text-sm">
+                        <div>
+                            <h3 class="font-bold text-lg tracking-tight">Ingeniería en Sistemas</h3>
+                            <p class="text-slate-500">Universidad XYZ • 2020 - 2024</p>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg tracking-tight">Bootcamp Full Stack</h3>
+                            <p class="text-slate-500">Certificación Profesional • 2023</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- COLUMNA DERECHA: Habilidades e Idiomas -->
+            <div class="lg:col-span-5 space-y-16">
+                <!-- HABILIDADES -->
+                <section id="habilidades">
+                    <div class="flex items-center gap-4 mb-10">
+                        <h2 class="text-sm font-black uppercase tracking-[0.3em] text-black">Habilidades</h2>
+                        <div class="h-px flex-grow bg-slate-100"></div>
+                    </div>
+
+                    <div class="space-y-8">
+                        <div>
+                            <h4 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Backend
+                            </h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span
+                                    class="px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-full text-[11px] font-bold">Python</span>
+                                <span
+                                    class="px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-full text-[11px] font-bold">Django</span>
+                                <span
+                                    class="px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-full text-[11px] font-bold">PostgreSQL</span>
+                                <span
+                                    class="px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-full text-[11px] font-bold">REST
+                                    API</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">Frontend
+                            </h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span
+                                    class="px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-full text-[11px] font-bold">HTML5
+                                    / CSS3</span>
+                                <span
+                                    class="px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-full text-[11px] font-bold">JavaScript</span>
+                                <span
+                                    class="px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-full text-[11px] font-bold">Tailwind</span>
+                                <span
+                                    class="px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-full text-[11px] font-bold">React</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4">
+                                Herramientas</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1.5 bg-black text-white rounded-full text-[11px] font-bold">Git /
+                                    GitHub</span>
+                                <span
+                                    class="px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-full text-[11px] font-bold">Docker</span>
+                                <span
+                                    class="px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-full text-[11px] font-bold">VS
+                                    Code</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- IDIOMAS -->
+                <section>
+                    <div class="flex items-center gap-4 mb-10">
+                        <h2 class="text-sm font-black uppercase tracking-[0.3em] text-black">Idiomas</h2>
+                        <div class="h-px flex-grow bg-slate-100"></div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div class="p-4 border border-slate-100 rounded-2xl">
+                            <p class="font-bold">Español</p>
+                            <p class="text-[10px] text-slate-400 uppercase tracking-widest">Nativo</p>
+                        </div>
+                        <div class="p-4 border border-slate-100 rounded-2xl">
+                            <p class="font-bold">Inglés</p>
+                            <p class="text-[10px] text-slate-400 uppercase tracking-widest">B1 Intermedio</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="py-20 border-t border-slate-50 text-center">
+        <p class="text-[10px] font-black uppercase tracking-[0.5em] text-slate-300 italic">Mendoza Avellan Carlos
+            Sebastian &copy; 2026</p>
+    </footer>
+
+    <script>
+        // Inicializar iconos
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

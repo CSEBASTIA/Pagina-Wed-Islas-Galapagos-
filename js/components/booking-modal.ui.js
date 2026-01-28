@@ -147,19 +147,33 @@ const BookingModal = {
         if (totalPriceEl) totalPriceEl.innerText = `$${total}`;
         if (guestsTextEl) guestsTextEl.innerText = `Total estimado para ${guests} persona${guests > 1 ? 's' : ''}`;
     },
-
+    ////
     handleFormSubmit(e) {
         e.preventDefault();
 
+        const tourTitle = document.getElementById('modal-tour-title').innerText;
+        const date = document.getElementById('input-date').value;
+        const guests = document.getElementById('input-guests').value;
+        const name = document.getElementById('input-name').value;
+        const phone = document.getElementById('input-phone').value;
+
+        if (!date || !guests || !name || !phone) {
+            alert('Por favor completa todos los campos');
+            return;
+        }
+
+        const total =
+            parseFloat(document.getElementById('modal-tour-price').value || '0') *
+            parseInt(guests || '1', 10);
+
         const formData = {
-            title: document.getElementById('modal-tour-title').innerText,
-            date: document.getElementById('input-date').value,
-            guests: document.getElementById('input-guests').value,
-            total: parseFloat(document.getElementById('modal-tour-price').value || '0') *
-                parseInt(document.getElementById('input-guests').value || '1', 10),
+            title: tourTitle,
+            date,
+            guests,
+            total,
             image: document.getElementById('modal-tour-image').src,
-            customerName: document.getElementById('input-name').value,
-            customerPhone: document.getElementById('input-phone').value
+            customerName: name,
+            customerPhone: phone
         };
 
         console.log('📝 Creando reserva:', formData);
@@ -168,12 +182,26 @@ const BookingModal = {
 
         if (booking) {
             console.log('✅ Reserva creada exitosamente');
+            // =========================
+            // 📲 REDIRECCIÓN A WHATSAPP
+            // =========================
+            const whatsappNumber = '+593994891081';
+            const message = `
+           Hola, deseo reservar un tour.
+
+           🛥️ Tour: ${tourTitle}// se inserta el nombre del tour
+           📅 Fecha: ${date}//  se inserta la fecha
+           👥 Personas: ${guests}// se inserta el numero de personas
+           👤 Nombre: ${name}// se inserta el nombre
+           📞 Teléfono: ${phone}// se inserta el telefono
+           `.trim();
+            const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`; //envia a whatsapp
+            window.open(whatsappURL, '_blank');
             this.showSuccessMessage();
         } else {
             console.error('❌ Error al crear reserva');
         }
     },
-
     showSuccessMessage() {
         if (this.modalStep1) this.modalStep1.style.display = 'none';
         if (this.modalStep2) {
