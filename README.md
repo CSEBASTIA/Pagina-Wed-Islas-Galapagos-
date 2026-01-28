@@ -248,4 +248,4 @@ const TOURS = [
 
 ## 📄 Licencia
 
-Proyecto privado - Isabela Tours © 2024
+Proyecto privado - Isabela Tours © 2025
