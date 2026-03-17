@@ -1,0 +1,36 @@
+{
+    "rewrites": [
+        {
+            "source": "/api/tours/reset",
+            "destination": "/api/tours/reset"
+        },
+        {
+            "source": "/api/tours/:id",
+            "destination": "/api/tours/[id]"
+        },
+        {
+            "source": "/api/tours",
+            "destination": "/api/tours/index"
+        },
+        {
+            "source": "/api/reservations/:id",
+            "destination": "/api/reservations/[id]"
+        },
+        {
+            "source": "/api/reservations",
+            "destination": "/api/reservations/index"
+        },
+        {
+            "source": "/api/gallery/:island/upload",
+            "destination": "/api/gallery/upload"
+        },
+        {
+            "source": "/api/gallery/:island/:file",
+            "destination": "/api/gallery/delete"
+        },
+        {
+            "source": "/api/gallery/:island",
+            "destination": "/api/gallery/list"
+        }
+    ]
+}

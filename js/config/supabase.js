@@ -1,57 +1,23 @@
-// js/config/supabase.config.js
-// Configuración de Supabase
+// js/config/supabase.js
+// NOTA: En el frontend solo se usa la clave ANON (pública).
+// La clave SERVICE_ROLE nunca va al frontend — solo en las Vercel Functions (servidor).
+//
+// Reemplaza los valores de abajo con los de tu proyecto Supabase:
+//   Supabase Dashboard → Settings → API → Project URL y anon/public key
 
-console.log('📦 Cargando supabase.config.js...');
+console.log('📦 Cargando supabase.js (frontend)...');
 
-// Credenciales de Supabase
+// ⚠️  ESTAS SON LAS ÚNICAS CREDENCIALES QUE VAN AL FRONTEND (clave anon, es pública)
 const SUPABASE_URL = 'https://uthtwemxslpdpcglelvw.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV0aHR3ZW14c2xwZHBjZ2xlbHZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MTAwMTYsImV4cCI6MjA4MDM4NjAxNn0.9WEZZdm-WcyWGnANV7MPKWlSnwd13zVrzPc9H3uNZA8';
 
-let supabaseClient = null;
+// El frontend ya NO llama a Supabase directamente.
+// Todos los datos pasan por /api/* (Vercel Functions) que usan la SERVICE_KEY en el servidor.
+// Este archivo solo existe como compatibilidad — las funciones de servicio usan fetch('/api/...')
 
-// Inicializar Supabase si está disponible
-if (typeof window !== 'undefined' && window.supabase && SUPABASE_URL && SUPABASE_ANON_KEY) {
-    try {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        console.log('✅ Supabase inicializado');
-    } catch (error) {
-        console.error('❌ Error al inicializar Supabase:', error);
-    }
-} else {
-    console.log('ℹ️ Supabase no configurado - usando localStorage');
-}
-
-// Servicio de Supabase
 const SupabaseService = {
-    getClient() {
-        return supabaseClient;
-    },
-
-    isConfigured() {
-        return supabaseClient !== null;
-    },
-
-    async testConnection() {
-        if (!supabaseClient) {
-            return false;
-        }
-
-        try {
-            const { error } = await supabaseClient.from('bookings').select('count');
-            if (error && error.code !== 'PGRST116') {
-                console.error('Error de conexión:', error);
-                return false;
-            }
-            console.log('✅ Conexión a Supabase exitosa');
-            return true;
-        } catch (error) {
-            console.error('Error al probar conexión:', error);
-            return false;
-        }
-    }
+    isConfigured() { return true; }
 };
-
-// Hacer disponible globalmente
 window.SupabaseService = SupabaseService;
 
-console.log('✅ supabase.config.js cargado');
+console.log('✅ supabase.js cargado (modo API-only, sin llamadas directas al frontend)');
