@@ -39,16 +39,18 @@ const BookingModal = {
         }
     },
 
-    open(tourId, isBlog = false) {
+    async open(tourId, isBlog = false) {
         console.log(`📖 Abriendo modal para tour ${tourId} (blog: ${isBlog})`);
 
         if (!this.modal) return;
 
         this.resetModal();
+        this.modal.classList.remove('hidden-modal');
+        this.modal.classList.add('flex-modal');
 
         const tour = isBlog
-            ? ToursService.getBlogTourById(tourId)
-            : ToursService.getTourById(tourId);
+            ? await ToursService.getBlogTourById(tourId)
+            : await ToursService.getTourById(tourId);
 
         if (!tour) {
             console.error(`❌ No se encontró el tour ${tourId}`);
@@ -63,9 +65,6 @@ const BookingModal = {
         } else {
             this.showBookingForm(tour);
         }
-
-        this.modal.classList.remove('hidden-modal');
-        this.modal.classList.add('flex-modal');
     },
 
     close() {

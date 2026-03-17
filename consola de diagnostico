@@ -1,7 +1,6 @@
 // 🔍 HERRAMIENTA DE DIAGNÓSTICO
 // Copia este código y pégalo en la CONSOLA del navegador (F12)
 // Te dirá qué está funcionando y qué no
-
 console.clear();
 console.log('%c🔍 DIAGNÓSTICO DE ISABELA TOURS', 'color: cyan; font-size: 20px; font-weight: bold');
 console.log('='.repeat(50));
