@@ -21,9 +21,9 @@ const AdminPanel = {
             : '—';
 
         el.innerHTML = [
-            { label: 'Tours Activos',   value: tours.length,                                        icon: '🗺️' },
-            { label: 'Rating Promedio', value: `${avgF('rating')} ⭐`,                              icon: '⭐' },
-            { label: 'Total Reviews',   value: tours.reduce((a, t) => a + (t.reviews || 0), 0),    icon: '📝' },
+            { label: 'Tours Activos', value: tours.length, icon: '🗺️' },
+            { label: 'Rating Promedio', value: `${avgF('rating')} ⭐`, icon: '⭐' },
+            { label: 'Total Reviews', value: tours.reduce((a, t) => a + (t.reviews || 0), 0), icon: '📝' },
         ].map(s => `
             <div class="bg-gray-800 rounded-lg border border-gray-700 p-5 flex items-center gap-4">
                 <span class="text-3xl">${s.icon}</span>
@@ -80,9 +80,9 @@ const AdminPanel = {
                         <span class="text-gray-500">⭐ ${tour.rating} (${tour.reviews})</span>
                     </div>
                     <div class="flex gap-1 mt-2 flex-wrap">
-                        ${(tour.tags||[]).map(t =>
-                            `<span class="bg-cyan-900/40 text-cyan-300 text-xs px-2 py-0.5 rounded">${t}</span>`
-                        ).join('')}
+                        ${(tour.tags || []).map(t =>
+            `<span class="bg-cyan-900/40 text-cyan-300 text-xs px-2 py-0.5 rounded">${t}</span>`
+        ).join('')}
                     </div>
                 </div>
 
@@ -91,7 +91,7 @@ const AdminPanel = {
                         class="bg-cyan-600/20 hover:bg-cyan-600/50 text-cyan-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition">
                         ✏️ Editar
                     </button>
-                    <button onclick="AdminPanel.confirmDelete(${tour.id}, '${(tour.title||'').replace(/'/g,"\\'")}')"
+                    <button onclick="AdminPanel.confirmDelete(${tour.id}, '${(tour.title || '').replace(/'/g, "\\'")}')"
                         class="bg-red-600/20 hover:bg-red-600/50 text-red-300 hover:text-red-100 px-4 py-2 rounded-lg text-sm font-medium transition">
                         🗑️ Eliminar
                     </button>
@@ -107,8 +107,17 @@ const AdminPanel = {
         if (!confirm(`¿Eliminar el tour "${title}"?\n\nSe eliminará de la base de datos y la página principal.`)) return;
         this._setLoading(id, true);
         await ToursService.deleteTour(id);
+
+        // ── Re-renderizar admin ──
         await this.updateStats();
         await this.renderTours();
+
+        // ── Re-renderizar página principal si está cargada ──
+        if (typeof ToursUI !== 'undefined') {
+            ToursUI._allTours = []; // limpiar caché
+            await ToursUI.renderTours();
+        }
+
         this._toast(`🗑️ Tour "${title}" eliminado`);
     },
 
@@ -206,12 +215,12 @@ const AdminPanel = {
         e.preventDefault();
         const get = (elId) => document.getElementById(elId)?.value?.trim();
         const changes = {};
-        const title = get('edit-title');       if (title)              changes.title       = title;
-        const dur = get('edit-duration');      if (dur)                changes.duration    = dur;
-        const dep = get('edit-departure');     if (dep)                changes.departure   = dep;
-        const arr = get('edit-arrival');       if (arr)                changes.arrival     = arr;
-        const desc = get('edit-description');  if (desc !== undefined)  changes.description = desc;
-        const img = get('edit-image');         if (img)                changes.image       = img;
+        const title = get('edit-title'); if (title) changes.title = title;
+        const dur = get('edit-duration'); if (dur) changes.duration = dur;
+        const dep = get('edit-departure'); if (dep) changes.departure = dep;
+        const arr = get('edit-arrival'); if (arr) changes.arrival = arr;
+        const desc = get('edit-description'); if (desc !== undefined) changes.description = desc;
+        const img = get('edit-image'); if (img) changes.image = img;
 
         // Deshabilitar botón mientras guarda
         const btn = e.target.querySelector('[type=submit]');
@@ -223,6 +232,11 @@ const AdminPanel = {
         if (updated) {
             await this.updateStats();
             await this.renderTours();
+            // Re-renderizar página principal   
+            if (typeof ToursUI !== 'undefined') {
+                ToursUI._allTours = [];
+                await ToursUI.renderTours();
+            }
             this._toast(`✅ Tour actualizado: "${updated.title}"`);
         } else {
             this._toast('❌ Error al actualizar el tour');
@@ -238,15 +252,15 @@ const AdminPanel = {
 
         const get = (id) => (document.getElementById(id)?.value || '').trim();
 
-        const title     = get('tour-title');
-        const duration  = get('tour-duration');
-        const desc      = get('tour-description');
-        const image     = get('tour-image');
+        const title = get('tour-title');
+        const duration = get('tour-duration');
+        const desc = get('tour-description');
+        const image = get('tour-image');
         const departure = get('tour-departure');
-        const arrival   = get('tour-arrival');
-        const tagsRaw   = get('tour-tags');
-        const diff      = get('tour-difficulty') || 'Moderado';
-        const rating    = parseFloat(get('tour-rating')) || 5.0;
+        const arrival = get('tour-arrival');
+        const tagsRaw = get('tour-tags');
+        const diff = get('tour-difficulty') || 'Moderado';
+        const rating = parseFloat(get('tour-rating')) || 5.0;
 
         if (!title) {
             alert('⚠️ El título es obligatorio.');
@@ -273,6 +287,11 @@ const AdminPanel = {
 
             await this.updateStats();
             await this.renderTours();
+            // Re-renderizar página principal
+            if (typeof ToursUI !== 'undefined') {
+                ToursUI._allTours = [];
+                await ToursUI.renderTours();
+            }
             this._toast(`✅ Tour "${newTour.title}" guardado en la base de datos`);
         } catch (err) {
             console.error('❌ Error al crear tour:', err);
