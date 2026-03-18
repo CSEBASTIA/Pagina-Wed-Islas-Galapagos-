@@ -21,6 +21,10 @@
             "destination": "/api/reservations/index"
         },
         {
+            "source": "/api/reviews",
+            "destination": "/api/reviews/index"
+        },
+        {
             "source": "/api/gallery/:island/upload",
             "destination": "/api/gallery/upload"
         },
