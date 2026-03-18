@@ -159,20 +159,18 @@ const ToursUI = {
         ).join('')}
                 </div>
             </div>
-            <div class="p-6 flex-1 flex flex-col">
-                <h3 class="text-xl font-bold text-gray-800 leading-tight mb-2">${tour.title}</h3>
-                <p class="text-gray-600 text-sm mb-6 line-clamp-2">${tour.description || ''}</p>
-                <div class="mt-auto pt-4 border-t border-gray-100">
-                    <a href="https://wa.me/593994891081?text=Hola%2C%20quiero%20dejar%20una%20rese%C3%B1a%20del%20tour%3A%20${encodeURIComponent(tour.title)}"
-                        target="_blank" rel="noopener"
-                        title="Dejar reseña"
-                        class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 text-sm font-bold rounded-lg transition shadow"
-                    >
-                        ⭐ Reseña
-                    </a>
-                </div>
-            </div>
-        `;
+           <div class="p-6 flex-1 flex flex-col">
+    <h3 class="text-xl font-bold text-gray-800 leading-tight mb-2">${tour.title}</h3>
+    <p class="text-gray-600 text-sm mb-6 line-clamp-2">${tour.description || ''}</p>
+    <div class="mt-auto pt-4 border-t border-gray-100">
+        <button onclick="ReviewModal.open('${tour.title.replace(/'/g, "\\'")}')"
+            class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 text-sm font-bold rounded-lg transition shadow"
+        >
+            ⭐ Dejar Reseña
+        </button>
+    </div>
+</div>
+    `;
         return card;
     },
 
