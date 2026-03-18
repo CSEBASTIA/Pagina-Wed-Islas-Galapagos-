@@ -8,8 +8,8 @@
 console.log('📦 Cargando supabase.js (frontend)...');
 
 // ⚠️  ESTAS SON LAS ÚNICAS CREDENCIALES QUE VAN AL FRONTEND (clave anon, es pública)
-const SUPABASE_URL = 'https://uthtwemxslpdpcglelvw.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV0aHR3ZW14c2xwZHBjZ2xlbHZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MTAwMTYsImV4cCI6MjA4MDM4NjAxNn0.9WEZZdm-WcyWGnANV7MPKWlSnwd13zVrzPc9H3uNZA8';
+const SUPABASE_URL = 'https://lmgecsbrkpfkeifshxot.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxtZ2Vjc2Jya3Bma2VpZnNoeG90Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3ODE0NTQsImV4cCI6MjA4OTM1NzQ1NH0.xcsOXoSmhwloInSoHOWtOLxXqTJsslG8mrYKfSwZdPo';
 
 // El frontend ya NO llama a Supabase directamente.
 // Todos los datos pasan por /api/* (Vercel Functions) que usan la SERVICE_KEY en el servidor.
