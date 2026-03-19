@@ -29,10 +29,9 @@ export default async function handler(req, res) {
 
         if (error) {
             console.error('Supabase error GET tours:', error);
-            return res.status(200).json(DEFAULT_TOURS); // fallback
+            return res.status(200).json(DEFAULT_TOURS);
         }
 
-        // Convertir tags de string CSV a array
         const tours = (data || []).map(t => ({
             ...t,
             tags: typeof t.tags === 'string'
@@ -51,9 +50,24 @@ export default async function handler(req, res) {
 
         const tagsStr = Array.isArray(tags) ? tags.join(',') : (tags || 'Tour');
 
+        // Generar ID único basado en timestamp
+        const newId = Date.now();
+
         const { data, error } = await supabase
             .from('tours')
-            .insert([{ title, description, duration, departure, arrival, rating: rating || 5.0, reviews: reviews || 0, image, tags: tagsStr, difficulty: difficulty || 'Moderado' }])
+            .insert([{
+                id: newId,
+                title,
+                description,
+                duration,
+                departure,
+                arrival,
+                rating: rating || 5.0,
+                reviews: reviews || 0,
+                image,
+                tags: tagsStr,
+                difficulty: difficulty || 'Moderado'
+            }])
             .select()
             .single();
 
@@ -66,4 +80,4 @@ export default async function handler(req, res) {
     }
 
     return res.status(405).json({ error: 'Método no permitido' });
-}
+} //importante pushe
