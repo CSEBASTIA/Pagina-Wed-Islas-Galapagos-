@@ -1,7 +1,7 @@
 // api/gallery/upload.js  →  POST /api/gallery/:island/upload
 import { supabase } from '../_supabase.js';
 
-export const config = { api: { bodyParser: false } };  // necesario para leer multipart
+export const config = { api: { bodyParser: false } };
 
 function cors(res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -9,7 +9,6 @@ function cors(res) {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 }
 
-// Leer body raw del stream
 function readBody(req) {
     return new Promise((resolve, reject) => {
         const chunks = [];
@@ -19,7 +18,6 @@ function readBody(req) {
     });
 }
 
-// Parser minimal multipart/form-data
 function parseMultipart(bodyBuffer, contentType) {
     const boundaryMatch = contentType.match(/boundary=([^\s;]+)/);
     if (!boundaryMatch) return null;
@@ -27,10 +25,10 @@ function parseMultipart(bodyBuffer, contentType) {
     const parts = [];
     let start = bodyBuffer.indexOf(boundary);
     while (start !== -1) {
-        start += boundary.length + 2; // skip \r\n
+        start += boundary.length + 2;
         const end = bodyBuffer.indexOf(boundary, start);
         if (end === -1) break;
-        const part = bodyBuffer.slice(start, end - 2); // trim trailing \r\n
+        const part = bodyBuffer.slice(start, end - 2);
         const headerEnd = part.indexOf(Buffer.from('\r\n\r\n'));
         if (headerEnd === -1) { start = end; continue; }
         const headers = part.slice(0, headerEnd).toString();
@@ -54,9 +52,8 @@ export default async function handler(req, res) {
     if (req.method === 'OPTIONS') return res.status(204).end();
     if (req.method !== 'POST') return res.status(405).json({ error: 'Método no permitido' });
 
-    // Isla desde la URL: /api/gallery/tortuga/upload
-    const urlParts = req.url.split('/api/gallery/')[1]?.split('/');
-    const island = urlParts?.[0];
+    // Leer isla desde query param
+    const island = req.query.island;
     if (!island) return res.status(400).json({ error: 'Isla requerida' });
 
     const contentType = req.headers['content-type'] || '';
@@ -71,8 +68,6 @@ export default async function handler(req, res) {
 
         if (!filePart) return res.status(400).json({ error: 'No se recibió ningún archivo con campo "photo"' });
 
-        // Nombre seguro con timestamp para evitar colisiones
-        const ext = filePart.filename.split('.').pop().toLowerCase();
         const safeName = `${Date.now()}_${filePart.filename.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
         const path = `${island}/${safeName}`;
 

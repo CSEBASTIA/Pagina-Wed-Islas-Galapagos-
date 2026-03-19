@@ -947,8 +947,7 @@
 
                 // Construir link de WhatsApp
                 const waMsg = `Hola, confirmo mi reserva:\n🛥️ Tour: ${tourName}\n📅 Fecha: ${date}\n👥 Personas: ${people}\n👤 Nombre: ${name}\n📞 Teléfono: ${phone || 'N/A'}\nID Reserva: #${reservation.id}`;
-                document.getElementById('res-whatsapp-link').href =
-                    `https://wa.me/593994891081?text=${encodeURIComponent(waMsg)}`;
+                document.getElementById('res-whatsapp-link').href = "https://wa.me/593994891081"
 
             } catch (err) {
                 errEl.textContent = '❌ Error: ' + err.message;

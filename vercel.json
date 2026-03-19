@@ -26,15 +26,15 @@
         },
         {
             "source": "/api/gallery/:island/upload",
-            "destination": "/api/gallery/upload"
+            "destination": "/api/gallery/upload?island=:island"
         },
         {
             "source": "/api/gallery/:island/:file",
-            "destination": "/api/gallery/delete"
+            "destination": "/api/gallery/delete?island=:island&file=:file"
         },
         {
             "source": "/api/gallery/:island",
-            "destination": "/api/gallery/list"
+            "destination": "/api/gallery/list?island=:island"
         }
     ]
 }

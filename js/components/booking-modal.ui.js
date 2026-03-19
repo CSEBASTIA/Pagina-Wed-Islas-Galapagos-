@@ -184,9 +184,9 @@ const BookingModal = {
             // =========================
             // 📲 REDIRECCIÓN A WHATSAPP
             // =========================
-            const whatsappNumber = '+593994891081';
+            const whatsappNumber = '593994891081';
             const message = `
-           Hola, deseo reservar un tour.
+           Hola, estoy interesando en un tour de las islas galapagos
 
            🛥️ Tour: ${tourTitle}// se inserta el nombre del tour
            📅 Fecha: ${date}//  se inserta la fecha

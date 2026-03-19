@@ -12,8 +12,8 @@ export default async function handler(req, res) {
     if (req.method === 'OPTIONS') return res.status(204).end();
     if (req.method !== 'GET') return res.status(405).json({ error: 'Método no permitido' });
 
-    // Extraer isla de la URL: /api/gallery/tortuga → island = 'tortuga'
-    const island = req.url.split('/api/gallery/')[1]?.split('/')[0];
+    // Leer isla desde query param
+    const island = req.query.island;
     if (!island) return res.status(400).json({ error: 'Isla requerida' });
 
     const { data, error } = await supabase.storage
