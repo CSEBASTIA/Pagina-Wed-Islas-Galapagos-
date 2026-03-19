@@ -21,3 +21,4 @@ const SupabaseService = {
 window.SupabaseService = SupabaseService;
 
 console.log('✅ supabase.js cargado (modo API-only, sin llamadas directas al frontend)');
+//siempre usar fetch('/api/...') para llamar a supabase
