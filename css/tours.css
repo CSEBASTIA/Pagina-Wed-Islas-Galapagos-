@@ -1,0 +1,14 @@
+.tours-page .tours-intro-media img{ transition: transform .7s ease; }
+.tours-page .tours-intro-media:hover img{ transform: scale(1.05); }
+.tours-stat-pill p:first-child{ line-height: 1; }
+
+/* Bloque “Somos Golden Ray I” — tonos tranquilos */
+.tours-about-nosotros{
+  border-bottom: 1px solid rgba(13,148,136,0.08);
+}
+.tours-about-media img{
+  display: block;
+}
+@media (prefers-reduced-motion: reduce){
+  .tours-about-media.group:hover img{ transform: none !important; }
+}

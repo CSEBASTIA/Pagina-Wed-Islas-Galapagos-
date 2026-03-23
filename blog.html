@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog — Golden Ray I · Galapagos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/animations.css">
+    <link rel="stylesheet" href="./css/blog.css">
+</head>
+<body class="blog-page bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+    <div class="fixed inset-0 z-[-1]" aria-hidden="true">
+        <img src="./assets/images/fondo de pagina.png" alt="" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black/40"></div>
+    </div>
+
+    <header>
+        <nav class="bg-white/95 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-100 shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-20">
+                    <a href="./index.html" class="flex items-center gap-2">
+                        <img src="./assets/images/logo-orca.png" alt="Golden Ray Logo" class="h-10 w-10 object-contain">
+                        <span class="text-2xl font-bold text-gray-800 tracking-tight">Golden Ray I</span>
+                    </a>
+                    <div class="hidden md:flex space-x-8">
+                        <a href="./index.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Inicio</a>
+                        <a href="./tours.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Tours</a>
+                        <span class="text-cyan-600 font-semibold border-b-2 border-cyan-500 pb-0.5">Blog</span>
+                        <a href="./contact.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Contacto</a>
+                    </div>
+                    <div class="md:hidden">
+                        <button id="mobile-menu-btn" class="text-gray-600" aria-label="Abrir menu">
+                            <i data-lucide="menu" class="h-7 w-7"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-gray-200 p-4 absolute w-full z-40 shadow-lg">
+            <div class="flex flex-col space-y-4">
+                <a href="./index.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Inicio</a>
+                <a href="./tours.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Tours</a>
+                <span class="text-cyan-600 font-semibold">Blog</span>
+                <a href="./contact.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Contacto</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 bg-white/95 backdrop-blur-[2px]">
+        <section class="blog-page-header py-16 md:py-24 px-4 relative overflow-hidden">
+            <div class="blog-header-glow absolute inset-0 pointer-events-none" aria-hidden="true"></div>
+            <div class="max-w-4xl mx-auto text-center relative z-10 gr-animate-in">
+                <span class="inline-block mb-3 py-1 px-3 rounded-full bg-cyan-100 text-cyan-700 text-xs font-bold uppercase tracking-wide">
+                    Ecuador · Galapagos
+                </span>
+                <h1 class="text-3xl md:text-5xl font-bold text-gray-900 mb-4">Explorando lo desconocido</h1>
+                <p class="text-gray-600 text-lg">Cada tour aparece aqui automaticamente con sus resenas.</p>
+            </div>
+        </section>
+
+        <p id="blog-load-error" class="hidden max-w-2xl mx-auto text-center text-red-600 text-sm px-4 mb-8 bg-red-50 border border-red-100 rounded-xl py-3"></p>
+        <section class="max-w-5xl mx-auto px-4 pb-16 space-y-16 md:space-y-20" id="blog-tours-root" aria-label="Tours del blog"></section>
+        <section class="max-w-5xl mx-auto px-4 pb-20 border-t border-gray-200 pt-16 md:pt-20" aria-labelledby="blog-reviews-all-title">
+            <div class="text-center mb-12 blog-scroll-reveal" data-blog-reveal>
+                <h2 id="blog-reviews-all-title" class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Resenas en general</h2>
+                <p class="text-gray-600 text-sm md:text-base max-w-xl mx-auto">Las opiniones mas recientes de todos los tours.</p>
+            </div>
+            <div id="blog-general-reviews"></div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-900 text-white py-10 mt-auto border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+            <p>© Golden Ray I · Isla Isabela</p>
+            <div class="flex gap-6">
+                <a href="./index.html" class="hover:text-cyan-400 transition">Inicio</a>
+                <a href="./tours.html" class="hover:text-cyan-400 transition">Tours</a>
+                <a href="./contact.html" class="hover:text-cyan-400 transition">Contacto</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="./js/services/tours.service.js"></script>
+    <script src="./js/services/reviews.service.js"></script>
+    <script src="./js/components/blog.ui.js"></script>
+    <script src="./js/components/navigation.ui.js"></script>
+    <script src="./js/blog-page.js"></script>
+</body>
+</html>

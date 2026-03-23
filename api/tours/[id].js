@@ -1,11 +1,6 @@
 // api/tours/[id].js
 import { supabase } from '../_supabase.js';
-
-function cors(res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-}
+import { assertAdmin, corsAllowAuth } from '../_adminAuth.js';
 
 function toTour(row) {
     if (!row) return null;
@@ -18,7 +13,7 @@ function toTour(row) {
 }
 
 export default async function handler(req, res) {
-    cors(res);
+    corsAllowAuth(res, 'GET,PUT,DELETE,OPTIONS');
     if (req.method === 'OPTIONS') return res.status(204).end();
 
     const id = parseInt(req.query.id);
@@ -34,6 +29,7 @@ export default async function handler(req, res) {
 
     // PUT /api/tours/:id
     if (req.method === 'PUT') {
+        if (!assertAdmin(req, res)) return;
         const allowed = ['title', 'description', 'duration', 'departure', 'arrival', 'rating', 'reviews', 'image', 'tags', 'difficulty'];
         const updates = {};
         for (const k of allowed) {
@@ -51,6 +47,7 @@ export default async function handler(req, res) {
 
     // DELETE /api/tours/:id
     if (req.method === 'DELETE') {
+        if (!assertAdmin(req, res)) return;
         const { error } = await supabase.from('tours').delete().eq('id', id);
         if (error) return res.status(500).json({ error: error.message });
         return res.status(200).json({ ok: true });

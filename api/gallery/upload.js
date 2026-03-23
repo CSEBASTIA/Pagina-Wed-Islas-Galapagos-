@@ -1,13 +1,8 @@
 // api/gallery/upload.js  →  POST /api/gallery/:island/upload
 import { supabase } from '../_supabase.js';
+import { assertAdmin, corsAllowAuth } from '../_adminAuth.js';
 
 export const config = { api: { bodyParser: false } };
-
-function cors(res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-}
 
 function readBody(req) {
     return new Promise((resolve, reject) => {
@@ -48,9 +43,10 @@ function parseMultipart(bodyBuffer, contentType) {
 }
 
 export default async function handler(req, res) {
-    cors(res);
+    corsAllowAuth(res, 'POST,OPTIONS');
     if (req.method === 'OPTIONS') return res.status(204).end();
     if (req.method !== 'POST') return res.status(405).json({ error: 'Método no permitido' });
+    if (!assertAdmin(req, res)) return;
 
     // Leer isla desde query param
     const island = req.query.island;

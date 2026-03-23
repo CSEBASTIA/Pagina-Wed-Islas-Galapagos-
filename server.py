@@ -13,10 +13,10 @@ API REST de Tours:
     DELETE /api/tours/{id}      → Eliminar
     POST   /api/tours/reset     → Restaurar los 6 originales
 
-API REST de Reservas:
+API REST de Reservas (solo admin si ADMIN_SECRET tiene ≥16 caracteres):
     GET    /api/reservations         → Listar todas
     GET    /api/reservations/{id}    → Obtener una
-    POST   /api/reservations         → Crear nueva (público)
+    POST   /api/reservations         → Crear (admin)
     PUT    /api/reservations/{id}    → Actualizar estado/datos
     DELETE /api/reservations/{id}    → Eliminar
 """
@@ -31,6 +31,7 @@ import time
 import sqlite3
 import json
 import re
+import hmac
 
 
 # ── Configuración ──────────────────────────────────────────────────────────────
@@ -499,18 +500,51 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
         except Exception:
             return {}
 
+    def _path_only(self):
+        """Ruta sin query string (evita que /api/tours?x=1 no coincida)."""
+        return self.path.split("?", 1)[0]
+
+    def _admin_authorized(self):
+        """Si ADMIN_SECRET está definido (>=16), exige Bearer o X-Admin-Secret."""
+        secret = os.environ.get("ADMIN_SECRET", "").strip()
+        if len(secret) < 16:
+            return True
+        auth = self.headers.get("Authorization", "")
+        token = auth[7:].strip() if auth.startswith("Bearer ") else self.headers.get("X-Admin-Secret", "").strip()
+        if len(token) != len(secret):
+            return False
+        try:
+            return hmac.compare_digest(token.encode("utf-8"), secret.encode("utf-8"))
+        except Exception:
+            return False
+
+    def _require_admin(self):
+        if not self._admin_authorized():
+            self._error("No autorizado", 401)
+            return False
+        return True
+
     # ── GET ──────────────────────────────────────────────────────────────────
     def do_GET(self):
         if self.path == "/livereload":
             self._handle_sse()
             return
 
+        p = self._path_only()
+
+        if p == "/api/admin/ping":
+            if not self._admin_authorized():
+                self._error("No autorizado", 401)
+                return
+            self._json({"ok": True})
+            return
+
         # API Tours
-        if self.path == "/api/tours":
+        if p == "/api/tours":
             self._json(db_get_all())
             return
 
-        m = re.match(r"^/api/tours/(\d+)$", self.path)
+        m = re.match(r"^/api/tours/(\d+)$", p)
         if m:
             tour = db_get_one(int(m.group(1)))
             if tour:
@@ -519,14 +553,17 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
                 self._error("Tour no encontrado", 404)
             return
 
-        # API Reservaciones — listar todas
-        if self.path == "/api/reservations":
+        # API Reservaciones — datos personales: solo administración
+        if p == "/api/reservations":
+            if not self._require_admin():
+                return
             self._json(db_get_all_reservations())
             return
 
-        # API Reservacion — obtener una
-        m_res = re.match(r"^/api/reservations/(\d+)$", self.path)
+        m_res = re.match(r"^/api/reservations/(\d+)$", p)
         if m_res:
+            if not self._require_admin():
+                return
             res = db_get_reservation(int(m_res.group(1)))
             if res:
                 self._json(res)
@@ -535,7 +572,9 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
             return
 
         # API Contenido — leer HTML de cualquier página
-        if self.path.startswith("/api/content"):
+        if p.startswith("/api/content"):
+            if not self._require_admin():
+                return
             from urllib.parse import urlparse, parse_qs
 
             qs = parse_qs(urlparse(self.path).query)
@@ -558,13 +597,15 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
             return
 
         # Listar páginas HTML editables
-        if self.path == "/api/pages":
+        if p == "/api/pages":
+            if not self._require_admin():
+                return
             pages = [f for f in os.listdir(".") if f.endswith(".html")]
             self._json({"pages": sorted(pages)})
             return
 
         # API Galerías — listar fotos de una isla
-        m_gal = re.match(r"^/api/gallery/([a-z0-9_-]+)$", self.path)
+        m_gal = re.match(r"^/api/gallery/([a-z0-9_-]+)$", p)
         if m_gal:
             island = m_gal.group(1)
             gallery_dir = os.path.join("assets", "images", "galleries", island)
@@ -586,8 +627,8 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
             return
 
         # Archivos HTML con live reload inyectado
-        path = self.translate_path(self.path)
-        if path.endswith(".html") or self.path in ("/", ""):
+        path = self.translate_path(p)
+        if path.endswith(".html") or p in ("/", ""):
             self._serve_html_with_reload(path)
             return
 
@@ -595,13 +636,17 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
 
     # ── POST ─────────────────────────────────────────────────────────────────
     def do_POST(self):
-        if self.path == "/api/tours/reset":
+        p = self._path_only()
+        if p == "/api/tours/reset":
+            if not self._require_admin():
+                return
             db_reset()
             self._json({"ok": True, "tours": db_get_all()})
             return
 
-        # Nueva reservación (público)
-        if self.path == "/api/reservations":
+        if p == "/api/reservations":
+            if not self._require_admin():
+                return
             data = self._read_body()
             required = ["customer_name", "email", "date", "people", "tour_name"]
             missing = [f for f in required if not data.get(f)]
@@ -613,18 +658,22 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
             self._json(reservation, 201)
             return
 
-        if self.path == "/api/tours":
+        if p == "/api/tours":
+            if not self._require_admin():
+                return
             data = self._read_body()
-            if not data.get("title") or not data.get("price"):
-                self._error("title y price son obligatorios")
+            if not data.get("title"):
+                self._error("title es obligatorio")
                 return
             tour = db_create(data)
             self._json(tour, 201)
             return
 
         # Upload de foto a galería de una isla
-        m_upload = re.match(r"^/api/gallery/([a-z0-9_-]+)/upload$", self.path)
+        m_upload = re.match(r"^/api/gallery/([a-z0-9_-]+)/upload$", p)
         if m_upload:
+            if not self._require_admin():
+                return
             island = m_upload.group(1)
             gallery_dir = os.path.join("assets", "images", "galleries", island)
             os.makedirs(gallery_dir, exist_ok=True)
@@ -673,8 +722,11 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
 
     # ── PUT ──────────────────────────────────────────────────────────────────
     def do_PUT(self):
+        p = self._path_only()
         # Guardar contenido HTML de una página
-        if self.path == "/api/content":
+        if p == "/api/content":
+            if not self._require_admin():
+                return
             length = int(self.headers.get("Content-Length", 0))
             if length <= 0:
                 self._error("Cuerpo vacío", 400)
@@ -706,9 +758,10 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
                 self._error(str(e), 500)
             return
 
-        # Actualizar reservación (estado u otros campos)
-        m_res_put = re.match(r"^/api/reservations/(\d+)$", self.path)
+        m_res_put = re.match(r"^/api/reservations/(\d+)$", p)
         if m_res_put:
+            if not self._require_admin():
+                return
             data = self._read_body()
             res = db_update_reservation(int(m_res_put.group(1)), data)
             if res:
@@ -717,8 +770,10 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
                 self._error("Reservación no encontrada", 404)
             return
 
-        m = re.match(r"^/api/tours/(\d+)$", self.path)
+        m = re.match(r"^/api/tours/(\d+)$", p)
         if m:
+            if not self._require_admin():
+                return
             data = self._read_body()
             tour = db_update(int(m.group(1)), data)
             if tour:
@@ -730,22 +785,27 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
 
     # ── DELETE ───────────────────────────────────────────────────────────────
     def do_DELETE(self):
-        # Eliminar reservación
-        m_res_del = re.match(r"^/api/reservations/(\d+)$", self.path)
+        p = self._path_only()
+        m_res_del = re.match(r"^/api/reservations/(\d+)$", p)
         if m_res_del:
+            if not self._require_admin():
+                return
             db_delete_reservation(int(m_res_del.group(1)))
             self._json({"ok": True})
             return
 
-        m = re.match(r"^/api/tours/(\d+)$", self.path)
+        m = re.match(r"^/api/tours/(\d+)$", p)
         if m:
+            if not self._require_admin():
+                return
             db_delete(int(m.group(1)))
             self._json({"ok": True})
             return
 
-        # Eliminar foto de galería
-        m_del = re.match(r"^/api/gallery/([a-z0-9_-]+)/(.+)$", self.path)
+        m_del = re.match(r"^/api/gallery/([a-z0-9_-]+)/(.+)$", p)
         if m_del:
+            if not self._require_admin():
+                return
             island = m_del.group(1)
             filename = os.path.basename(m_del.group(2))  # Seguridad: solo nombre base
             filepath = os.path.join("assets", "images", "galleries", island, filename)
@@ -765,7 +825,7 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header(
             "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"
         )
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Admin-Secret")
         self.end_headers()
 
     # ── SSE ──────────────────────────────────────────────────────────────────

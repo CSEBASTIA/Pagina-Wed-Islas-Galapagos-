@@ -1,16 +1,12 @@
 // api/gallery/delete.js  →  DELETE /api/gallery/:island/:file
 import { supabase } from '../_supabase.js';
-
-function cors(res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'DELETE,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-}
+import { assertAdmin, corsAllowAuth } from '../_adminAuth.js';
 
 export default async function handler(req, res) {
-    cors(res);
+    corsAllowAuth(res, 'DELETE,OPTIONS');
     if (req.method === 'OPTIONS') return res.status(204).end();
     if (req.method !== 'DELETE') return res.status(405).json({ error: 'Método no permitido' });
+    if (!assertAdmin(req, res)) return;
 
     // Leer isla y archivo desde query params
     const island = req.query.island;

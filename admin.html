@@ -38,14 +38,9 @@
 
                 <form id="admin-login-form" class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-2">Usuario Admin</label>
-                        <input type="text" id="admin-username" placeholder="admin" required
-                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-2">Contraseña</label>
-                        <input type="password" id="admin-password" placeholder="••••••••" required
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Clave de administración</label>
+                        <input type="password" id="admin-secret" autocomplete="current-password" required
+                            placeholder="Misma clave que ADMIN_SECRET"
                             class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 outline-none transition">
                     </div>
 
@@ -58,19 +53,14 @@
                     </button>
                 </form>
 
-                <!-- Info -->
                 <div class="mt-6 pt-6 border-t border-gray-700">
-                    <p class="text-xs text-gray-500 text-center">Credenciales por defecto:</p>
-                    <p class="text-xs text-gray-400 text-center mt-1">Usuario: <span
-                            class="font-mono text-cyan-400">admin</span></p>
-                    <p class="text-xs text-gray-400 text-center">Contraseña: <span
-                            class="font-mono text-cyan-400">admin123</span></p>
+                    <p class="text-xs text-gray-500 text-center">Esta clave debe coincidir con <span class="font-mono">ADMIN_SECRET</span> del servidor.</p>
                 </div>
             </div>
 
             <!-- Footer -->
             <div class="text-center mt-8">
-                <a href="/"
+                <a href="./index.html"
                     class="text-cyan-400 hover:text-cyan-300 font-medium text-sm flex items-center justify-center gap-2">
                     <i data-lucide="arrow-left" class="h-4 w-4"></i>
                     Volver al Sitio
@@ -106,19 +96,23 @@
             <div class="max-w-7xl mx-auto px-4 py-8">
                 <!-- Tabs -->
                 <div class="flex gap-2 mb-8 border-b border-gray-700">
-                    <button onclick="switchTab('tours')"
+                    <button onclick="switchTab('tours', event)"
                         class="tab-btn active px-4 py-2 text-sm font-medium text-cyan-400 border-b-2 border-cyan-500 pb-3">
                         🗺️ Tours
                     </button>
-                    <button onclick="switchTab('galleries')"
+                    <button onclick="switchTab('galleries', event)"
                         class="tab-btn px-4 py-2 text-sm font-medium text-gray-400 hover:text-gray-300 pb-3">
                         🖼️ Galerías
                     </button>
-                    <button onclick="switchTab('reviews'); loadReviews()"
+                    <button onclick="switchTab('reviews', event); loadReviews()"
                         class="tab-btn px-4 py-2 text-sm font-medium text-gray-400 hover:text-gray-300 pb-3">
                         ⭐ Reseñas
                     </button>
-                    <button onclick="switchTab('htmleditor'); loadHtmlEditor()"
+                    <button onclick="switchTab('blog', event); loadBlogAdminTab()"
+                        class="tab-btn px-4 py-2 text-sm font-medium text-gray-400 hover:text-gray-300 pb-3">
+                        📰 Blog
+                    </button>
+                    <button onclick="switchTab('htmleditor', event); loadHtmlEditor()"
                         class="tab-btn px-4 py-2 text-sm font-medium text-gray-400 hover:text-gray-300 pb-3">
                         📝 Editor HTML
                     </button>
@@ -263,6 +257,23 @@
                     </div>
                 </div>
 
+                <div id="tab-blog" class="tab-content hidden">
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h2 class="text-2xl font-bold text-white">📰 Estado del Blog</h2>
+                                <p class="text-gray-400 text-sm mt-1">Resumen de tours y sus reseñas</p>
+                            </div>
+                            <button onclick="loadBlogAdminTab()"
+                                class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm transition">
+                                🔄 Actualizar
+                            </button>
+                        </div>
+                        <div id="blog-admin-summary" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+                        <div id="blog-admin-list" class="space-y-3"></div>
+                    </div>
+                </div>
+
                 <!-- HTML Editor Tab -->
                 <div id="tab-htmleditor" class="tab-content hidden">
                     <div class="space-y-4">
@@ -346,48 +357,67 @@
 
     <!-- Config & Services -->
     <script src="./js/config/supabase.js"></script>
+    <script src="./js/admin-api-headers.js"></script>
     <script src="./js/services/observer.service.js"></script>
     <script src="./js/services/theme.service.js"></script>
     <script src="./js/services/tours.service.js"></script>
     <script src="./js/services/gallery.service.js"></script>
-    <script src="./js/services/reviews.service.js"></script> ← agrega esta línea
+    <script src="./js/services/reviews.service.js"></script>
     <script src="./js/components/admin-panel.ui.js"></script>
     <!-- Admin Auth Script -->
     <script>
-        // Credenciales por defecto
-        const ADMIN_CREDENTIALS = {
-            username: 'admin',
-            password: 'admin123'
-        };
+        const SESSION_KEY = 'admin_api_secret';
 
-        // Verificar si está logueado
-        function checkAdminAuth() {
-            const token = localStorage.getItem('admin_token');
-            if (token) {
-                showAdminPanel();
+        async function checkAdminAuth() {
+            const stored = sessionStorage.getItem(SESSION_KEY);
+            if (!stored || !String(stored).trim()) {
+                if (stored) sessionStorage.removeItem(SESSION_KEY);
+                return;
+            }
+            try {
+                const r = await fetch('/api/admin/ping', { headers: { ...adminApiHeaders() } });
+                if (r.ok) {
+                    await showAdminPanel();
+                    return;
+                }
+                sessionStorage.removeItem(SESSION_KEY);
+            } catch {
+                sessionStorage.removeItem(SESSION_KEY);
             }
         }
 
-        // Login
-        function login(e) {
+        async function login(e) {
             e.preventDefault();
-            const username = document.getElementById('admin-username').value;
-            const password = document.getElementById('admin-password').value;
-
-            if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-                localStorage.setItem('admin_token', 'authenticated_' + Date.now());
-                showAdminPanel();
-            } else {
-                const errorDiv = document.getElementById('login-error');
-                errorDiv.textContent = 'Usuario o contraseña incorrectos';
+            const secret = (document.getElementById('admin-secret')?.value || '').trim();
+            const errorDiv = document.getElementById('login-error');
+            errorDiv.classList.add('hidden');
+            if (!secret) {
+                errorDiv.textContent = 'Introduce la clave de administración.';
                 errorDiv.classList.remove('hidden');
-                setTimeout(() => errorDiv.classList.add('hidden'), 3000);
+                return;
+            }
+            sessionStorage.setItem(SESSION_KEY, secret);
+            try {
+                const r = await fetch('/api/admin/ping', { headers: { ...adminApiHeaders() } });
+                const data = await r.json().catch(() => ({}));
+                if (r.ok) {
+                    document.getElementById('admin-secret').value = '';
+                    await showAdminPanel();
+                    return;
+                }
+                sessionStorage.removeItem(SESSION_KEY);
+                errorDiv.textContent = data.error || (r.status === 401 ? 'Clave incorrecta.' : 'No se pudo validar la sesión.');
+                errorDiv.classList.remove('hidden');
+            } catch {
+                sessionStorage.removeItem(SESSION_KEY);
+                errorDiv.textContent = 'No se pudo conectar con /api/admin/ping.';
+                errorDiv.classList.remove('hidden');
             }
         }
 
         // Logout
         function logout() {
-            localStorage.removeItem('admin_token');
+            sessionStorage.removeItem(SESSION_KEY);
             location.reload();
         }
 
@@ -399,15 +429,17 @@
         }
 
         // Cambiar tab
-        function switchTab(tabName) {
+        function switchTab(tabName, ev) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('border-b-2', 'border-cyan-500', 'text-cyan-400');
                 btn.classList.add('text-gray-400', 'hover:text-gray-300');
             });
             document.getElementById('tab-' + tabName)?.classList.remove('hidden');
-            event.target.classList.remove('text-gray-400', 'hover:text-gray-300');
-            event.target.classList.add('border-b-2', 'border-cyan-500', 'text-cyan-400');
+            if (ev?.target) {
+                ev.target.classList.remove('text-gray-400', 'hover:text-gray-300');
+                ev.target.classList.add('border-b-2', 'border-cyan-500', 'text-cyan-400');
+            }
         }
 
         // Inicializar panel admin (async — compatible con Supabase)
@@ -561,7 +593,7 @@
             ta.value = 'Cargando...';
             ta.disabled = true;
             try {
-                const res = await fetch(`/api/content?page=${page}`);
+                const res = await fetch(`/api/content?page=${page}`, { headers: { ...adminApiHeaders() } });
                 const data = await res.json();
                 if (data.error) throw new Error(data.error);
                 ta.value = data.content;
@@ -586,7 +618,7 @@
             try {
                 const res = await fetch('/api/content', {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', ...adminApiHeaders() },
                     body: JSON.stringify({ page, content })
                 });
                 const data = await res.json();
@@ -606,13 +638,13 @@
             if (!confirm(`¿Restaurar "${page}" desde el backup "${backup}"?\n\nEl archivo actual se sobreescribirá.`)) return;
             try {
                 // Cargar el .bak
-                const res = await fetch(`/api/content?page=${backup}`);
+                const res = await fetch(`/api/content?page=${backup}`, { headers: { ...adminApiHeaders() } });
                 const data = await res.json();
                 if (data.error) throw new Error(`No se encontró backup: ${data.error}`);
                 // Guardarlo como el archivo original
                 const saveRes = await fetch('/api/content', {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', ...adminApiHeaders() },
                     body: JSON.stringify({ page, content: data.content })
                 });
                 const saved = await saveRes.json();
@@ -641,7 +673,7 @@
             const sel = document.getElementById('html-page-select');
             if (!sel) return;
             try {
-                const res = await fetch('/api/pages');
+                const res = await fetch('/api/pages', { headers: { ...adminApiHeaders() } });
                 const data = await res.json();
                 if (data.pages) {
                     sel.innerHTML = data.pages.map(p => {
@@ -740,6 +772,52 @@
                 if (typeof AdminPanel !== 'undefined') AdminPanel._toast('🗑 Reseña eliminada');
             } catch (err) {
                 alert('Error: ' + err.message);
+            }
+        }
+
+        async function loadBlogAdminTab() {
+            const summary = document.getElementById('blog-admin-summary');
+            const list = document.getElementById('blog-admin-list');
+            if (!summary || !list) return;
+
+            summary.innerHTML = '';
+            list.innerHTML = '<p class="text-gray-400">⏳ Cargando...</p>';
+
+            try {
+                const [tours, reviews] = await Promise.all([
+                    ToursService.getAllTours(),
+                    ReviewsService.getAll()
+                ]);
+
+                const totalTours = tours.length;
+                const totalReviews = reviews.length;
+                const toursWithReviews = new Set(reviews.map(r => (r.tour_name || '').toLowerCase().trim())).size;
+
+                summary.innerHTML = [
+                    { label: 'Tours', value: totalTours, color: 'text-cyan-300' },
+                    { label: 'Reseñas', value: totalReviews, color: 'text-yellow-300' },
+                    { label: 'Tours con reseñas', value: toursWithReviews, color: 'text-green-300' }
+                ].map(s => `
+                    <div class="bg-gray-800 border border-gray-700 rounded-xl p-4">
+                        <p class="text-xs text-gray-400">${s.label}</p>
+                        <p class="text-2xl font-bold ${s.color}">${s.value}</p>
+                    </div>
+                `).join('');
+
+                list.innerHTML = tours.map(tour => {
+                    const count = reviews.filter(r => (r.tour_name || '').toLowerCase().trim() === (tour.title || '').toLowerCase().trim()).length;
+                    return `
+                        <div class="bg-gray-800 border border-gray-700 rounded-xl p-4 flex items-center justify-between gap-4">
+                            <div>
+                                <p class="text-white font-semibold">${tour.title || 'Tour sin titulo'}</p>
+                                <p class="text-xs text-gray-400">Visible en principal, tours y blog dinamico</p>
+                            </div>
+                            <span class="text-sm px-3 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">${count} reseña(s)</span>
+                        </div>
+                    `;
+                }).join('') || '<p class="text-gray-400">No hay tours disponibles.</p>';
+            } catch (e) {
+                list.innerHTML = `<p class="text-red-400">❌ Error: ${e.message}</p>`;
             }
         }
     </script>

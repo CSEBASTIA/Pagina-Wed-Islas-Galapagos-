@@ -1,5 +1,6 @@
 // api/tours/reset.js
 import { supabase } from '../_supabase.js';
+import { assertAdmin, corsAllowAuth } from '../_adminAuth.js';
 
 const DEFAULT_TOURS = [
     { id: 101, title: "Tour Cuatro Hermanos", description: "Snorkel avanzado en islotes volcánicos. Hogar de mantarrayas y tortugas.", duration: "5 Horas", departure: "07:30 AM", arrival: "12:30 PM", rating: 4.9, reviews: 85, image: "./assets/images/Cuatro hermanos.jpeg", tags: "Snorkel,Aventura,Fauna", difficulty: "Moderado" },
@@ -10,16 +11,11 @@ const DEFAULT_TOURS = [
     { id: 106, title: "Tour Sierra Negra", description: "Ascenso al volcán activo más grande del archipiélago.", duration: "8 Horas", departure: "07:00 AM", arrival: "03:00 PM", rating: 4.8, reviews: 78, image: "./assets/images/GALERIA3.jpg", tags: "Senderismo,Volcán,Aventura", difficulty: "Difícil" },
 ];
 
-function cors(res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-}
-
 export default async function handler(req, res) {
-    cors(res);
+    corsAllowAuth(res, 'POST,OPTIONS');
     if (req.method === 'OPTIONS') return res.status(204).end();
     if (req.method !== 'POST') return res.status(405).json({ error: 'Método no permitido' });
+    if (!assertAdmin(req, res)) return;
 
     // Borrar todos y volver a insertar los 6 originales
     await supabase.from('tours').delete().gte('id', 0);

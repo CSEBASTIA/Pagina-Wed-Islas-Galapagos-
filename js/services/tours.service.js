@@ -18,9 +18,12 @@ const DEFAULT_TOURS = [
 // ── Helper: petición JSON a la API ───────────────────────────────────────────
 async function apiCall(path, method = 'GET', body = null) {
     try {
+        const adminHeaders = typeof window.adminApiHeaders === 'function'
+            ? window.adminApiHeaders()
+            : {};
         const opts = {
             method,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', ...adminHeaders },
         };
         if (body) opts.body = JSON.stringify(body);
         const res = await fetch(path, opts);

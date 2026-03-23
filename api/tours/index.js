@@ -1,5 +1,5 @@
-// api/tours/index.js
 import { supabase } from '../_supabase.js';
+import { assertAdmin, corsAllowAuth } from '../_adminAuth.js';
 
 const DEFAULT_TOURS = [
     { id: 101, title: "Tour Cuatro Hermanos", description: "Snorkel avanzado en islotes volcánicos. Hogar de mantarrayas y tortugas.", duration: "5 Horas", departure: "07:30 AM", arrival: "12:30 PM", rating: 4.9, reviews: 85, image: "./assets/images/Cuatro hermanos.jpeg", tags: ["Snorkel", "Aventura", "Fauna"], difficulty: "Moderado" },
@@ -10,49 +10,31 @@ const DEFAULT_TOURS = [
     { id: 106, title: "Tour Sierra Negra", description: "Ascenso al volcán activo más grande del archipiélago.", duration: "8 Horas", departure: "07:00 AM", arrival: "03:00 PM", rating: 4.8, reviews: 78, image: "./assets/images/GALERIA3.jpg", tags: ["Senderismo", "Volcán", "Aventura"], difficulty: "Difícil" },
 ];
 
-function cors(res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-}
-
 export default async function handler(req, res) {
-    cors(res);
+    corsAllowAuth(res, 'GET,POST,OPTIONS');
     if (req.method === 'OPTIONS') return res.status(204).end();
 
-    // GET /api/tours
     if (req.method === 'GET') {
-        const { data, error } = await supabase
-            .from('tours')
-            .select('*')
-            .order('id');
-
+        const { data, error } = await supabase.from('tours').select('*').order('id');
         if (error) {
             console.error('Supabase error GET tours:', error);
             return res.status(200).json(DEFAULT_TOURS);
         }
-
-        const tours = (data || []).map(t => ({
+        const tours = (data || []).map((t) => ({
             ...t,
             tags: typeof t.tags === 'string'
-                ? t.tags.split(',').map(x => x.trim()).filter(Boolean)
-                : (t.tags || [])
+                ? t.tags.split(',').map((x) => x.trim()).filter(Boolean)
+                : (t.tags || []),
         }));
-
         return res.status(200).json(tours.length ? tours : DEFAULT_TOURS);
     }
 
-    // POST /api/tours
     if (req.method === 'POST') {
-        const { title, description, duration, departure, arrival, rating, reviews, image, tags, difficulty } = req.body;
-
+        if (!assertAdmin(req, res)) return;
+        const { title, description, duration, departure, arrival, rating, reviews, image, tags, difficulty } = req.body || {};
         if (!title) return res.status(400).json({ error: 'title es obligatorio' });
-
         const tagsStr = Array.isArray(tags) ? tags.join(',') : (tags || 'Tour');
-
-        // Generar ID único basado en timestamp
         const newId = Date.now();
-
         const { data, error } = await supabase
             .from('tours')
             .insert([{
@@ -66,18 +48,16 @@ export default async function handler(req, res) {
                 reviews: reviews || 0,
                 image,
                 tags: tagsStr,
-                difficulty: difficulty || 'Moderado'
+                difficulty: difficulty || 'Moderado',
             }])
             .select()
             .single();
-
         if (error) return res.status(500).json({ error: error.message });
-
         return res.status(201).json({
             ...data,
-            tags: data.tags ? data.tags.split(',').map(x => x.trim()) : []
+            tags: data.tags ? data.tags.split(',').map((x) => x.trim()) : [],
         });
     }
 
     return res.status(405).json({ error: 'Método no permitido' });
-} //importante pushe
+}

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tours & Destinos — Golden Ray I · Galapagos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/animations.css">
+    <link rel="stylesheet" href="./css/tours.css">
+</head>
+
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen tours-page">
+    <div class="fixed inset-0 z-[-1]" aria-hidden="true">
+        <img src="./assets/images/fondo de pagina.png" alt="" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black/40"></div>
+    </div>
+
+    <header>
+        <nav class="bg-white/95 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-100 shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-20">
+                    <a href="./index.html" class="flex items-center gap-2">
+                        <img src="./assets/images/logo-orca.png" alt="Golden Ray Logo" class="h-10 w-10 object-contain">
+                        <span class="text-2xl font-bold text-gray-800 tracking-tight">Golden Ray I</span>
+                    </a>
+                    <div class="hidden md:flex space-x-8">
+                        <a href="./index.html"
+                            class="text-gray-600 hover:text-cyan-600 font-medium transition">Inicio</a>
+                        <span class="text-cyan-600 font-semibold border-b-2 border-cyan-500 pb-0.5">Tours</span>
+                        <a href="./blog.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Blog</a>
+                        <a href="./contact.html"
+                            class="text-gray-600 hover:text-cyan-600 font-medium transition">Contacto</a>
+                    </div>
+                    <div class="md:hidden">
+                        <button id="mobile-menu-btn" class="text-gray-600" aria-label="Abrir menu">
+                            <i data-lucide="menu" class="h-7 w-7"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div id="mobile-menu"
+            class="hidden md:hidden bg-white border-b border-gray-200 p-4 absolute w-full z-40 shadow-lg">
+            <div class="flex flex-col space-y-4">
+                <a href="./index.html" onclick="toggleMobileMenu()"
+                    class="text-left text-gray-800 font-medium">Inicio</a>
+                <span class="text-cyan-600 font-semibold">Tours & Galeria</span>
+                <a href="./blog.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Blog</a>
+                <a href="./contact.html" onclick="toggleMobileMenu()"
+                    class="text-left text-gray-800 font-medium">Contacto</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 bg-white/95 backdrop-blur-[2px]">
+        <!-- ========== SOMOS GOLDEN RAY I (diseño + imagen) ========== -->
+        <section class="tours-about-nosotros max-w-7xl mx-auto px-4 pt-16 md:pt-24 pb-8 md:pb-12"
+            aria-labelledby="tours-somos-heading">
+            <div class="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <div
+                    class="relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-teal-100/70 group tours-about-media">
+                    <img src="./assets/images/lancha.jpeg" alt="Golden Ray I, nuestra lancha en Galápagos"
+                        class="w-full h-full object-cover min-h-[280px] md:min-h-[380px] transition duration-700 group-hover:scale-[1.02]">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent pointer-events-none">
+                    </div>
+                    <div class="absolute bottom-6 left-6 right-6 text-white">
+                        <p class="font-bold text-xl drop-shadow-md">Golden Ray I</p>
+                        <p class="text-teal-200 text-sm font-medium drop-shadow">Nuestra Lancha Insignia</p>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <span
+                        class="inline-block py-1.5 px-3 rounded-full bg-teal-50 text-teal-700 text-xs font-bold uppercase tracking-wide border border-teal-100">
+                        Tu anfitrión local
+                    </span>
+                    <h2 id="tours-somos-heading" class="text-4xl md:text-5xl font-bold text-slate-900 leading-tight">
+                        Somos <span class="text-teal-600">Golden Ray I</span>
+                    </h2>
+                    <p class="text-lg text-slate-600 leading-relaxed">
+                        Desde hace más de 10 años, navegamos las aguas de Galápagos con un compromiso inquebrantable.
+                        Somos un equipo local, responsable y altamente capacitado, dedicado a ofrecerte una experiencia
+                        segura y auténtica en cada travesía.
+                    </p>
+                    <div class="bg-slate-50 p-6 rounded-2xl border-l-4 border-teal-500 shadow-sm">
+                        <h3 class="text-xl font-bold text-slate-900 mb-2 flex items-center gap-2">
+                            <i data-lucide="ship" class="w-5 h-5 text-teal-600 shrink-0"></i> Golden Ray I
+                        </h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            Mi lancha rápida, la <strong class="text-slate-800">"Golden Ray I"</strong>, está equipada
+                            para brindarte confort y seguridad. Ofrecemos tours diarios con total disponibilidad y
+                            flexibilidad. ¡Nosotros nos encargamos de todo para que tú solo disfrutes!
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-8 pt-2 tours-stats-row">
+                        <div class="text-center">
+                            <p class="text-3xl font-bold text-slate-900">10+</p>
+                            <p class="text-xs text-slate-500 uppercase tracking-wide mt-1">Años experiencia</p>
+                        </div>
+                        <div class="w-px h-12 bg-slate-200" aria-hidden="true"></div>
+                        <div class="text-center">
+                            <p class="text-3xl font-bold text-slate-900">100%</p>
+                            <p class="text-xs text-slate-500 uppercase tracking-wide mt-1">Clientes felices</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="max-w-7xl mx-auto px-4 py-16 md:py-24">
+            <header class="text-center mb-12">
+                <span class="text-cyan-600 font-bold tracking-wider text-sm uppercase">Nuestros Destinos</span>
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2">Las Islas que Debes Conocer</h1>
+                <p class="text-gray-600 mt-2">Informacion y galeria por destino. Contacto directo por WhatsApp.</p>
+            </header>
+            <!-- ========== islas de las galerias  ========== -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+                <!-- Isla Tortuga -->
+                <div
+                    class="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="./assets/images/isla tortuga.jpeg" alt="Isla Tortuga"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent">
+                        </div>
+                        <div class="absolute top-4 left-4">
+                            <span
+                                class="bg-emerald-500/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">Aves
+                                · Relax</span>
+                        </div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <h3 class="text-2xl font-extrabold text-white leading-tight">Isla Tortuga</h3>
+                            <p class="text-emerald-300 text-sm font-medium">Santuario de Aves</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                            Un cráter volcánico colapsado en medio del mar con forma de media luna. Hogar de
+                            aves marinas y espectaculares paisajes, ideal para fotografía y observación de
+                            naturaleza.
+                        </p>
+                        <!-- Galería dinámica -->
+                        <div id="gallery-tortuga" class="grid grid-cols-3 gap-1.5 mb-4"></div>
+                        <!-- Botones de acción -->
+                        <div class="flex gap-2 mt-2">
+                            <a href="https://wa.me/593994891081?text=Hola%2C%20me%20interesa%20el%20Tour%20Isla%20Tortuga%20%F0%9F%90%A2"
+                                target="_blank" rel="noopener"
+                                class="flex-1 bg-green-500 hover:bg-green-600 text-white text-sm font-bold px-4 py-2 rounded-xl transition flex items-center justify-center gap-2 shadow">
+                                💬 Reservar por WhatsApp
+                            </a>
+                            <a href="./galeria.html?isla=tortuga"
+                                class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-xl transition flex items-center gap-1">
+                                🖼 Galería
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Punta Cormorant -->
+                <div
+                    class="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="./assets/images/punta cormorant.jpeg" alt="Punta Cormorant"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent">
+                        </div>
+                        <div class="absolute top-4 left-4">
+                            <span
+                                class="bg-orange-500/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">Playa
+                                · Snorkel</span>
+                        </div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <h3 class="text-2xl font-extrabold text-white leading-tight">Punta Cormorant</h3>
+                            <p class="text-orange-300 text-sm font-medium">Playa y Laguna</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                            Playas de arena verde y blanca únicas en Galápagos, flamencos rosados en la laguna y
+                            snorkel en la famosa Corona del Diablo. Un ecosistema variado e irrepetible.
+                        </p>
+                        <!-- Galería dinámica -->
+                        <div id="gallery-cormorant" class="grid grid-cols-3 gap-1.5 mb-4"></div>
+                        <!-- Botones de acción -->
+                        <div class="flex gap-2 mt-2">
+                            <a href="https://wa.me/593994891081?text=Hola%2C%20me%20interesa%20el%20Tour%20Punta%20Cormorant%20%F0%9F%A6%A9"
+                                target="_blank" rel="noopener"
+                                class="flex-1 bg-green-500 hover:bg-green-600 text-white text-sm font-bold px-4 py-2 rounded-xl transition flex items-center justify-center gap-2 shadow">
+                                💬 Reservar por WhatsApp
+                            </a>
+                            <a href="./galeria.html?isla=cormorant"
+                                class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-xl transition flex items-center gap-1">
+                                🖼 Galería
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cuatro Hermanos -->
+                <div
+                    class="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="./assets/images/Cuatro hermanos.jpeg" alt="Cuatro Hermanos"
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent">
+                        </div>
+                        <div class="absolute top-4 left-4">
+                            <span
+                                class="bg-cyan-500/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">Snorkel
+                                · Aventura</span>
+                        </div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <h3 class="text-2xl font-extrabold text-white leading-tight">Cuatro Hermanos</h3>
+                            <p class="text-cyan-300 text-sm font-medium">Snorkel Avanzado</p>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 text-sm leading-relaxed mb-4">
+                            Cuatro islotes volcánicos que emergen del océano, hogar de mantarrayas gigantes,
+                            tortugas marinas y una vida submarina extraordinaria. La joya del snorkel en
+                            Isabela.
+                        </p>
+                        <!-- Galería dinámica -->
+                        <div id="gallery-hermanos" class="grid grid-cols-3 gap-1.5 mb-4"></div>
+                        <!-- Botones de acción -->
+                        <div class="flex gap-2 mt-2">
+                            <a href="https://wa.me/593994891081?text=Hola%2C%20me%20interesa%20el%20Tour%20Cuatro%20Hermanos%20%F0%9F%A4%BF"
+                                target="_blank" rel="noopener"
+                                class="flex-1 bg-green-500 hover:bg-green-600 text-white text-sm font-bold px-4 py-2 rounded-xl transition flex items-center justify-center gap-2 shadow">
+                                💬 Reservar por WhatsApp
+                            </a>
+                            <a href="./galeria.html?isla=hermanos"
+                                class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-xl transition flex items-center gap-1">
+                                🖼 Galería
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Lightbox -->
+            <div id="island-lightbox" class="fixed inset-0 z-[200] hidden items-center justify-center bg-black/90"
+                onclick="closeLightbox()">
+                <button class="absolute top-4 right-4 text-white text-3xl font-bold z-10"
+                    onclick="closeLightbox()">✕</button>
+                <img id="lightbox-img" src="" alt=""
+                    class="max-w-[90vw] max-h-[90vh] rounded-xl shadow-2xl object-contain">
+            </div>
+            </div>
+        </section>
+
+        <div id="island-lightbox" class="fixed inset-0 z-[200] hidden items-center justify-center bg-black/90"
+            onclick="if(event.target===this) closeLightbox()">
+            <button type="button" class="absolute top-4 right-4 text-white text-3xl font-bold z-10"
+                onclick="closeLightbox()">✕</button>
+            <img id="lightbox-img" src="" alt="" class="max-w-[90vw] max-h-[90vh] rounded-xl shadow-2xl object-contain">
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 text-white py-10 mt-auto border-t border-gray-800">
+        <div
+            class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+            <p>© Golden Ray I · Isla Isabela</p>
+            <div class="flex gap-6">
+                <a href="./index.html" class="hover:text-cyan-400 transition">Inicio</a>
+                <a href="./blog.html" class="hover:text-cyan-400 transition">Blog</a>
+                <a href="./contact.html" class="hover:text-cyan-400 transition">Contacto</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="./js/config/supabase.js"></script>
+    <script src="./js/services/gallery.service.js"></script>
+    <script src="./js/components/navigation.ui.js"></script>
+    <script src="./js/main.js"></script>
+</body>
+
+</html>

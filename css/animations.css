@@ -1,0 +1,28 @@
+/* Shared animations */
+@keyframes gr-fade-up { from { opacity:0; transform: translateY(18px);} to {opacity:1; transform: translateY(0);} }
+@keyframes gr-fade-in { from { opacity:0;} to { opacity:1;} }
+@keyframes gr-scale-in { from {opacity:0; transform:scale(.96);} to {opacity:1; transform:scale(1);} }
+.gr-animate-in{ animation:gr-fade-up .75s cubic-bezier(.22,1,.36,1) both;}
+.gr-animate-in-delay-1{animation-delay:.1s}
+.gr-animate-in-delay-2{animation-delay:.2s}
+.gr-stagger > *{ opacity:0; animation:gr-fade-up .65s cubic-bezier(.22,1,.36,1) both;}
+.gr-stagger > *:nth-child(1){animation-delay:.05s}
+.gr-stagger > *:nth-child(2){animation-delay:.12s}
+.gr-stagger > *:nth-child(3){animation-delay:.19s}
+.gr-stagger > *:nth-child(4){animation-delay:.26s}
+.gr-stagger > *:nth-child(5){animation-delay:.33s}
+.gr-stagger > *:nth-child(6){animation-delay:.40s}
+
+@keyframes gr-float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes gr-soft-glow {
+  0%,100% { opacity:.35; }
+  50% { opacity:.65; }
+}
+
+.gr-float { animation: gr-float 4s ease-in-out infinite; }
+.gr-soft-glow { animation: gr-soft-glow 3s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce){ .gr-animate-in,.gr-stagger>*{animation:none!important; opacity:1!important; transform:none!important;} }

@@ -25,7 +25,11 @@ const ReviewsService = {
 
     // Eliminar una reseña (admin)
     async remove(id) {
-        const res = await fetch(`/api/reviews?id=${id}`, { method: 'DELETE' });
+        const headers = {
+            'Content-Type': 'application/json',
+            ...(typeof window.adminApiHeaders === 'function' ? window.adminApiHeaders() : {}),
+        };
+        const res = await fetch(`/api/reviews?id=${id}`, { method: 'DELETE', headers });
         const json = await res.json();
         if (!res.ok) throw new Error(json.error || 'Error al eliminar reseña');
         return json;

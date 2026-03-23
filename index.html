@@ -4,49 +4,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Golden Ray I - Tours - Galápagos</title>
-    <!-- Google Fonts -->
+    <meta name="description" content="Golden Ray I — tours y experiencias en Isla Isabela, Galápagos.">
+    <title>Golden Ray I - Inicio - Galápagos</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- CSS propio -->
     <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/animations.css">
+    <link rel="stylesheet" href="./css/home.css">
 </head>
 
-<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
-    <!-- Fondo -->
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen home-page">
+    <!-- ========== FONDO GLOBAL ========== -->
     <div class="fixed inset-0 z-[-1]">
-        <!-- Tu imagen del mar -->
         <img src="./assets/images/fondo de pagina.png" alt="Fondo de página" class="w-full h-full object-cover">
-        <!-- El filtro oscuro para que se lea el texto -->
         <div class="absolute inset-0 bg-black/50"></div>
     </div>
-    <!-- Navbar -->
-    <nav class="bg-[#FFFFFF] sticky top-0 z-50 border-b border-[#FFFFFF]">
+
+    <!-- ========== NAVEGACIÓN ========== -->
+    <nav class="bg-white sticky top-0 z-50 border-b border-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
-                <!-- Logo (Clickeable para ir a Inicio) -->
-                <div class="flex items-center gap-2 cursor-pointer" onclick="showHome()">
+                <a href="./index.html" class="flex items-center gap-2 no-underline text-inherit">
                     <img src="./assets/images/logo-orca.png" alt="Golden Ray Logo" class="h-10 w-10 object-contain">
                     <span class="text-2xl font-bold text-gray-800 tracking-tight">Golden Ray I</span>
-                </div>
-
-                <!-- Desktop Menu -->
+                </a>
                 <div class="hidden md:flex space-x-8">
-                    <button onclick="showHome()"
-                        class="text-gray-600 hover:text-cyan-600 font-medium transition focus:outline-none">Inicio</button>
-                    <button onclick="showTours()"
-                        class="text-gray-600 hover:text-cyan-600 font-medium transition focus:outline-none">Tours</button>
-                    <button onclick="showBlog()"
-                        class="text-gray-600 hover:text-cyan-600 font-medium transition focus:outline-none">Blog</button>
-                    <button onclick="showContact()"
-                        class="text-gray-600 hover:text-cyan-600 font-medium transition focus:outline-none">Contacto</button>
+                    <a href="./index.html"
+                        class="text-cyan-600 font-semibold border-b-2 border-cyan-500 pb-0.5">Inicio</a>
+                    <a href="./tours.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Tours</a>
+                    <a href="./blog.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Blog</a>
+                    <a href="./contact.html"
+                        class="text-gray-600 hover:text-cyan-600 font-medium transition">Contacto</a>
                 </div>
-
-
-
-                <!-- Mobile Menu Button -->
                 <div class="md:hidden">
-                    <button id="mobile-menu-btn" class="text-gray-600">
+                    <button id="mobile-menu-btn" class="text-gray-600" aria-label="Abrir menú">
                         <i data-lucide="menu" class="h-7 w-7"></i>
                     </button>
                 </div>
@@ -54,741 +44,165 @@
         </div>
     </nav>
 
-    <!-- Mobile Menu (Hidden by default) -->
     <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-gray-200 p-4 absolute w-full z-40 shadow-lg">
         <div class="flex flex-col space-y-4">
-            <button onclick="showHome(); toggleMobileMenu()" class="text-left text-gray-800 font-medium">Inicio</button>
-            <button onclick="showTours(); toggleMobileMenu()" class="text-left text-gray-800 font-medium">Tours &
-                Galería</button>
-            <button onclick="showBlog(); toggleMobileMenu()" class="text-left text-gray-800 font-medium">Blog - Islas
-                Secretas</button>
-            <button onclick="showContact(); toggleMobileMenu()"
-                class="text-left text-gray-800 font-medium">Contacto</button>
-
+            <a href="./index.html" onclick="toggleMobileMenu()" class="text-left text-cyan-600 font-semibold">Inicio</a>
+            <a href="./tours.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Tours &
+                Galería</a>
+            <a href="./blog.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Blog</a>
+            <a href="./contact.html" onclick="toggleMobileMenu()"
+                class="text-left text-gray-800 font-medium">Contacto</a>
         </div>
     </div>
 
-    <!-- ================= VIEW: HOME ================= -->
+    <!-- ========== CONTENIDO: SOLO INICIO (home nuevo) ========== -->
     <div id="home-view">
-        <!-- Hero Section -->
-        <div class="relative h-[600px] flex items-center justify-center overflow-hidden">
-            <div class="absolute inset-0 z-0">
+
+        <!-- 1. HERO -->
+        <section class="section-hero relative h-[600px] flex items-center justify-center overflow-hidden"
+            aria-label="Presentación">
+            <div class="hero-backdrop absolute inset-0 z-0">
                 <img src="./assets/images/galapagos4.jpeg" alt="Paisaje de Galápagos"
-                    class="w-full h-full object-cover" />
+                    class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-black/10"></div>
             </div>
-            <div class="relative z-10 text-center px-4 max-w-3xl mx-auto mt-8 w-full">
-                <!-- Contenedor con efecto cristal oscuro para mejorar la lectura -->
-                <div class="bg-black/20 backdrop-blur-none rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl">
-
+            <div class="relative z-10 text-center px-4 max-w-3xl mx-auto mt-8 w-full gr-animate-in">
+                <div class="hero-glass bg-black/20 rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl">
                     <span
                         class="inline-block py-1 px-3 rounded-full bg-cyan-500/20 text-cyan-200 border border-cyan-400/30 text-sm font-semibold mb-4">
-                        Descubre el Paraíso Encantado
+                        Descubre el Paraiso Encantado
                     </span>
-
                     <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-lg">
-                        Explora la Magia de <br /> Isla Isabela
+                        Explora la Magia de <br> Isla Isabela
                     </h1>
-
                     <p class="text-lg md:text-xl text-gray-100 mb-10 max-w-2xl mx-auto drop-shadow-md">
-                        Vive experiencias únicas en los islotes más exclusivos de Galápagos.
-                        Elige tu fecha y reserva ahora tu aventura en Isabela
+                        Vive experiencias unicas en los islotes mas exclusivos de Galapagos.
+                        Escribenos y te ayudamos a planificar tu aventura en Isabela.
                     </p>
-
                 </div>
             </div>
-        </div>
-        <!-- Info Section: Galapagos Description -->
-        <section class="py-16">
+        </section>
+
+        <!-- 2. ARCHIPIÉLAGO -->
+        <section class="py-16" aria-labelledby="archipielago-heading">
             <div class="max-w-7xl mx-auto px-4">
                 <div class="text-center max-w-3xl mx-auto mb-12">
-                    <span class="text-cyan-600 font-bold tracking-wider text-sm uppercase">El Archipiélago
+                    <span class="text-cyan-600 font-bold tracking-wider text-sm uppercase">El Archipielago
                         Encantado</span>
-                    <h2 class="text-3xl font-bold text-white mt-2 mb-4">Galápagos: Un Laboratorio Viviente</h2>
+                    <h2 id="archipielago-heading" class="text-3xl font-bold text-white mt-2 mb-4">Galapagos: Un
+                        Laboratorio Viviente</h2>
                     <p class="text-white text-lg leading-relaxed">
-                        Las Islas Galápagos son un patrimonio natural de la humanidad, famosas por inspirar la teoría de
-                        la evolución de Darwin. Este archipiélago volcánico es uno de los lugares con mayor
-                        biodiversidad y endemismo del planeta.
+                        Las Islas Galapagos son un patrimonio natural de la humanidad, famosas por inspirar la teoria de
+                        la evolucion.
                     </p>
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Card 1: Fauna -->
-                    <div
-                        class="bg-white/90 backdrop-blur-sm border border-white/10 p-8 rounded-2xl hover:bg-white/50 hover:shadow-xl transition text-center group">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 gr-stagger">
+                    <div class="home-info-card bg-white/90 border border-white/10 p-8 rounded-2xl text-center group">
                         <div
                             class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition">
                             <i data-lucide="bug" class="w-8 h-8 text-orange-600"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-black/80 mb-2">Fauna Única</h3>
-                        <p class="text-black/80 text-sm">
-                            Hogar de las famosas tortugas gigantes centenarias, iguanas marinas prehistóricas y piqueros
-                            de patas azules que no temen a la presencia humana.
-                        </p>
+                        <h3 class="text-xl font-bold text-black/80 mb-2">Fauna Unica</h3>
+                        <p class="text-black/80 text-sm">Hogar de tortugas gigantes, iguanas marinas y aves
+                            emblematicas.</p>
                     </div>
-
-                    <!-- Card 2: Flora -->
-                    <div
-                        class="bg-white/90 backdrop-blur-sm border border-white/10 p-8 rounded-2xl hover:bg-white/50 hover:shadow-xl transition text-center group">
+                    <div class="home-info-card bg-white/90 border border-white/10 p-8 rounded-2xl text-center group">
                         <div
                             class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition">
                             <i data-lucide="flower-2" class="w-8 h-8 text-green-600"></i>
                         </div>
                         <h3 class="text-xl font-bold text-black/80 mb-2">Flora Adaptativa</h3>
-                        <p class="text-black/80 text-sm">
-                            Desde los bosques de Scalesia en las tierras altas hasta los cactus de lava y manglares
-                            rojos en la costa, la vegetación ha evolucionado para sobrevivir.
-                        </p>
+                        <p class="text-black/80 text-sm">Bosques, cactus y manglares evolucionados para sobrevivir.</p>
                     </div>
-
-                    <!-- Card 3: Marine Life -->
-                    <div
-                        class="bg-white/90 backdrop-blur-sm border border-white/10 p-8 rounded-2xl hover:bg-white/50 hover:shadow-xl transition text-center group">
+                    <div class="home-info-card bg-white/90 border border-white/10 p-8 rounded-2xl text-center group">
                         <div
                             class="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition">
                             <i data-lucide="waves" class="w-8 h-8 text-cyan-600"></i>
                         </div>
                         <h3 class="text-xl font-bold text-black/80 mb-2">Reserva Marina</h3>
-                        <p class="text-black/80 text-sm">
-                            Nuestras aguas son un santuario para tiburones martillo, mantarrayas gigantes, ballenas y
-                            delfines. Un paraíso mundial para el snorkel y buceo.
-                        </p>
+                        <p class="text-black/80 text-sm">Un paraiso mundial para snorkel y observacion de fauna.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Main Content Home (Exploration) -->
-        <main class="max-w-7xl mx-auto px-4 py-16">
-
-            <!-- Section Header -->
+        <!-- 3. ¿QUÉ OPINAS? (REVIEWS) -->
+        <main class="max-w-7xl mx-auto px-4 py-16" id="section-tours-reviews">
             <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold text-white/80 mb-2">Que opinas sobre nuestros tours?</h2>
-                <p class="text-white/80">Déjanos tu reseña y ayúdanos a mejorar.</p>
+                <h2 class="text-3xl font-bold text-white/90 mb-2">Que opinas sobre nuestros tours?</h2>
+                <p class="text-white/90">Dejanos tu resena y ayudanos a mejorar.</p>
             </div>
-
-            <!-- Tours Grid (Populated by JS) -->
-            <div id="tours-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Tour cards will be injected here -->
-
-            </div>
-
-            <!-- Feature Section -->
-            <div
-                class="mt-24 bg-white rounded-3xl p-8 md:p-12 shadow-xl flex flex-col md:flex-row gap-12 items-center overflow-hidden relative">
-                <div class="absolute top-0 right-0 w-64 h-64 bg-cyan-50 rounded-full -mr-16 -mt-16 z-0"></div>
-                <div class="relative z-10 flex-1">
-                    <span class="text-cyan-600 font-bold tracking-wider text-sm uppercase mb-2 block">¿Por qué elegir
-                        a Golden Ray I?</span>
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Experiencia Local Auténtica</h2>
-                    <div class="space-y-4">
-                        <div class="flex gap-4">
-                            <div
-                                class="w-12 h-12 bg-cyan-100 rounded-full flex items-center justify-center text-cyan-600 shrink-0">
-                                <i data-lucide="users" class="h-6 w-6"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800">Guías certificados</h4>
-                                <p class="text-sm text-gray-600">Expertos locales con licencia oficial y años de
-                                    experiencia. Conocemos cada corriente y cada rincón secreto de las islas,
-                                    garantizando una aventura segura y responsable.</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-4">
-                            <div
-                                class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 shrink-0">
-                                <i data-lucide="map-pin" class="h-6 w-6"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-gray-800">Destinos Preservados</h4>
-                                <p class="text-sm text-gray-600">Experiencias de bajo impacto ambiental en los
-                                    ecosistemas más puros. Disfruta de la fauna única con protocolos de visita estrictos
-                                    para asegurar su conservación. </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex-1 w-full h-64 md:h-auto relative">
-                    <img src="./assets/images/Golden RAY.jpeg" alt="Lancha Golden Ray"
-                        class="w-full h-full object-cover rounded-2xl shadow-lg" />
-                </div>
-            </div>
+            <div id="tours-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+            <p class="text-center text-white/80 mt-8 text-sm">
+                Sin reservas en la web: contacto directo por WhatsApp al
+                <a href="https://wa.me/593994891081" target="_blank" rel="noopener"
+                    class="text-cyan-300 hover:text-cyan-200 underline">
+                    +593 99 489 1081
+                </a>.
+            </p>
         </main>
-    </div>
-    <!-- ================= VIEW: TOURS (INFO + GALLERY) ================= -->
-    <div id="tours-view" class="hidden-section fade-in-up">
-        <div class="bg-white">
-            <!-- Personal Info Section -->
-            <div class="max-w-7xl mx-auto px-4 py-16 md:py-24">
-                <div class="flex flex-col md:flex-row items-center gap-12">
-                    <div class="flex-1 relative">
-                        <div class="relative rounded-3xl overflow-hidden shadow-2xl aspect-[4/3] group">
-                            <img src="./assets/images/lancha.jpeg" alt="Lancha Golden Ray"
-                                class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                            <div class="absolute bottom-6 left-6 text-white">
-                                <p class="font-bold text-xl">Golden Ray I</p>
-                                <p class="text-cyan-200 text-sm">Nuestra Lancha Insignia</p>
-                            </div>
-                        </div>
-                        <!-- Decorative circle -->
-                        <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-cyan-100 rounded-full -z-10"></div>
-                    </div>
 
-                    <div class="flex-1 space-y-6">
-                        <span
-                            class="inline-block py-1 px-3 rounded-full bg-cyan-100 text-cyan-700 text-xs font-bold uppercase tracking-wide">
-                            Tu Anfitrión Local
-                        </span>
-                        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-                            Somos <span class="text-cyan-600">Golden Ray I</span>
-                        </h2>
-                        <p class="text-lg text-gray-600 leading-relaxed">
-                            Desde hace más de 10 años, navegamos las aguas de Galápagos con un compromiso
-                            inquebrantable. Somos un equipo local, responsable y altamente capacitado, dedicado a
-                            ofrecerte una experiencia segura y auténtica en cada travesía.
-                        </p>
-                        <div class="bg-gray-50 p-6 rounded-2xl border-l-4 border-cyan-500">
-                            <h3 class="text-xl font-bold text-gray-800 mb-2 flex items-center gap-2">
-                                <i data-lucide="ship" class="w-5 h-5 text-cyan-600"></i> Golden Ray I
-                            </h3>
-                            <p class="text-gray-600 text-sm">
-                                Mi lancha rápida, la <strong>"Golden Ray I"</strong>, está equipada para brindarte
-                                confort y seguridad. Ofrecemos tours diarios con total disponibilidad y flexibilidad.
-                                ¡Nosotros nos encargamos de todo para que tú solo disfrutes!
-                            </p>
-                        </div>
-                        <div class="flex items-center gap-6 pt-4">
-                            <div class="text-center">
-                                <p class="text-3xl font-bold text-gray-900">10+</p>
-                                <p class="text-xs text-gray-500 uppercase">Años Experiencia</p>
-                            </div>
-                            <div class="w-px h-10 bg-gray-200"></div>
-                            <div class="text-center">
-                                <p class="text-3xl font-bold text-gray-900">100%</p>
-                                <p class="text-xs text-gray-500 uppercase">Clientes Felices</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Destinos Destacados -->
-            <div class="bg-gray-50 py-16">
-                <div class="max-w-7xl mx-auto px-4">
-                    <div class="text-center mb-12">
-                        <span class="text-cyan-600 font-bold tracking-wider text-sm uppercase">Nuestros Destinos</span>
-                        <h2 class="text-3xl font-bold text-gray-900 mt-2">Las Islas que Debes Conocer</h2>
-                        <p class="text-gray-600 mt-2">Tres experiencias únicas en los rincones más espectaculares de
-                            Galápagos.</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-                        <!-- Isla Tortuga -->
-                        <div
-                            class="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-                            <div class="relative h-64 overflow-hidden">
-                                <img src="./assets/images/isla tortuga.jpeg" alt="Isla Tortuga"
-                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                                <div
-                                    class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent">
-                                </div>
-                                <div class="absolute top-4 left-4">
-                                    <span
-                                        class="bg-emerald-500/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">Aves
-                                        · Relax</span>
-                                </div>
-                                <div class="absolute bottom-4 left-4 right-4">
-                                    <h3 class="text-2xl font-extrabold text-white leading-tight">Isla Tortuga</h3>
-                                    <p class="text-emerald-300 text-sm font-medium">Santuario de Aves</p>
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <p class="text-gray-600 text-sm leading-relaxed mb-4">
-                                    Un cráter volcánico colapsado en medio del mar con forma de media luna. Hogar de
-                                    aves marinas y espectaculares paisajes, ideal para fotografía y observación de
-                                    naturaleza.
-                                </p>
-                                <!-- Galería dinámica -->
-                                <div id="gallery-tortuga" class="grid grid-cols-3 gap-1.5 mb-4"></div>
-                                <!-- Botones de acción -->
-                                <div class="flex gap-2 mt-2">
-                                    <a href="https://wa.me/593994891081?text=Hola%2C%20me%20interesa%20el%20Tour%20Isla%20Tortuga%20%F0%9F%90%A2"
-                                        target="_blank" rel="noopener"
-                                        class="flex-1 bg-green-500 hover:bg-green-600 text-white text-sm font-bold px-4 py-2 rounded-xl transition flex items-center justify-center gap-2 shadow">
-                                        💬 Reservar por WhatsApp
-                                    </a>
-                                    <a href="./galeria.html?isla=tortuga"
-                                        class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-xl transition flex items-center gap-1">
-                                        🖼 Galería
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <!-- Punta Cormorant -->
-                        <div
-                            class="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-                            <div class="relative h-64 overflow-hidden">
-                                <img src="./assets/images/punta cormorant.jpeg" alt="Punta Cormorant"
-                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                                <div
-                                    class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent">
-                                </div>
-                                <div class="absolute top-4 left-4">
-                                    <span
-                                        class="bg-orange-500/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">Playa
-                                        · Snorkel</span>
-                                </div>
-                                <div class="absolute bottom-4 left-4 right-4">
-                                    <h3 class="text-2xl font-extrabold text-white leading-tight">Punta Cormorant</h3>
-                                    <p class="text-orange-300 text-sm font-medium">Playa y Laguna</p>
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <p class="text-gray-600 text-sm leading-relaxed mb-4">
-                                    Playas de arena verde y blanca únicas en Galápagos, flamencos rosados en la laguna y
-                                    snorkel en la famosa Corona del Diablo. Un ecosistema variado e irrepetible.
-                                </p>
-                                <!-- Galería dinámica -->
-                                <div id="gallery-cormorant" class="grid grid-cols-3 gap-1.5 mb-4"></div>
-                                <!-- Botones de acción -->
-                                <div class="flex gap-2 mt-2">
-                                    <a href="https://wa.me/593994891081?text=Hola%2C%20me%20interesa%20el%20Tour%20Punta%20Cormorant%20%F0%9F%A6%A9"
-                                        target="_blank" rel="noopener"
-                                        class="flex-1 bg-green-500 hover:bg-green-600 text-white text-sm font-bold px-4 py-2 rounded-xl transition flex items-center justify-center gap-2 shadow">
-                                        💬 Reservar por WhatsApp
-                                    </a>
-                                    <a href="./galeria.html?isla=cormorant"
-                                        class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-xl transition flex items-center gap-1">
-                                        🖼 Galería
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Cuatro Hermanos -->
-                        <div
-                            class="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-                            <div class="relative h-64 overflow-hidden">
-                                <img src="./assets/images/Cuatro hermanos.jpeg" alt="Cuatro Hermanos"
-                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                                <div
-                                    class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent">
-                                </div>
-                                <div class="absolute top-4 left-4">
-                                    <span
-                                        class="bg-cyan-500/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">Snorkel
-                                        · Aventura</span>
-                                </div>
-                                <div class="absolute bottom-4 left-4 right-4">
-                                    <h3 class="text-2xl font-extrabold text-white leading-tight">Cuatro Hermanos</h3>
-                                    <p class="text-cyan-300 text-sm font-medium">Snorkel Avanzado</p>
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <p class="text-gray-600 text-sm leading-relaxed mb-4">
-                                    Cuatro islotes volcánicos que emergen del océano, hogar de mantarrayas gigantes,
-                                    tortugas marinas y una vida submarina extraordinaria. La joya del snorkel en
-                                    Isabela.
-                                </p>
-                                <!-- Galería dinámica -->
-                                <div id="gallery-hermanos" class="grid grid-cols-3 gap-1.5 mb-4"></div>
-                                <!-- Botones de acción -->
-                                <div class="flex gap-2 mt-2">
-                                    <a href="https://wa.me/593994891081?text=Hola%2C%20me%20interesa%20el%20Tour%20Cuatro%20Hermanos%20%F0%9F%A4%BF"
-                                        target="_blank" rel="noopener"
-                                        class="flex-1 bg-green-500 hover:bg-green-600 text-white text-sm font-bold px-4 py-2 rounded-xl transition flex items-center justify-center gap-2 shadow">
-                                        💬 Reservar por WhatsApp
-                                    </a>
-                                    <a href="./galeria.html?isla=hermanos"
-                                        class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-xl transition flex items-center gap-1">
-                                        🖼 Galería
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- Lightbox -->
-                    <div id="island-lightbox"
-                        class="fixed inset-0 z-[200] hidden items-center justify-center bg-black/90"
-                        onclick="closeLightbox()">
-                        <button class="absolute top-4 right-4 text-white text-3xl font-bold z-10"
-                            onclick="closeLightbox()">✕</button>
-                        <img id="lightbox-img" src="" alt=""
-                            class="max-w-[90vw] max-h-[90vh] rounded-xl shadow-2xl object-contain">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================= VIEW: BLOG ================= -->
-    <div id="blog-view" class="hidden-section fade-in-up min-h-screen bg-[#0c0a09]">
-
-        <!-- Blog Header -->
-        <div class="py-20 px-4">
-            <div class="max-w-4xl mx-auto text-center">
-                <span
-                    class="inline-block mb-3 px-3 py-1 rounded-full bg-orange-500/10 text-orange-300 text-xs font-semibold tracking-[0.25em] uppercase">
-                    Ecuador · Galápagos
-                </span>
-                <h1 class="text-3xl md:text-5xl font-bold text-stone-100 mb-4">
-                    Explorando lo Desconocido
-                </h1>
-                <p class="text-stone-300 text-lg">
-                    Descubre las joyas ocultas de Isla Isabela y sus alrededores. Guías
-                    completas de los Cuatro Hermanos, Cormorant y la mítica Isla Tortuga.
-                </p>
-            </div>
-        </div>
-
-        <div class="max-w-5xl mx-auto px-4 py-16 space-y-24">
-            <!-- ========== CUATRO HERMANOS ========== -->
-            <article class="flex flex-col md:flex-row gap-8 items-center
-             bg-stone-900/40 p-4 md:p-8 rounded-3xl shadow-2xl
-             border border-stone-800/80 hover:border-orange-500/30
-             transition-colors duration-300">
-                <!-- Imagen + tarjeta flotante -->
+        <!-- 4. ¿POR QUÉ ELEGIRNOS? -->
+        <section class="home-tranquil-strip py-16 md:py-24" aria-labelledby="home-por-que-heading">
+            <div class="max-w-6xl mx-auto px-4">
                 <div
-                    class="flex-1 w-full h-[400px] rounded-2xl overflow-hidden shadow-xl relative group border border-stone-800/80">
-                    <img src="./assets/images/cuatro hermano 2.jpeg" alt="Islotes Cuatro Hermanos"
-                        class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
-
-                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition duration-500"></div>
-
-                    <div class="absolute left-6 top-6 transition-transform group-hover:-translate-y-1 duration-500">
-                        <div class="bg-stone-900/80 backdrop-blur-md
-                   border border-stone-700/80 hover:border-orange-400/40
-                   rounded-2xl shadow-2xl px-6 py-5 max-w-xs
-                   transition-colors duration-300">
-                            <div class="flex items-center gap-3 mb-3">
-                                <span
-                                    class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500/20 text-cyan-300">
-                                    <i data-lucide="waves" class="w-5 h-5"></i>
-                                </span>
-                                <div>
-                                    <p
-                                        class="text-xs font-semibold text-stone-400 tracking-[0.2em] uppercase leading-tight">
-                                        Snorkel Avanzado
-                                    </p>
-                                    <h3 class="text-base font-bold text-stone-50">
-                                        Islotes Cuatro Hermanos
-                                    </h3>
+                    class="home-feature-showcase rounded-[2rem] bg-white shadow-[0_25px_60px_-15px_rgba(15,118,110,0.12)] border border-teal-100/80 overflow-hidden gr-animate-in">
+                    <div class="grid md:grid-cols-2 gap-10 lg:gap-14 items-center p-8 md:p-12 lg:p-14">
+                        <div class="order-2 md:order-1 space-y-8">
+                            <div>
+                                <p
+                                    class="home-kicker text-[0.7rem] md:text-xs font-bold tracking-[0.2em] text-teal-600 uppercase mb-3">
+                                    ¿Por qué elegir a Golden Ray I?
+                                </p>
+                                <h2 id="home-por-que-heading"
+                                    class="text-3xl md:text-4xl font-bold text-slate-900 leading-tight">
+                                    Experiencia Local Auténtica
+                                </h2>
+                            </div>
+                            <div class="space-y-7">
+                                <div class="flex gap-5">
+                                    <div class="home-icon-ring home-icon-ring--sea shrink-0" aria-hidden="true">
+                                        <i data-lucide="users" class="w-6 h-6 text-teal-700"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-slate-900 mb-1.5">Guías certificados</h3>
+                                        <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+                                            Expertos locales con licencia oficial y años de experiencia. Conocemos cada
+                                            corriente y cada rincón secreto de las islas, garantizando una aventura
+                                            segura y responsable.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-5">
+                                    <div class="home-icon-ring home-icon-ring--nature shrink-0" aria-hidden="true">
+                                        <i data-lucide="map-pin" class="w-6 h-6 text-emerald-700"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-slate-900 mb-1.5">Destinos preservados</h3>
+                                        <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+                                            Experiencias de bajo impacto ambiental en los ecosistemas más puros.
+                                            Disfruta de la fauna única con protocolos de visita estrictos para asegurar
+                                            su conservación.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                            <p class="text-sm text-stone-200 leading-snug">
-                                Islotes volcánicos llenos de vida marina, hogar de mantarrayas y tortugas en aguas
-                                profundas.
-                            </p>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Texto lateral -->
-                <div class="flex-1 space-y-5">
-                    <div class="inline-block">
-                        <span class="text-orange-300 font-bold tracking-wider text-xs uppercase px-3 py-1
-                   bg-orange-500/10 border border-orange-500/30 rounded-full">
-                            Snorkel Avanzado
-                        </span>
-                    </div>
-                    <h2 class="text-4xl font-extrabold text-stone-50 leading-tight">
-                        Tour Cuatro Hermanos
-                    </h2>
-                    <p class="text-stone-300 leading-relaxed text-lg">
-                        Conocidos localmente como “Los 4 Hermanos”, este grupo de islotes es un paraíso para el buceo y
-                        el snorkel
-                        avanzado.
-                    </p>
-
-
-                </div>
-            </article>
-
-            <!-- ========== PUNTA CORMORANT ========== -->
-            <article class="flex flex-col md:flex-row-reverse gap-8 items-center
-             bg-stone-900/40 p-4 md:p-8 rounded-3xl shadow-2xl
-             border border-stone-800/80 hover:border-orange-500/30
-             transition-colors duration-300">
-                <!-- Imagen + tarjeta flotante -->
-                <div
-                    class="flex-1 w-full h-[400px] rounded-2xl overflow-hidden shadow-xl relative group border border-stone-800/80">
-                    <img src="./assets/images/la de los pajaros.jpeg" alt="Punta Cormorant"
-                        class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
-
-                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition duration-500"></div>
-
-                    <div class="absolute left-6 top-6 transition-transform group-hover:-translate-y-1 duration-500">
-                        <div class="bg-stone-900/80 backdrop-blur-md
-                   border border-stone-700/80 hover:border-orange-400/40
-                   rounded-2xl shadow-2xl px-6 py-5 max-w-xs
-                   transition-colors duration-300">
-                            <div class="flex items-center gap-3 mb-3">
-                                <span
-                                    class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-orange-500/20 text-orange-300">
-                                    <i data-lucide="sun" class="w-5 h-5"></i>
-                                </span>
-                                <div>
-                                    <p
-                                        class="text-xs font-semibold text-stone-400 tracking-[0.2em] uppercase leading-tight">
-                                        Playa y Laguna
-                                    </p>
-                                    <h3 class="text-base font-bold text-stone-50">
-                                        Punta Cormorant
-                                    </h3>
-                                </div>
+                        <div class="order-1 md:order-2 home-feature-photo">
+                            <div
+                                class="relative rounded-2xl md:rounded-3xl overflow-hidden shadow-lg ring-1 ring-teal-100/60">
+                                <img src="./assets/images/Golden RAY.jpeg" alt="Lancha Golden Ray I en el mar"
+                                    class="w-full h-full object-cover min-h-[240px] md:min-h-[320px]">
                             </div>
-                            <p class="text-sm text-stone-200 leading-snug">
-                                Playas de arena verde y blanca, flamencos y snorkel en la Corona del Diablo.
-                            </p>
                         </div>
                     </div>
                 </div>
-
-                <!-- Texto lateral -->
-                <div class="flex-1 space-y-5">
-                    <div class="inline-block">
-                        <span class="text-orange-300 font-bold tracking-wider text-xs uppercase px-3 py-1
-                   bg-orange-500/10 border border-orange-500/30 rounded-full">
-                            Playa y Laguna
-                        </span>
-                    </div>
-                    <h2 class="text-4xl font-extrabold text-stone-50 leading-tight">
-                        Tour Cormorant
-                    </h2>
-                    <p class="text-stone-300 leading-relaxed text-lg">
-                        Punta Cormorant ofrece una de las playas más inusuales de Galápagos. Descubre un ecosistema
-                        vibrante donde la
-                        naturaleza se muestra en su estado más puro bajo el sol ecuatorial.
-                    </p>
-
-
-                </div>
-            </article>
-
-            <!-- ========== ISLA TORTUGA ========== -->
-            <article class="flex flex-col md:flex-row gap-8 items-center
-             bg-stone-900/40 p-4 md:p-8 rounded-3xl shadow-2xl
-             border border-stone-800/80 hover:border-orange-500/30
-             transition-colors duration-300">
-                <!-- Imagen + tarjeta flotante -->
-                <div
-                    class="flex-1 w-full h-[400px] rounded-2xl overflow-hidden shadow-xl relative group border border-stone-800/80">
-                    <img src="./assets/images/tortuga2.jpeg" alt="Isla Tortuga"
-                        class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
-
-                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition duration-500"></div>
-
-                    <div class="absolute left-6 top-6 transition-transform group-hover:-translate-y-1 duration-500">
-                        <div class="bg-stone-900/80 backdrop-blur-md
-                   border border-stone-700/80 hover:border-orange-400/40
-                   rounded-2xl shadow-2xl px-6 py-5 max-w-xs
-                   transition-colors duration-300">
-                            <div class="flex items-center gap-3 mb-3">
-                                <span
-                                    class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-300">
-                                    <i data-lucide="bird" class="w-5 h-5"></i>
-                                </span>
-                                <div>
-                                    <p
-                                        class="text-xs font-semibold text-stone-400 tracking-[0.2em] uppercase leading-tight">
-                                        Santuario de Aves
-                                    </p>
-                                    <h3 class="text-base font-bold text-stone-50">
-                                        Isla Tortuga
-                                    </h3>
-                                </div>
-                            </div>
-                            <p class="text-sm text-stone-200 leading-snug">
-                                Cráter colapsado en medio del mar, hogar de aves marinas y paisajes perfectos para
-                                fotografía.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Texto lateral -->
-                <div class="flex-1 space-y-5">
-                    <div class="inline-block">
-                        <span class="text-orange-300 font-bold tracking-wider text-xs uppercase px-3 py-1
-                   bg-orange-500/10 border border-orange-500/30 rounded-full">
-                            Santuario de Aves
-                        </span>
-                    </div>
-                    <h2 class="text-4xl font-extrabold text-stone-50 leading-tight">
-                        Tour Isla Tortuga
-                    </h2>
-                    <p class="text-stone-300 leading-relaxed text-lg">
-                        Con forma de media luna, Isla Tortuga es un sitio protegido espectacular, perfecto para avistar
-                        aves y
-                        disfrutar del paisaje volcánico.
-                    </p>
-
-
-                </div>
-            </article>
-
-            <!-- Botón volver -->
-            <div class="text-center pt-12">
-                <button onclick="showHome()"
-                    class="bg-stone-800 text-stone-100 px-8 py-3 rounded-full hover:bg-stone-700 transition">
-                    Volver a los Tours Principales
-                </button>
             </div>
-        </div>
+        </section>
+
     </div>
 
-
-    <!-- ================= VIEW: CONTACT ================= -->
-    <div id="contact-view" class="hidden-section fade-in-up">
-        <!-- Contact Header -->
-        <div class="bg-gray-900 py-20 px-4 relative overflow-hidden">
-            <div class="absolute inset-0 opacity-20">
-                <img src="./assets/images/leon marino.jpeg" class="w-full h-full object-cover" alt="Background">
-            </div>
-            <div class="max-w-4xl mx-auto text-center relative z-10">
-                <h1 class="text-3xl md:text-5xl font-bold text-white mb-4">¡Hablemos de tu Aventura!</h1>
-                <p class="text-gray-300 text-lg">Estamos listos para planear tu experiencia en Isabela. Contáctanos por
-                    cualquiera de nuestros canales.</p>
-            </div>
-        </div>
-
-        <div class="max-w-7xl mx-auto px-4 py-16">
-            <!-- Contact Cards -->Ñ
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
-                <a href="https://wa.me/593994891081" target="_blank"
-                    class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2 border border-gray-100 group text-center">
-                    <div
-                        class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-green-200 transition">
-                        <i data-lucide="message-circle" class="w-8 h-8 text-green-600"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">WhatsApp</h3>
-                    <p class="text-gray-500 mb-4">Chat directo y rápido</p>
-                    <p class="text-green-600 font-bold text-lg">+593 99 489 1081</p>
-                </a>
-                <a href="#"
-                    class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2 border border-gray-100 group text-center">
-                    <div
-                        class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-pink-200 transition">
-                        <i data-lucide="instagram" class="w-8 h-8 text-pink-600"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">Instagram</h3>
-                    <p class="text-gray-500 mb-4">Síguenos para ver fotos</p>
-                    <p class="text-pink-600 font-bold text-lg">@goldenraytuneles1
-                    </p>
-                </a>
-                <a href="#"
-                    class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-2 border border-gray-100 group text-center">
-                    <div
-                        class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 transition">
-                        <i data-lucide="facebook" class="w-8 h-8 text-blue-600"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">Facebook</h3>
-                    <p class="text-gray-500 mb-4">Únete a nuestra comunidad</p>
-                    <p class="text-blue-600 font-bold text-lg">Isabela Tours Oficial</p>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================= MODAL DE RESERVAS ================= -->
-    <div id="reservation-modal"
-        class="fixed inset-0 z-[300] hidden items-center justify-center bg-black/70 backdrop-blur-sm px-4"
-        onclick="if(event.target===this) closeReservationModal()">
-        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden">
-            <!-- Header -->
-            <div class="bg-gradient-to-r from-cyan-600 to-cyan-500 px-6 py-5 flex justify-between items-center">
-                <div>
-                    <h2 class="text-white text-xl font-bold">🗓 Reservar Tour</h2>
-                    <p id="reservation-tour-name" class="text-cyan-100 text-sm mt-0.5"></p>
-                </div>
-                <button onclick="closeReservationModal()"
-                    class="text-white/80 hover:text-white text-2xl leading-none">&times;</button>
-            </div>
-
-            <!-- Step 1: Formulario -->
-            <div id="reservation-step-1">
-                <form id="reservation-form" class="px-6 py-6 space-y-4" onsubmit="submitReservation(event)">
-                    <input type="hidden" id="res-tour-id" title="ID del tour">
-                    <input type="hidden" id="res-tour-name-hidden" title="Nombre del tour">
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Nombre Completo *</label>
-                            <input type="text" id="res-name" required placeholder="Tu nombre"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 outline-none transition">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-                            <input type="email" id="res-email" required placeholder="correo@email.com"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 outline-none transition">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono / WhatsApp</label>
-                            <input type="tel" id="res-phone" placeholder="+593 99..."
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 outline-none transition">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Fecha del Tour *</label>
-                            <input type="date" id="res-date" required
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 outline-none transition">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">N° de Personas *</label>
-                            <input type="number" id="res-people" min="1" max="20" value="2" required
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 outline-none transition">
-                        </div>
-                        <div class="col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Mensaje / Notas</label>
-                            <textarea id="res-message" rows="2" placeholder="¿Alguna solicitud especial?"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 outline-none resize-none transition"></textarea>
-                        </div>
-                    </div>
-
-                    <div id="res-error"
-                        class="hidden text-red-600 text-sm bg-red-50 border border-red-200 rounded-lg px-3 py-2"></div>
-
-                    <div class="flex gap-3 pt-2">
-                        <button type="submit" id="res-submit-btn"
-                            class="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 rounded-lg transition text-sm flex items-center justify-center gap-2">
-                            <span id="res-btn-text">✅ Confirmar Reserva</span>
-                        </button>
-                        <button type="button" onclick="closeReservationModal()"
-                            class="px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-lg transition text-sm font-medium">
-                            Cancelar
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Step 2: Éxito -->
-            <div id="reservation-step-2" class="hidden px-6 py-10 text-center">
-                <div class="text-6xl mb-4">🎉</div>
-                <h3 class="text-2xl font-bold text-gray-800 mb-2">¡Reserva Enviada!</h3>
-                <p class="text-gray-500 mb-2">Tu solicitud fue registrada con éxito.</p>
-                <p id="res-success-detail" class="text-cyan-700 font-semibold text-sm mb-6"></p>
-                <p class="text-gray-400 text-xs mb-6">Nos pondremos en contacto pronto para confirmar tu reserva.
-                    También puedes contactarnos directamente por WhatsApp.</p>
-                <div class="flex flex-col gap-3">
-                    <a id="res-whatsapp-link" href="#" target="_blank" title="Confirmar reserva por WhatsApp"
-                        class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg transition text-sm flex items-center justify-center gap-2">
-                        💬 Confirmar por WhatsApp
-                    </a>
-                    <button onclick="closeReservationModal()"
-                        class="py-2 text-gray-500 hover:text-gray-700 text-sm transition">
-                        Cerrar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
+    <!-- ========== PIE ========== -->
     <footer id="contact-section" class="bg-gray-900 text-white pt-16 pb-8 mt-auto">
         <div class="max-w-7xl mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
@@ -798,40 +212,38 @@
                         <span class="text-xl font-bold"><span class="text-cyan-400">Golden Ray I</span></span>
                     </div>
                     <p class="text-gray-400 text-sm leading-relaxed">
-                        Tu conexión local experta para descubrir las maravillas de la Isla Isabela. Turismo sostenible y
-                        experiencias inolvidables.
+                        Tu conexion local experta para descubrir las maravillas de Isla Isabela.
                     </p>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">Enlaces Rápidos</h4>
+                    <h4 class="font-bold text-lg mb-4">Enlaces Rapidos</h4>
                     <ul class="space-y-2 text-gray-400 text-sm">
-                        <li><button onclick="showHome()"
-                                class="hover:text-cyan-400 transition text-left">Inicio</button></li>
-                        <li><button onclick="showTours()" class="hover:text-cyan-400 transition text-left">Todos los
-                                Tours</button></li>
-                        <li><button onclick="showBlog()" class="hover:text-cyan-400 transition text-left">Blog</button>
-                        </li>
+                        <li><a href="./index.html" class="hover:text-cyan-400 transition">Inicio</a></li>
+                        <li><a href="./tours.html" class="hover:text-cyan-400 transition">Todos los Tours</a></li>
+                        <li><a href="./blog.html" class="hover:text-cyan-400 transition">Blog</a></li>
+                        <li><a href="./contact.html" class="hover:text-cyan-400 transition">Contacto</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-bold text-lg mb-4">Contacto</h4>
                     <ul class="space-y-3 text-gray-400 text-sm">
-                        <li class="flex items-center gap-2 font-bold text-cyan-400">
-                            <i data-lucide="phone" class="h-4 w-4"></i> 0994981081
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <i data-lucide="mail" class="h-4 w-4"></i> goldenraytuneles@gmail.com
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <i data-lucide="map-pin" class="h-4 w-4"></i> Puerto Villamil, Isabela, Galápagos
-                        </li>
+                        <li class="flex items-center gap-2 font-bold text-cyan-400"><i data-lucide="phone"
+                                class="h-4 w-4"></i> 0994981081</li>
+                        <li class="flex items-center gap-2"><i data-lucide="mail" class="h-4 w-4"></i>
+                            goldenraytuneles@gmail.com</li>
+                        <li class="flex items-center gap-2"><i data-lucide="map-pin" class="h-4 w-4"></i> Puerto
+                            Villamil, Isabela, Galapagos</li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold text-lg mb-4">Síguenos</h4>
+                    <h4 class="font-bold text-lg mb-4">Siguenos</h4>
                     <div class="flex gap-4">
-                        <a href="#" class="bg-gray-808 p-2 rounded-full hover:bg-cyan-600 transition"><i
+                        <a href="https://www.instagram.com/goldenraytuneles1/" target="_blank" rel="noopener noreferrer"
+                            class="bg-gray-800 p-2 rounded-full hover:bg-cyan-600 transition" aria-label="Instagram"><i
                                 data-lucide="instagram" class="h-5 w-5"></i></a>
+                        <a href="https://www.facebook.com/search/top/?q=Golden%20Ray%20Isabela%20Tours" target="_blank"
+                            rel="noopener noreferrer" class="bg-gray-800 p-2 rounded-full hover:bg-cyan-600 transition"
+                            aria-label="Facebook"><i data-lucide="facebook" class="h-5 w-5"></i></a>
                     </div>
                 </div>
             </div>
@@ -841,124 +253,17 @@
         </div>
     </footer>
 
-
-    <!-- ====================================== -->
-    <!-- SCRIPTS - ORDEN IMPORTANTE -->
-    <!-- ====================================== -->
-
-    <!-- 1. LIBRERÍAS EXTERNAS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- 2. CONFIGURACIÓN -->
     <script src="./js/config/supabase.js"></script>
-
-    <!-- 3. SERVICIOS -->
     <script src="./js/services/tours.service.js"></script>
     <script src="./js/services/gallery.service.js"></script>
-    <script src="./js/services/reservation.service.js"></script>
-
-    <!-- 4. COMPONENTES UI -->
     <script src="./js/components/navigation.ui.js"></script>
     <script src="./js/components/tours.ui.js"></script>
     <script src="./js/services/reviews.service.js"></script>
     <script src="./js/components/review-modal.ui.js"></script>
-    <script src="./js/components/blog.ui.js"></script>
-    <script src="./js/components/gallery.ui.js"></script>
-    <script src="./js/components/admin.ui.js"></script>
-
-    <!-- 5. INICIALIZACIÓN -->
     <script src="./js/main.js"></script>
-
-    <!-- 6. RESERVAS -->
-    <script>
-        // ── Lógica del Modal de Reservas ─────────────────────────────────────
-        let _currentReservationTour = { id: 0, name: '' };
-
-        function openReservationModal(tourId, tourName) {
-            _currentReservationTour = { id: tourId, name: tourName };
-            document.getElementById('reservation-tour-name').textContent = tourName;
-            document.getElementById('res-tour-id').value = tourId;
-            document.getElementById('res-tour-name-hidden').value = tourName;
-
-            // Fecha mínima = hoy
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('res-date').min = today;
-
-            // Resetear steps
-            document.getElementById('reservation-step-1').classList.remove('hidden');
-            document.getElementById('reservation-step-2').classList.add('hidden');
-            document.getElementById('reservation-form').reset();
-            document.getElementById('res-tour-id').value = tourId;
-            document.getElementById('res-tour-name-hidden').value = tourName;
-            document.getElementById('res-date').min = today;
-            document.getElementById('res-error').classList.add('hidden');
-
-            const modal = document.getElementById('reservation-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            if (window.lucide) lucide.createIcons();
-        }
-
-        function closeReservationModal() {
-            const modal = document.getElementById('reservation-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        async function submitReservation(event) {
-            event.preventDefault();
-            const btn = document.getElementById('res-submit-btn');
-            const btnText = document.getElementById('res-btn-text');
-            const errEl = document.getElementById('res-error');
-            errEl.classList.add('hidden');
-
-            const name = document.getElementById('res-name').value.trim();
-            const email = document.getElementById('res-email').value.trim();
-            const phone = document.getElementById('res-phone').value.trim();
-            const date = document.getElementById('res-date').value;
-            const people = parseInt(document.getElementById('res-people').value, 10);
-            const message = document.getElementById('res-message').value.trim();
-            const tourId = parseInt(document.getElementById('res-tour-id').value, 10);
-            const tourName = document.getElementById('res-tour-name-hidden').value;
-
-            btn.disabled = true;
-            btnText.textContent = '⏳ Enviando...';
-
-            try {
-                const reservation = await ReservationService.create({
-                    tour_id: tourId,
-                    tour_name: tourName,
-                    customer_name: name,
-                    email,
-                    phone,
-                    date,
-                    people,
-                    message,
-                });
-
-                // Mostrar paso de éxito
-                document.getElementById('reservation-step-1').classList.add('hidden');
-                document.getElementById('reservation-step-2').classList.remove('hidden');
-
-                document.getElementById('res-success-detail').textContent =
-                    `${tourName} — ${date} — ${people} persona${people > 1 ? 's' : ''}`;
-
-                // Construir link de WhatsApp
-                const waMsg = `Hola, confirmo mi reserva:\n🛥️ Tour: ${tourName}\n📅 Fecha: ${date}\n👥 Personas: ${people}\n👤 Nombre: ${name}\n📞 Teléfono: ${phone || 'N/A'}\nID Reserva: #${reservation.id}`;
-                document.getElementById('res-whatsapp-link').href = "https://wa.me/593994891081"
-
-            } catch (err) {
-                errEl.textContent = '❌ Error: ' + err.message;
-                errEl.classList.remove('hidden');
-            } finally {
-                btn.disabled = false;
-                btnText.textContent = '✅ Confirmar Reserva';
-            }
-        }
-    </script>
-
 </body>
 
 </html>

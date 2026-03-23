@@ -1,14 +1,9 @@
 // api/reviews/index.js
 import { supabase } from '../_supabase.js';
-
-function cors(res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,DELETE,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-}
+import { assertAdmin, corsAllowAuth } from '../_adminAuth.js';
 
 export default async function handler(req, res) {
-    cors(res);
+    corsAllowAuth(res, 'GET,POST,DELETE,OPTIONS');
     if (req.method === 'OPTIONS') return res.status(204).end();
 
     // GET /api/reviews
@@ -46,6 +41,7 @@ export default async function handler(req, res) {
 
     // DELETE /api/reviews/:id  (desde admin)
     if (req.method === 'DELETE') {
+        if (!assertAdmin(req, res)) return;
         const id = req.query.id;
         if (!id) return res.status(400).json({ error: 'ID requerido' });
 

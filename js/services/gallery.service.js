@@ -26,8 +26,12 @@ const GalleryService = {
     async uploadPhoto(islandId, file) {
         const formData = new FormData();
         formData.append('photo', file);
+        const headers = {
+            ...(typeof window.adminApiHeaders === 'function' ? window.adminApiHeaders() : {}),
+        };
         const res = await fetch(`/api/gallery/${islandId}/upload`, {
             method: 'POST',
+            headers,
             body: formData,
         });
         if (!res.ok) {
@@ -39,8 +43,12 @@ const GalleryService = {
 
     // Eliminar una foto de una isla
     async deletePhoto(islandId, filename) {
+        const headers = {
+            ...(typeof window.adminApiHeaders === 'function' ? window.adminApiHeaders() : {}),
+        };
         const res = await fetch(`/api/gallery/${islandId}/${filename}`, {
             method: 'DELETE',
+            headers,
         });
         if (!res.ok) {
             const err = await res.json();
