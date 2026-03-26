@@ -449,51 +449,86 @@
                 await AdminPanel.renderTours();
             }
             if (typeof GalleryService !== 'undefined') {
-                renderGalleries();
+                await renderGalleries();  // await para capturar errores
             }
             if (window.lucide) lucide.createIcons();
         }
 
-        // Renderizar galerías de tours
+        // Renderizar galerías de tours — dinámico desde la BD
         async function renderGalleries() {
             const container = document.getElementById('galleries-container');
             if (!container || typeof GalleryService === 'undefined') return;
+            try {
+                // Mostrar spinner mientras cargan los tours
+                container.innerHTML = `
+                    <div class="col-span-full flex justify-center py-12">
+                        <div class="flex flex-col items-center gap-3 text-gray-400">
+                            <div class="w-8 h-8 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
+                            <p class="text-sm">Cargando tours...</p>
+                        </div>
+                    </div>`;
 
-            const islands = GalleryService.islands;
+                // Cargar todos los tours desde la API
+                const tours = await GalleryService.getIslandsFromTours();
 
-            container.innerHTML = islands.map(isl => `
-                <div class="bg-gray-800 rounded-xl border border-gray-700 p-6 hover:border-cyan-500/50 transition">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="text-3xl">${isl.icon}</span>
-                        <div>
-                            <h3 class="text-xl font-bold text-white">${isl.name}</h3>
-                            <p class="text-sm text-gray-400">${isl.description}</p>
+                if (!tours || tours.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-span-full text-center py-12 text-gray-400">
+                            <p class="text-4xl mb-3">🗺️</p>
+                            <p>No hay tours. Crea uno primero en la pestaña <strong>Tours</strong>.</p>
+                        </div>`;
+                    return;
+                }
+
+                container.innerHTML = tours.map(tour => `
+                    <div class="bg-gray-800 rounded-xl border border-gray-700 p-6 hover:border-cyan-500/50 transition">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-2xl">${tour.icon}</span>
+                            <div class="min-w-0">
+                                <h3 class="text-lg font-bold text-white truncate">${tour.name}</h3>
+                                <p class="text-xs text-gray-400 truncate">${tour.description}</p>
+                                <a href="./galeria.html?isla=${tour.id}" target="_blank"
+                                   class="text-xs text-cyan-400 hover:text-cyan-300 transition">
+                                   🔗 Ver galería pública
+                                </a>
+                            </div>
+                        </div>
+                        <!-- Miniaturas -->
+                        <div id="admin-gallery-${tour.id}" class="grid grid-cols-3 gap-2 mb-4 min-h-[80px]">
+                            <p class="text-gray-500 text-xs col-span-3 text-center pt-6">⏳ Cargando...</p>
+                        </div>
+                        <!-- Upload -->
+                        <div class="flex items-center gap-3">
+                            <label class="flex-1 cursor-pointer">
+                                <input type="file" id="file-input-${tour.id}" accept="image/*" class="hidden"
+                                    onchange="uploadGalleryPhoto('${tour.id}', this)">
+                                <div class="bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-bold px-4 py-2 rounded-lg transition text-center flex items-center justify-center gap-2">
+                                    <span>📷</span> Subir Foto
+                                </div>
+                            </label>
                         </div>
                     </div>
+                `).join('');
 
-                    <!-- Miniaturas -->
-                    <div id="admin-gallery-${isl.id}" class="grid grid-cols-3 gap-2 mb-4 min-h-[100px]">
-                        <p class="text-gray-500 text-xs col-span-3 text-center pt-8">⏳ Cargando...</p>
-                    </div>
+                // Cargar fotos reales de cada tour
+                for (const tour of tours) {
+                    await loadAdminGallery(tour.id);
+                }
+                if (window.lucide) lucide.createIcons();
 
-                    <!-- Upload -->
-                    <div class="flex items-center gap-3">
-                        <label class="flex-1 cursor-pointer">
-                            <input type="file" id="file-input-${isl.id}" accept="image/*" class="hidden"
-                                onchange="uploadGalleryPhoto('${isl.id}', this)">
-                            <div class="bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-bold px-4 py-2 rounded-lg transition text-center flex items-center justify-center gap-2">
-                                <span>&#128247;</span> Subir Foto
-                            </div>
-                        </label>
-                    </div>
-                </div>
-            `).join('');
-
-            // Cargar fotos reales de cada isla
-            for (const isl of islands) {
-                await loadAdminGallery(isl.id);
+            } catch(e) {
+                console.error('❌ Error en renderGalleries:', e);
+                if (container) container.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-red-400">
+                        <p class="text-3xl mb-3">❌</p>
+                        <p>Error al cargar galerías: ${e.message}</p>
+                        <button onclick="renderGalleries()" class="mt-4 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm">
+                            🔄 Reintentar
+                        </button>
+                    </div>`;
             }
         }
+
 
         async function loadAdminGallery(islandId) {
             const container = document.getElementById(`admin-gallery-${islandId}`);

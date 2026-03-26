@@ -1,16 +1,10 @@
 // js/services/gallery.service.js
-// Gestión de galerías de fotos por isla — API con el servidor local
+// Gestión de galerías de fotos por tour — API con el servidor local
 
 const GalleryService = {
 
-    // Islas disponibles
-    islands: [
-        { id: 'tortuga',    name: 'Isla Tortuga',     icon: '🐢', description: 'Santuario de aves' },
-        { id: 'cormorant',  name: 'Punta Cormorant',  icon: '🦩', description: 'Playa y laguna'    },
-        { id: 'hermanos',   name: 'Cuatro Hermanos',  icon: '🤿', description: 'Snorkel avanzado'  },
-    ],
-
-    // Obtener fotos de una isla desde el servidor
+    // Obtener fotos de un tour/isla desde el servidor
+    // islandId puede ser un ID numérico de tour (ej: 107) o un slug legacy (ej: 'tortuga')
     async getPhotos(islandId) {
         try {
             const res = await fetch(`/api/gallery/${islandId}`);
@@ -22,7 +16,26 @@ const GalleryService = {
         }
     },
 
-    // Subir una foto a una isla
+    // Obtener lista dinámica de todos los tours disponibles como galerías
+    async getIslandsFromTours() {
+        try {
+            const res = await fetch('/api/tours');
+            const tours = await res.json();
+            if (!Array.isArray(tours)) return [];
+            return tours.map(tour => ({
+                id: tour.id,            // slug numérico para la galería
+                name: tour.title,
+                icon: '🌊',
+                description: (tour.tags || []).join(' · ') || tour.difficulty || '',
+                wa: encodeURIComponent(`Hola, me interesa el ${tour.title} 🌊`),
+            }));
+        } catch (e) {
+            console.error('❌ Error cargando tours para galería:', e);
+            return [];
+        }
+    },
+
+    // Subir una foto a la galería de un tour
     async uploadPhoto(islandId, file) {
         const formData = new FormData();
         formData.append('photo', file);
@@ -41,7 +54,7 @@ const GalleryService = {
         return await res.json();
     },
 
-    // Eliminar una foto de una isla
+    // Eliminar una foto de la galería de un tour
     async deletePhoto(islandId, filename) {
         const headers = {
             ...(typeof window.adminApiHeaders === 'function' ? window.adminApiHeaders() : {}),

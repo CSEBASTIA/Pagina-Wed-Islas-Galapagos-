@@ -4,8 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tours & Destinos — Golden Ray I · Galapagos</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Tours &amp; Destinos — Golden Ray I · Galapagos</title>
+    <meta name="description" content="Explora todos los tours y destinos disponibles en Isla Isabela, Galápagos con Golden Ray I.">
+    <!-- Preconnect a CDNs externos -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <!-- Google Fonts: no bloqueante -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"></noscript>
+    <!-- Tailwind CDN (necesita estar sincrónico para aplicar estilos) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide: defer porque solo se usa al final del DOM -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/animations.css">
     <link rel="stylesheet" href="./css/tours.css">
@@ -26,12 +38,10 @@
                         <span class="text-2xl font-bold text-gray-800 tracking-tight">Golden Ray I</span>
                     </a>
                     <div class="hidden md:flex space-x-8">
-                        <a href="./index.html"
-                            class="text-gray-600 hover:text-cyan-600 font-medium transition">Inicio</a>
+                        <a href="./index.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Inicio</a>
                         <span class="text-cyan-600 font-semibold border-b-2 border-cyan-500 pb-0.5">Tours</span>
                         <a href="./blog.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Blog</a>
-                        <a href="./contact.html"
-                            class="text-gray-600 hover:text-cyan-600 font-medium transition">Contacto</a>
+                        <a href="./contact.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Contacto</a>
                     </div>
                     <div class="md:hidden">
                         <button id="mobile-menu-btn" class="text-gray-600" aria-label="Abrir menu">
@@ -44,18 +54,16 @@
         <div id="mobile-menu"
             class="hidden md:hidden bg-white border-b border-gray-200 p-4 absolute w-full z-40 shadow-lg">
             <div class="flex flex-col space-y-4">
-                <a href="./index.html" onclick="toggleMobileMenu()"
-                    class="text-left text-gray-800 font-medium">Inicio</a>
-                <span class="text-cyan-600 font-semibold">Tours & Galeria</span>
+                <a href="./index.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Inicio</a>
+                <span class="text-cyan-600 font-semibold">Tours &amp; Galeria</span>
                 <a href="./blog.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Blog</a>
-                <a href="./contact.html" onclick="toggleMobileMenu()"
-                    class="text-left text-gray-800 font-medium">Contacto</a>
+                <a href="./contact.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Contacto</a>
             </div>
         </div>
     </header>
 
     <main class="flex-1 bg-white/95 backdrop-blur-[2px]">
-        <!-- ========== SOMOS GOLDEN RAY I (diseño + imagen) ========== -->
+        <!-- ========== SOMOS GOLDEN RAY I ========== -->
         <section class="tours-about-nosotros max-w-7xl mx-auto px-4 pt-16 md:pt-24 pb-8 md:pb-12"
             aria-labelledby="tours-somos-heading">
             <div class="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -109,157 +117,25 @@
             </div>
         </section>
 
+        <!-- ========== TOURS DINÁMICOS ========== -->
         <section class="max-w-7xl mx-auto px-4 py-16 md:py-24">
             <header class="text-center mb-12">
                 <span class="text-cyan-600 font-bold tracking-wider text-sm uppercase">Nuestros Destinos</span>
                 <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mt-2">Las Islas que Debes Conocer</h1>
-                <p class="text-gray-600 mt-2">Informacion y galeria por destino. Contacto directo por WhatsApp.</p>
+                <p class="text-gray-600 mt-2">Información y galería por destino. Contacto directo por WhatsApp.</p>
             </header>
-            <!-- ========== islas de las galerias  ========== -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-                <!-- Isla Tortuga -->
-                <div
-                    class="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-                    <div class="relative h-64 overflow-hidden">
-                        <img src="./assets/images/isla tortuga.jpeg" alt="Isla Tortuga"
-                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent">
-                        </div>
-                        <div class="absolute top-4 left-4">
-                            <span
-                                class="bg-emerald-500/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">Aves
-                                · Relax</span>
-                        </div>
-                        <div class="absolute bottom-4 left-4 right-4">
-                            <h3 class="text-2xl font-extrabold text-white leading-tight">Isla Tortuga</h3>
-                            <p class="text-emerald-300 text-sm font-medium">Santuario de Aves</p>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <p class="text-gray-600 text-sm leading-relaxed mb-4">
-                            Un cráter volcánico colapsado en medio del mar con forma de media luna. Hogar de
-                            aves marinas y espectaculares paisajes, ideal para fotografía y observación de
-                            naturaleza.
-                        </p>
-                        <!-- Galería dinámica -->
-                        <div id="gallery-tortuga" class="grid grid-cols-3 gap-1.5 mb-4"></div>
-                        <!-- Botones de acción -->
-                        <div class="flex gap-2 mt-2">
-                            <a href="https://wa.me/593994891081?text=Hola%2C%20me%20interesa%20el%20Tour%20Isla%20Tortuga%20%F0%9F%90%A2"
-                                target="_blank" rel="noopener"
-                                class="flex-1 bg-green-500 hover:bg-green-600 text-white text-sm font-bold px-4 py-2 rounded-xl transition flex items-center justify-center gap-2 shadow">
-                                💬 Reservar por WhatsApp
-                            </a>
-                            <a href="./galeria.html?isla=tortuga"
-                                class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-xl transition flex items-center gap-1">
-                                🖼 Galería
-                            </a>
-                        </div>
+            <!-- Grid de tours dinámico -->
+            <div id="tours-destinations-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Spinner de carga -->
+                <div id="tours-loading" class="col-span-full flex justify-center py-20">
+                    <div class="flex flex-col items-center gap-3 text-gray-400">
+                        <div class="w-10 h-10 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
+                        <p class="text-sm font-medium">Cargando destinos...</p>
                     </div>
                 </div>
-
-
-                <!-- Punta Cormorant -->
-                <div
-                    class="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-                    <div class="relative h-64 overflow-hidden">
-                        <img src="./assets/images/punta cormorant.jpeg" alt="Punta Cormorant"
-                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent">
-                        </div>
-                        <div class="absolute top-4 left-4">
-                            <span
-                                class="bg-orange-500/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">Playa
-                                · Snorkel</span>
-                        </div>
-                        <div class="absolute bottom-4 left-4 right-4">
-                            <h3 class="text-2xl font-extrabold text-white leading-tight">Punta Cormorant</h3>
-                            <p class="text-orange-300 text-sm font-medium">Playa y Laguna</p>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <p class="text-gray-600 text-sm leading-relaxed mb-4">
-                            Playas de arena verde y blanca únicas en Galápagos, flamencos rosados en la laguna y
-                            snorkel en la famosa Corona del Diablo. Un ecosistema variado e irrepetible.
-                        </p>
-                        <!-- Galería dinámica -->
-                        <div id="gallery-cormorant" class="grid grid-cols-3 gap-1.5 mb-4"></div>
-                        <!-- Botones de acción -->
-                        <div class="flex gap-2 mt-2">
-                            <a href="https://wa.me/593994891081?text=Hola%2C%20me%20interesa%20el%20Tour%20Punta%20Cormorant%20%F0%9F%A6%A9"
-                                target="_blank" rel="noopener"
-                                class="flex-1 bg-green-500 hover:bg-green-600 text-white text-sm font-bold px-4 py-2 rounded-xl transition flex items-center justify-center gap-2 shadow">
-                                💬 Reservar por WhatsApp
-                            </a>
-                            <a href="./galeria.html?isla=cormorant"
-                                class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-xl transition flex items-center gap-1">
-                                🖼 Galería
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Cuatro Hermanos -->
-                <div
-                    class="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-                    <div class="relative h-64 overflow-hidden">
-                        <img src="./assets/images/Cuatro hermanos.jpeg" alt="Cuatro Hermanos"
-                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent">
-                        </div>
-                        <div class="absolute top-4 left-4">
-                            <span
-                                class="bg-cyan-500/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">Snorkel
-                                · Aventura</span>
-                        </div>
-                        <div class="absolute bottom-4 left-4 right-4">
-                            <h3 class="text-2xl font-extrabold text-white leading-tight">Cuatro Hermanos</h3>
-                            <p class="text-cyan-300 text-sm font-medium">Snorkel Avanzado</p>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <p class="text-gray-600 text-sm leading-relaxed mb-4">
-                            Cuatro islotes volcánicos que emergen del océano, hogar de mantarrayas gigantes,
-                            tortugas marinas y una vida submarina extraordinaria. La joya del snorkel en
-                            Isabela.
-                        </p>
-                        <!-- Galería dinámica -->
-                        <div id="gallery-hermanos" class="grid grid-cols-3 gap-1.5 mb-4"></div>
-                        <!-- Botones de acción -->
-                        <div class="flex gap-2 mt-2">
-                            <a href="https://wa.me/593994891081?text=Hola%2C%20me%20interesa%20el%20Tour%20Cuatro%20Hermanos%20%F0%9F%A4%BF"
-                                target="_blank" rel="noopener"
-                                class="flex-1 bg-green-500 hover:bg-green-600 text-white text-sm font-bold px-4 py-2 rounded-xl transition flex items-center justify-center gap-2 shadow">
-                                💬 Reservar por WhatsApp
-                            </a>
-                            <a href="./galeria.html?isla=hermanos"
-                                class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-xl transition flex items-center gap-1">
-                                🖼 Galería
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Lightbox -->
-            <div id="island-lightbox" class="fixed inset-0 z-[200] hidden items-center justify-center bg-black/90"
-                onclick="closeLightbox()">
-                <button class="absolute top-4 right-4 text-white text-3xl font-bold z-10"
-                    onclick="closeLightbox()">✕</button>
-                <img id="lightbox-img" src="" alt=""
-                    class="max-w-[90vw] max-h-[90vh] rounded-xl shadow-2xl object-contain">
-            </div>
             </div>
         </section>
-
-        <div id="island-lightbox" class="fixed inset-0 z-[200] hidden items-center justify-center bg-black/90"
-            onclick="if(event.target===this) closeLightbox()">
-            <button type="button" class="absolute top-4 right-4 text-white text-3xl font-bold z-10"
-                onclick="closeLightbox()">✕</button>
-            <img id="lightbox-img" src="" alt="" class="max-w-[90vw] max-h-[90vh] rounded-xl shadow-2xl object-contain">
-        </div>
     </main>
 
     <footer class="bg-gray-900 text-white py-10 mt-auto border-t border-gray-800">
@@ -274,12 +150,165 @@
         </div>
     </footer>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Lightbox para mini-galerías -->
+    <div id="island-lightbox" class="fixed inset-0 z-[200] hidden items-center justify-center bg-black/90"
+        onclick="if(event.target===this) closeLightbox()">
+        <button type="button" class="absolute top-4 right-4 text-white text-3xl font-bold z-10"
+            onclick="closeLightbox()">✕</button>
+        <img id="lightbox-img" src="" alt="" class="max-w-[90vw] max-h-[90vh] rounded-xl shadow-2xl object-contain">
+    </div>
+
     <script src="./js/config/supabase.js"></script>
+    <script src="./js/services/tours.service.js"></script>
     <script src="./js/services/gallery.service.js"></script>
     <script src="./js/components/navigation.ui.js"></script>
-    <script src="./js/main.js"></script>
+
+    <script>
+        // ── Renderizar todos los tours como tarjetas de destino ────────────────
+        async function renderDestinationTours() {
+            const grid = document.getElementById('tours-destinations-grid');
+            const loading = document.getElementById('tours-loading');
+
+            // Colores para las badges según índice (cíclico)
+            const badgeColors = [
+                'bg-emerald-500/90', 'bg-orange-500/90', 'bg-cyan-500/90',
+                'bg-purple-500/90', 'bg-rose-500/90', 'bg-yellow-500/90'
+            ];
+            const textColors = [
+                'text-emerald-300', 'text-orange-300', 'text-cyan-300',
+                'text-purple-300', 'text-rose-300', 'text-yellow-300'
+            ];
+
+            try {
+                const tours = await ToursService.getAllTours();
+
+                if (loading) loading.remove();
+
+                if (!tours || tours.length === 0) {
+                    grid.innerHTML = `
+                        <div class="col-span-full text-center py-20 text-gray-500">
+                            <p class="text-5xl mb-4">🗺️</p>
+                            <p class="text-lg">No hay tours disponibles aún.</p>
+                            <p class="text-sm mt-2">¡Vuelve pronto para descubrir nuestros destinos!</p>
+                        </div>`;
+                    return;
+                }
+
+                tours.forEach((tour, idx) => {
+                    const color = badgeColors[idx % badgeColors.length];
+                    const textColor = textColors[idx % textColors.length];
+                    const tagsLabel = (tour.tags || []).slice(0, 2).join(' · ');
+                    // Usamos el ID del tour como slug de galería
+                    const gallerySlug = tour.id;
+                    const waText = encodeURIComponent(`Hola, me interesa el ${tour.title} 🌊`);
+                    const waLink = `https://wa.me/593994891081?text=${waText}`;
+
+                    const card = document.createElement('div');
+                    card.className = 'group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2';
+                    card.innerHTML = `
+                        <div class="relative h-64 overflow-hidden">
+                            <img src="${tour.image || ''}" alt="${tour.title}"
+                                loading="lazy"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                onerror="this.src='https://placehold.co/600x400/0891b2/ffffff?text=${encodeURIComponent(tour.title)}'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                            <div class="absolute top-4 left-4">
+                                <span class="${color} backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
+                                    ${tagsLabel || tour.difficulty || 'Tour'}
+                                </span>
+                            </div>
+                            <div class="absolute bottom-4 left-4 right-4">
+                                <h3 class="text-2xl font-extrabold text-white leading-tight">${tour.title}</h3>
+                                <p class="${textColor} text-sm font-medium">${tour.duration || ''}</p>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-600 text-sm leading-relaxed mb-4">${tour.description || ''}</p>
+                            <!-- Mini galería dinámica -->
+                            <div id="mini-gallery-${tour.id}" class="grid grid-cols-3 gap-1.5 mb-4"></div>
+                            <!-- Botones de acción -->
+                            <div class="flex gap-2 mt-2">
+                                <a href="${waLink}" target="_blank" rel="noopener"
+                                    class="flex-1 bg-green-500 hover:bg-green-600 text-white text-sm font-bold px-4 py-2 rounded-xl transition flex items-center justify-center gap-2 shadow">
+                                    💬 Reservar por WhatsApp
+                                </a>
+                                <a href="./galeria.html?isla=${gallerySlug}"
+                                    class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-xl transition flex items-center gap-1">
+                                    🖼 Galería
+                                </a>
+                            </div>
+                        </div>`;
+                    grid.appendChild(card);
+
+                    // Cargar mini-galería para este tour
+                    loadMiniGallery(tour.id);
+                });
+
+            } catch (err) {
+                console.error('Error cargando destinos:', err);
+                if (loading) loading.remove();
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-16 text-red-500">
+                        <p class="text-4xl mb-3">⚠️</p>
+                        <p>Error al cargar los destinos. Recarga la página.</p>
+                    </div>`;
+            }
+
+            if (window.lucide) lucide.createIcons();
+        }
+
+        // ── Mini galería por tour (máx 3 fotos) ──────────────────────────────
+        async function loadMiniGallery(tourId) {
+            const container = document.getElementById(`mini-gallery-${tourId}`);
+            if (!container) return;
+            try {
+                const photos = await GalleryService.getPhotos(tourId);
+                if (!photos || photos.length === 0) {
+                    container.innerHTML = '';
+                    return;
+                }
+                container.innerHTML = photos.slice(0, 3).map(photo => `
+                    <div class="aspect-square overflow-hidden rounded-lg cursor-pointer"
+                        onclick="openLightbox('${photo.url}')">
+                        <img src="${photo.url}" alt="Foto ${tourId}"
+                            class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                            onerror="this.parentElement.style.display='none'">
+                    </div>`).join('');
+                if (window.lucide) lucide.createIcons();
+            } catch (e) {
+                console.warn(`No se pudo cargar mini-galería del tour ${tourId}:`, e);
+            }
+        }
+
+        // ── Lightbox ──────────────────────────────────────────────────────────
+        function openLightbox(src) {
+            const lb = document.getElementById('island-lightbox');
+            const img = document.getElementById('lightbox-img');
+            if (!lb || !img) return;
+            img.src = src;
+            lb.classList.remove('hidden');
+            lb.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lb = document.getElementById('island-lightbox');
+            if (!lb) return;
+            lb.classList.add('hidden');
+            lb.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        // ── Inicializar ───────────────────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (typeof Navigation !== 'undefined') Navigation.init();
+            await renderDestinationTours();
+        });
+    </script>
 </body>
 
 </html>

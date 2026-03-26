@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galería – Isabela Tours · Galápagos</title>
-    <meta name="description" content="Galería de fotos de los tours en Isla Isabela, Galápagos. Descubre Isla Tortuga, Punta Cormorant y Cuatro Hermanos.">
+    <title>Galería — Golden Ray I · Galápagos</title>
+    <meta name="description" content="Galería de fotos de los tours en Isla Isabela, Galápagos.">
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="./css/main.css">
-
-    <!-- Tailwind -->
+    <!-- Preconnect a CDNs externos -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <!-- Google Fonts: no bloqueante -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"></noscript>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/animations.css">
 </head>
 <body class="bg-gray-950 text-white min-h-screen flex flex-col">
 
@@ -30,12 +32,14 @@
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <a href="./index.html" class="flex items-center gap-2 text-white font-bold text-xl">
                 <i data-lucide="anchor" class="h-6 w-6 text-cyan-400"></i>
-                Isabela<span class="text-cyan-400">Tours</span>
+                Golden Ray <span class="text-cyan-400">I</span>
             </a>
-            <a href="./index.html" class="flex items-center gap-1 text-gray-400 hover:text-cyan-400 transition text-sm">
-                <i data-lucide="arrow-left" class="h-4 w-4"></i>
-                Volver al inicio
-            </a>
+            <div class="flex items-center gap-4">
+                <a href="./tours.html" class="flex items-center gap-1 text-gray-400 hover:text-cyan-400 transition text-sm">
+                    <i data-lucide="arrow-left" class="h-4 w-4"></i>
+                    Volver a Tours
+                </a>
+            </div>
         </div>
     </nav>
 
@@ -47,7 +51,7 @@
                 class="inline-block px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 text-xs font-semibold uppercase tracking-widest mb-4">
                 Galería de Fotos
             </span>
-            <h1 id="gallery-title" class="text-4xl md:text-5xl font-bold text-white mb-3">...</h1>
+            <h1 id="gallery-title" class="text-4xl md:text-5xl font-bold text-white mb-3">Cargando...</h1>
             <p id="gallery-subtitle" class="text-gray-400 text-lg"></p>
         </div>
     </div>
@@ -70,7 +74,7 @@
 
         <!-- Galería -->
         <div id="gallery-grid" class="hidden">
-            <!-- Selector de islas (tabs) -->
+            <!-- Selector de tours (tabs) -->
             <div id="island-tabs" class="flex flex-wrap gap-3 mb-8 justify-center"></div>
 
             <!-- Grid de fotos -->
@@ -111,85 +115,69 @@
 
     <!-- Footer -->
     <footer class="bg-gray-900 border-t border-white/10 py-6 text-center text-gray-500 text-sm">
-        <p>© 2024 IsabelaTours · <a href="/" class="hover:text-cyan-400 transition">Volver al inicio</a></p>
+        <p>© 2024 Golden Ray I · <a href="./tours.html" class="hover:text-cyan-400 transition">Ver todos los tours</a></p>
     </footer>
 
     <!-- Servicios JS -->
     <script src="./js/services/gallery.service.js"></script>
 
     <script>
-        // ── Configuración de islas ─────────────────────────────────────────────
-        const ISLANDS = {
-            tortuga: {
-                name: 'Isla Tortuga',
-                subtitle: 'Santuario de Aves · Cráter volcánico en el mar',
-                icon: '🐢',
-                color: 'emerald',
-                wa: 'Hola%2C%20me%20interesa%20el%20Tour%20Isla%20Tortuga%20%F0%9F%90%A2'
-            },
-            cormorant: {
-                name: 'Punta Cormorant',
-                subtitle: 'Playa y Laguna · Flamencos y snorkel',
-                icon: '🦩',
-                color: 'orange',
-                wa: 'Hola%2C%20me%20interesa%20el%20Tour%20Punta%20Cormorant%20%F0%9F%A6%A9'
-            },
-            hermanos: {
-                name: 'Cuatro Hermanos',
-                subtitle: 'Snorkel Avanzado · Mantarrayas y tortugas',
-                icon: '🤿',
-                color: 'cyan',
-                wa: 'Hola%2C%20me%20interesa%20el%20Tour%20Cuatro%20Hermanos%20%F0%9F%A4%BF'
-            },
-        };
-
-        let _currentIsland = 'tortuga';
+        // ── Estado ─────────────────────────────────────────────────────────────
+        let _currentIsland = null;
         let _allPhotos = [];
         let _lightboxIndex = 0;
+        let _allTours = [];   // cache de todos los tours cargados
 
-        // ── Obtener isla de la URL ─────────────────────────────────────────────
+        // ── Obtener parámetro de URL ────────────────────────────────────────────
         function getIslandFromURL() {
             const params = new URLSearchParams(window.location.search);
-            const isla = params.get('isla');
-            return isla && ISLANDS[isla] ? isla : 'tortuga';
+            return params.get('isla') || null;
         }
 
-        // ── Renderizar tabs de islas ───────────────────────────────────────────
-        function renderTabs(activeIsland) {
+        // ── Renderizar tabs de tours ────────────────────────────────────────────
+        function renderTabs(activeTourId) {
             const container = document.getElementById('island-tabs');
-            container.innerHTML = Object.entries(ISLANDS).map(([id, isl]) => `
+            if (!_allTours.length) { container.innerHTML = ''; return; }
+            container.innerHTML = _allTours.map(tour => `
                 <button
-                    onclick="switchIsland('${id}')"
+                    onclick="switchIsland(${tour.id})"
                     class="flex items-center gap-2 px-5 py-2 rounded-xl font-medium text-sm transition border ${
-                        id === activeIsland
+                        String(tour.id) === String(activeTourId)
                         ? 'bg-cyan-600 border-cyan-500 text-white shadow'
                         : 'bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700'
                     }"
-                >${isl.icon} ${isl.name}</button>
+                >${tour.title}</button>
             `).join('');
         }
 
-        // ── Cambiar isla ───────────────────────────────────────────────────────
+        // ── Cambiar isla/tour ───────────────────────────────────────────────────
         async function switchIsland(islandId) {
             _currentIsland = islandId;
-            // Actualizar URL sin recargar
             history.pushState(null, '', `?isla=${islandId}`);
             updateHeader(islandId);
             renderTabs(islandId);
             await loadPhotos(islandId);
         }
 
-        // ── Actualizar header ─────────────────────────────────────────────────
+        // ── Actualizar header dinámicamente ────────────────────────────────────
         function updateHeader(islandId) {
-            const isl = ISLANDS[islandId];
-            document.title = `${isl.name} – Galería | IsabelaTours`;
-            document.getElementById('gallery-title').textContent = `${isl.icon} ${isl.name}`;
-            document.getElementById('gallery-subtitle').textContent = isl.subtitle;
-            document.getElementById('cta-whatsapp').href =
-                `https://wa.me/593994891081?text=${isl.wa}`;
+            // Buscar el tour en la lista cargada
+            const tour = _allTours.find(t => String(t.id) === String(islandId));
+            if (tour) {
+                document.title = `${tour.title} – Galería | Golden Ray I`;
+                document.getElementById('gallery-title').textContent = `🌊 ${tour.title}`;
+                document.getElementById('gallery-subtitle').textContent =
+                    (tour.tags || []).join(' · ') || tour.difficulty || '';
+                document.getElementById('cta-whatsapp').href =
+                    `https://wa.me/593994891081?text=${encodeURIComponent('Hola, me interesa el ' + tour.title + ' 🌊')}`;
+            } else {
+                // Fallback si no se encontró el tour
+                document.getElementById('gallery-title').textContent = `🌊 Galería`;
+                document.getElementById('gallery-subtitle').textContent = '';
+            }
         }
 
-        // ── Cargar fotos ───────────────────────────────────────────────────────
+        // ── Cargar fotos ────────────────────────────────────────────────────────
         async function loadPhotos(islandId) {
             document.getElementById('gallery-loading').classList.remove('hidden');
             document.getElementById('gallery-grid').classList.add('hidden');
@@ -216,7 +204,7 @@
             }
         }
 
-        // ── Renderizar fotos ───────────────────────────────────────────────────
+        // ── Renderizar fotos ────────────────────────────────────────────────────
         function renderPhotos(photos) {
             const grid = document.getElementById('photos-grid');
             grid.innerHTML = photos.map((photo, i) => `
@@ -237,7 +225,7 @@
             if (window.lucide) lucide.createIcons();
         }
 
-        // ── Lightbox ───────────────────────────────────────────────────────────
+        // ── Lightbox ────────────────────────────────────────────────────────────
         function openLightbox(index) {
             _lightboxIndex = index;
             showLightboxPhoto(index);
@@ -270,7 +258,6 @@
             showLightboxPhoto(_lightboxIndex);
         }
 
-        // Navegación con teclado
         document.addEventListener('keydown', (e) => {
             if (document.getElementById('lightbox').classList.contains('hidden')) return;
             if (e.key === 'ArrowLeft') prevPhoto();
@@ -278,13 +265,32 @@
             if (e.key === 'Escape') closeLightbox();
         });
 
-        // ── Inicializar ────────────────────────────────────────────────────────
+        // ── Inicializar ─────────────────────────────────────────────────────────
         document.addEventListener('DOMContentLoaded', async () => {
-            const isla = getIslandFromURL();
-            _currentIsland = isla;
-            updateHeader(isla);
-            renderTabs(isla);
-            await loadPhotos(isla);
+            // Cargar todos los tours para los tabs y el header dinámico
+            try {
+                const res = await fetch('/api/tours');
+                _allTours = await res.json();
+            } catch (e) {
+                console.warn('No se pudo cargar lista de tours:', e);
+                _allTours = [];
+            }
+
+            const islaParam = getIslandFromURL();
+            // Si no hay parámetro, usar el primer tour disponible
+            const islandId = islaParam || (_allTours.length ? _allTours[0].id : null);
+
+            if (!islandId) {
+                document.getElementById('gallery-loading').classList.add('hidden');
+                document.getElementById('gallery-empty').classList.remove('hidden');
+                document.getElementById('gallery-title').textContent = 'Sin tours disponibles';
+                return;
+            }
+
+            _currentIsland = islandId;
+            updateHeader(islandId);
+            renderTabs(islandId);
+            await loadPhotos(islandId);
             if (window.lucide) lucide.createIcons();
         });
     </script>

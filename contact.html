@@ -3,106 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contacto — Golden Ray I · Galapagos</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Contacto — Golden Ray I · Galápagos</title>
+    <meta name="description" content="Contáctanos por WhatsApp, Instagram, Facebook o correo. Golden Ray I — tours en Isla Isabela, Galápagos.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/animations.css">
-    <link rel="stylesheet" href="./css/home.css">
-    <link rel="stylesheet" href="./css/contact.css">
+    <style>
+        .contact-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 1.5rem;
+            transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+        }
+        .contact-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(8, 145, 178, 0.12);
+            border-color: #a5f3fc;
+        }
+        .contact-icon-ring {
+            width: 72px; height: 72px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.25rem;
+            transition: transform 0.3s ease;
+        }
+        .contact-card:hover .contact-icon-ring { transform: scale(1.12) rotate(-5deg); }
+        .info-row {
+            display: flex; align-items: center; gap: 1rem;
+            padding: 1rem 1.25rem;
+            border-radius: 0.875rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .info-row:hover { background: #f0f9ff; border-color: #a5f3fc; }
+        @keyframes float-slow {
+            0%,100%{ transform: translateY(0); }
+            50%{ transform: translateY(-12px); }
+        }
+        .animate-float { animation: float-slow 6s ease-in-out infinite; }
+        @keyframes pulse-ring {
+            0%{ box-shadow: 0 0 0 0 rgba(34,211,238,0.45); }
+            70%{ box-shadow: 0 0 0 14px rgba(34,211,238,0); }
+            100%{ box-shadow: 0 0 0 0 rgba(34,211,238,0); }
+        }
+        .pulse-ring { animation: pulse-ring 2.5s ease-out infinite; }
+    </style>
 </head>
-<body class="contact-page bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+    <!-- Fondo del sitio -->
     <div class="fixed inset-0 z-[-1]" aria-hidden="true">
         <img src="./assets/images/fondo de pagina.png" alt="" class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-black/40"></div>
+        <div class="absolute inset-0 bg-black/50"></div>
     </div>
 
-    <header>
-        <nav class="bg-white sticky top-0 z-50 border-b border-white">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-20">
-                    <a href="./index.html" class="flex items-center gap-2">
-                        <img src="./assets/images/logo-orca.png" alt="Golden Ray Logo" class="h-10 w-10 object-contain">
-                        <span class="text-2xl font-bold text-gray-800 tracking-tight">Golden Ray I</span>
-                    </a>
-                    <div class="hidden md:flex space-x-8">
-                        <a href="./index.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Inicio</a>
-                        <a href="./tours.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Tours</a>
-                        <a href="./blog.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Blog</a>
-                        <span class="text-cyan-600 font-semibold border-b-2 border-cyan-500 pb-0.5">Contacto</span>
-                    </div>
-                    <div class="md:hidden">
-                        <button id="mobile-menu-btn" class="text-gray-600" aria-label="Abrir menu">
-                            <i data-lucide="menu" class="h-7 w-7"></i>
-                        </button>
-                    </div>
+    <!-- ───────── NAV (igual al resto del sitio) ───────── -->
+    <nav class="bg-white sticky top-0 z-50 border-b border-gray-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="./index.html" class="flex items-center gap-2 no-underline text-inherit">
+                    <img src="./assets/images/logo-orca.png" alt="Golden Ray Logo" class="h-10 w-10 object-contain">
+                    <span class="text-2xl font-bold text-gray-800 tracking-tight">Golden Ray I</span>
+                </a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="./index.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Inicio</a>
+                    <a href="./tours.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Tours</a>
+                    <a href="./blog.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Blog</a>
+                    <span class="text-cyan-600 font-semibold border-b-2 border-cyan-500 pb-0.5">Contacto</span>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-600" aria-label="Abrir menú">
+                        <i data-lucide="menu" class="h-7 w-7"></i>
+                    </button>
                 </div>
             </div>
-        </nav>
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-gray-200 p-4 absolute w-full z-40 shadow-lg">
-            <div class="flex flex-col space-y-4">
-                <a href="./index.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Inicio</a>
-                <a href="./tours.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Tours & Galeria</a>
-                <a href="./blog.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Blog</a>
-                <span class="text-cyan-600 font-semibold">Contacto</span>
-            </div>
         </div>
-    </header>
+    </nav>
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-gray-200 p-4 absolute w-full z-40 shadow-lg">
+        <div class="flex flex-col space-y-4">
+            <a href="./index.html" onclick="toggleMobileMenu()" class="text-gray-800 font-medium">Inicio</a>
+            <a href="./tours.html" onclick="toggleMobileMenu()" class="text-gray-800 font-medium">Tours</a>
+            <a href="./blog.html" onclick="toggleMobileMenu()" class="text-gray-800 font-medium">Blog</a>
+            <span class="text-cyan-600 font-semibold">Contacto</span>
+        </div>
+    </div>
 
     <main class="flex-1">
-        <section class="relative min-h-[420px] md:min-h-[480px] flex items-center justify-center overflow-hidden px-4 py-16" aria-labelledby="contact-hero-title">
-            <div class="absolute inset-0 z-0">
-                <img src="./assets/images/leon marino.jpeg" alt="" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-black/45"></div>
-            </div>
-            <div class="relative z-10 text-center max-w-3xl mx-auto w-full gr-animate-in">
-                <div class="hero-glass bg-black/25 backdrop-blur-sm rounded-3xl p-8 md:p-12 border border-white/15 shadow-2xl">
-                    <span class="inline-block py-1 px-3 rounded-full bg-cyan-500/25 text-cyan-100 border border-cyan-400/35 text-sm font-semibold mb-4">
-                        Estamos para ayudarte
-                    </span>
-                    <h1 id="contact-hero-title" class="text-3xl md:text-5xl font-bold text-white mb-4">Hablemos de tu aventura</h1>
-                    <p class="text-lg text-gray-100">Contacto directo por WhatsApp, Instagram, Facebook o correo.</p>
+        <!-- ───────── HERO ───────── -->
+        <section class="bg-white/95 backdrop-blur-sm pt-16 pb-14 px-4 shadow-sm">
+            <div class="max-w-3xl mx-auto text-center gr-animate-in">
+                <span class="inline-block mb-4 py-1.5 px-4 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200 text-xs font-bold uppercase tracking-widest">
+                    Estamos para ti 🌊
+                </span>
+                <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 leading-tight">
+                    Hablemos de tu <span class="text-cyan-600">aventura</span>
+                </h1>
+                <p class="text-lg text-gray-600 max-w-xl mx-auto leading-relaxed">
+                    Escríbenos por el canal que prefieras. Respondemos rápido y te ayudamos a planificar cada detalle de tu experiencia en Galápagos.
+                </p>
+                <!-- Indicador WhatsApp activo -->
+                <div class="inline-flex items-center gap-2 mt-6 bg-green-50 border border-green-200 rounded-full px-5 py-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-500 pulse-ring"></span>
+                    <span class="text-green-700 text-sm font-semibold">WhatsApp disponible ahora</span>
                 </div>
             </div>
         </section>
 
-        <section class="max-w-7xl mx-auto px-4 py-16 md:py-20" aria-label="Canales de contacto">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 gr-stagger">
-                <a href="https://wa.me/593994891081?text=Hola%2C%20me%20interesa%20informacion%20sobre%20tours%20en%20Isabela" target="_blank" rel="noopener noreferrer" class="contact-channel-card home-info-card bg-white/90 backdrop-blur-sm border border-white/10 p-8 rounded-2xl hover:bg-white hover:shadow-xl transition text-center group block no-underline text-inherit">
-                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition">
-                        <i data-lucide="message-circle" class="w-8 h-8 text-green-600"></i>
+        <!-- ───────── TARJETAS DE CANAL ───────── -->
+        <section class="bg-white/95 backdrop-blur-sm py-14 px-4 border-t border-gray-100">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 gr-stagger">
+
+                    <!-- WhatsApp -->
+                    <a href="https://wa.me/593994891081?text=Hola%2C%20me%20interesa%20informacion%20sobre%20tours%20en%20Isabela"
+                       target="_blank" rel="noopener noreferrer"
+                       class="contact-card p-7 text-center block no-underline group">
+                        <div class="contact-icon-ring bg-green-100">
+                            <i data-lucide="message-circle" class="w-9 h-9 text-green-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">WhatsApp</h3>
+                        <p class="text-gray-500 text-sm mb-4">Respuesta inmediata</p>
+                        <p class="text-green-600 font-bold text-lg">+593 99 489 1081</p>
+                        <div class="mt-5 inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition shadow-sm">
+                            💬 Escribir ahora
+                        </div>
+                    </a>
+
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/goldenraytuneles1/"
+                       target="_blank" rel="noopener noreferrer"
+                       class="contact-card p-7 text-center block no-underline group">
+                        <div class="contact-icon-ring bg-pink-100">
+                            <!-- Instagram SVG -->
+                            <svg class="w-9 h-9 text-pink-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                                <circle cx="12" cy="12" r="4"/>
+                                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">Instagram</h3>
+                        <p class="text-gray-500 text-sm mb-4">Fotos y novedades</p>
+                        <p class="text-pink-600 font-bold">@goldenraytuneles1</p>
+                        <div class="mt-5 inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition shadow-sm">
+                            📸 Ver perfil
+                        </div>
+                    </a>
+
+                    <!-- Facebook -->
+                    <a href="https://www.facebook.com/search/top/?q=Golden%20Ray%20Isabela%20Tours"
+                       target="_blank" rel="noopener noreferrer"
+                       class="contact-card p-7 text-center block no-underline group">
+                        <div class="contact-icon-ring bg-blue-100">
+                            <!-- Facebook SVG -->
+                            <svg class="w-9 h-9 text-blue-600" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">Facebook</h3>
+                        <p class="text-gray-500 text-sm mb-4">Síguenos</p>
+                        <p class="text-blue-600 font-bold">Isabela Tours</p>
+                        <div class="mt-5 inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition shadow-sm">
+                            👍 Seguir
+                        </div>
+                    </a>
+
+                    <!-- Email -->
+                    <a href="mailto:goldenraytuneles@gmail.com?subject=Consulta%20Golden%20Ray%20I"
+                       class="contact-card p-7 text-center block no-underline group">
+                        <div class="contact-icon-ring bg-cyan-100">
+                            <i data-lucide="mail" class="w-9 h-9 text-cyan-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">Correo</h3>
+                        <p class="text-gray-500 text-sm mb-4">Escríbenos cuando quieras</p>
+                        <p class="text-cyan-600 font-bold text-sm break-all">goldenraytuneles@gmail.com</p>
+                        <div class="mt-5 inline-flex items-center gap-2 bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition shadow-sm">
+                            ✉️ Enviar email
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ───────── UBICACIÓN + CTA ───────── -->
+        <section class="bg-gray-50/95 backdrop-blur-sm py-20 px-4 border-t border-gray-100">
+            <div class="max-w-5xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+
+                    <!-- Info de ubicación -->
+                    <div class="space-y-5 gr-animate-in">
+                        <h2 class="text-3xl font-bold text-gray-900">¿Dónde encontrarnos?</h2>
+                        <p class="text-gray-600 leading-relaxed">
+                            Estamos en Puerto Villamil, Isla Isabela — el corazón de Galápagos. Nuestras operaciones salen desde el muelle principal todos los días.
+                        </p>
+                        <div class="space-y-3">
+                            <div class="info-row">
+                                <div class="w-10 h-10 rounded-xl bg-cyan-100 flex items-center justify-center shrink-0">
+                                    <i data-lucide="map-pin" class="w-5 h-5 text-cyan-600"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-800 font-semibold text-sm">Ubicación</p>
+                                    <p class="text-gray-500 text-sm">Puerto Villamil, Isla Isabela, Galápagos</p>
+                                </div>
+                            </div>
+                            <div class="info-row">
+                                <div class="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
+                                    <i data-lucide="phone" class="w-5 h-5 text-green-600"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-800 font-semibold text-sm">Teléfono / WhatsApp</p>
+                                    <p class="text-green-600 text-sm font-bold">+593 99 489 1081</p>
+                                </div>
+                            </div>
+                            <div class="info-row">
+                                <div class="w-10 h-10 rounded-xl bg-cyan-100 flex items-center justify-center shrink-0">
+                                    <i data-lucide="clock" class="w-5 h-5 text-cyan-600"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-800 font-semibold text-sm">Horario de tours</p>
+                                    <p class="text-gray-500 text-sm">Lunes a Domingo · 06:00 AM – 05:00 PM</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <h3 class="text-xl font-bold text-black/80 mb-2">WhatsApp</h3>
-                    <p class="text-black/70 text-sm mb-4">Chat directo</p>
-                    <p class="text-green-600 font-bold text-lg">+593 99 489 1081</p>
-                </a>
-                <a href="https://www.instagram.com/goldenraytuneles1/" target="_blank" rel="noopener noreferrer" class="contact-channel-card home-info-card bg-white/90 backdrop-blur-sm border border-white/10 p-8 rounded-2xl hover:bg-white hover:shadow-xl transition text-center group block no-underline text-inherit">
-                    <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition">
-                        <i data-lucide="instagram" class="w-8 h-8 text-pink-600"></i>
+
+                    <!-- CTA WhatsApp -->
+                    <div class="bg-white rounded-3xl border border-gray-200 p-8 text-center shadow-md gr-animate-in">
+                        <div class="w-20 h-20 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-5 animate-float">
+                            <span class="text-4xl">🐢</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">¿Listo para explorar?</h3>
+                        <p class="text-gray-500 text-sm mb-6 leading-relaxed">
+                            No esperes más. Escríbenos ahora y diseñemos juntos tu experiencia perfecta en Galápagos.
+                        </p>
+                        <a href="https://wa.me/593994891081?text=Hola%2C%20quiero%20reservar%20un%20tour%20en%20Gal%C3%A1pagos%20%F0%9F%90%A2"
+                           target="_blank" rel="noopener noreferrer"
+                           class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold px-8 py-4 rounded-2xl transition text-lg shadow w-full justify-center">
+                            💬 Reservar por WhatsApp
+                        </a>
+                        <a href="./tours.html"
+                           class="inline-flex items-center gap-2 mt-3 text-cyan-600 hover:text-cyan-700 text-sm font-medium transition w-full justify-center">
+                            <i data-lucide="map" class="h-4 w-4"></i>
+                            Ver todos los tours →
+                        </a>
                     </div>
-                    <h3 class="text-xl font-bold text-black/80 mb-2">Instagram</h3>
-                    <p class="text-black/70 text-sm mb-4">Fotos y novedades</p>
-                    <p class="text-pink-600 font-bold text-lg">@goldenraytuneles1</p>
-                </a>
-                <a href="https://www.facebook.com/search/top/?q=Golden%20Ray%20Isabela%20Tours" target="_blank" rel="noopener noreferrer" class="contact-channel-card home-info-card bg-white/90 backdrop-blur-sm border border-white/10 p-8 rounded-2xl hover:bg-white hover:shadow-xl transition text-center group block no-underline text-inherit">
-                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition">
-                        <i data-lucide="facebook" class="w-8 h-8 text-blue-600"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-black/80 mb-2">Facebook</h3>
-                    <p class="text-black/70 text-sm mb-4">Buscanos en Facebook</p>
-                    <p class="text-blue-600 font-bold text-lg">Isabela Tours Oficial</p>
-                </a>
-                <a href="mailto:goldenraytuneles@gmail.com?subject=Consulta%20Golden%20Ray%20I" class="contact-channel-card home-info-card bg-white/90 backdrop-blur-sm border border-white/10 p-8 rounded-2xl hover:bg-white hover:shadow-xl transition text-center group block no-underline text-inherit">
-                    <div class="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition">
-                        <i data-lucide="mail" class="w-8 h-8 text-cyan-600"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-black/80 mb-2">Correo</h3>
-                    <p class="text-black/70 text-sm mb-4">Escribenos cuando quieras</p>
-                    <p class="text-cyan-600 font-bold text-sm break-all">goldenraytuneles@gmail.com</p>
-                </a>
+                </div>
             </div>
         </section>
     </main>
 
+    <!-- ───────── FOOTER (igual al resto del sitio) ───────── -->
     <footer class="bg-gray-900 text-white py-10 mt-auto border-t border-gray-800">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
             <p>© Golden Ray I · Isla Isabela</p>
@@ -114,9 +266,7 @@
         </div>
     </footer>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="./js/components/navigation.ui.js"></script>
-    <script src="./js/contact-page.js"></script>
+    <script>if(window.lucide) lucide.createIcons();</script>
 </body>
 </html>
