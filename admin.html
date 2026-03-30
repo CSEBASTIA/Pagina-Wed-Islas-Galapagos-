@@ -120,7 +120,7 @@
                 <div class="mt-8 pt-6 border-t border-white/5">
                     <p class="text-[10px] text-stone-500 text-center uppercase tracking-widest leading-relaxed">
                         Acceso restringido · IP Registrada<br>
-                        Golden Ray I · Galápagos 🐢
+                        Golden Ray I · Galapagos
                     </p>
                 </div>
             </div>
@@ -178,23 +178,23 @@
                 <div class="flex gap-4 mb-10 overflow-x-auto pb-2 no-scrollbar border-b border-white/5">
                     <button onclick="switchTab('tours', event)"
                         class="tab-btn active px-6 py-3 text-sm font-bold whitespace-nowrap">
-                        🗺️ Gestión de Tours
+                        Gestion de Tours
                     </button>
                     <button onclick="switchTab('galleries', event)"
                         class="tab-btn px-6 py-3 text-sm font-bold text-stone-400 hover:text-stone-200 whitespace-nowrap">
-                        🖼️ Galerías Fotos
+                        Galerias Fotos
                     </button>
                     <button onclick="switchTab('reviews', event); loadReviews()"
                         class="tab-btn px-6 py-3 text-sm font-bold text-stone-400 hover:text-stone-200 whitespace-nowrap">
-                        ⭐ Reseñas Clientes
+                        Resenas Clientes
                     </button>
                     <button onclick="switchTab('blog', event); loadBlogAdminTab()"
                         class="tab-btn px-6 py-3 text-sm font-bold text-stone-400 hover:text-stone-200 whitespace-nowrap">
-                        📰 Estado Blog
+                        Estado Blog
                     </button>
-                    <button onclick="switchTab('htmleditor', event); loadHtmlEditor()"
+                    <button onclick="switchTab('promos', event); loadPromotionsTab()"
                         class="tab-btn px-6 py-3 text-sm font-bold text-stone-400 hover:text-stone-200 whitespace-nowrap">
-                        📝 Editor Código
+                        Promociones
                     </button>
                 </div>
 
@@ -245,18 +245,18 @@
                                         class="w-full px-5 py-3 bg-stone-900/60 border border-white/10 rounded-xl text-white focus:border-amber-500 outline-none resize-none transition-all"></textarea>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-semibold text-stone-300 mb-2">⏱ Duración Estimada</label>
+                                    <label class="block text-sm font-semibold text-stone-300 mb-2">Duracion Estimada</label>
                                     <input type="text" id="tour-duration" placeholder="Ej: 5 a 6 Horas"
                                         class="w-full px-5 py-3 bg-stone-900/60 border border-white/10 rounded-xl text-white focus:border-amber-500 outline-none transition-all">
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-sm font-semibold text-stone-300 mb-2">🛫 Salida</label>
+                                        <label class="block text-sm font-semibold text-stone-300 mb-2">Salida</label>
                                         <input type="text" id="tour-departure" placeholder="08:00 AM"
                                             class="w-full px-4 py-3 bg-stone-900/60 border border-white/10 rounded-xl text-white focus:border-amber-500 outline-none transition-all text-sm">
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-semibold text-stone-300 mb-2">🛬 Regreso</label>
+                                        <label class="block text-sm font-semibold text-stone-300 mb-2">Regreso</label>
                                         <input type="text" id="tour-arrival" placeholder="02:00 PM"
                                             class="w-full px-4 py-3 bg-stone-900/60 border border-white/10 rounded-xl text-white focus:border-amber-500 outline-none transition-all text-sm">
                                     </div>
@@ -265,9 +265,9 @@
                                     <label class="block text-sm font-semibold text-stone-300 mb-2">Nivel de Dificultad</label>
                                     <select id="tour-difficulty" title="Nivel de dificultad"
                                         class="w-full px-5 py-3 bg-stone-900/60 border border-white/10 rounded-xl text-white focus:border-amber-500 outline-none appearance-none cursor-pointer">
-                                        <option value="Fácil">🟢 Principiante (Fácil)</option>
-                                        <option value="Moderado" selected>🟠 Intermedio (Moderado)</option>
-                                        <option value="Difícil">🔴 Experto (Difícil)</option>
+                                        <option value="Fácil">Principiante (Facil)</option>
+                                        <option value="Moderado" selected>Intermedio (Moderado)</option>
+                                        <option value="Difícil">Experto (Dificil)</option>
                                     </select>
                                 </div>
                                 <div>
@@ -276,7 +276,7 @@
                                         class="w-full px-5 py-3 bg-stone-900/60 border border-white/10 rounded-xl text-white focus:border-amber-500 outline-none transition-all font-mono">
                                 </div>
                                 <div class="md:col-span-2">
-                                    <label class="block text-sm font-semibold text-stone-300 mb-2">🖼 Portada (URL de Imagen)</label>
+                                    <label class="block text-sm font-semibold text-stone-300 mb-2">Portada (URL de Imagen)</label>
                                     <input type="text" id="tour-image" placeholder="https://..."
                                         class="w-full px-5 py-3 bg-stone-900/60 border border-white/10 rounded-xl text-white focus:border-amber-500 outline-none transition-all text-sm">
                                 </div>
@@ -288,7 +288,7 @@
                                 <div class="md:col-span-2 flex gap-4 pt-4">
                                     <button type="submit"
                                         class="flex-1 warm-gradient-btn text-white px-6 py-4 rounded-xl font-black transition shadow-xl">
-                                        💾 Confirmar y Guardar
+                                        Confirmar y Guardar
                                     </button>
                                     <button type="button" onclick="toggleTourForm()"
                                         class="px-8 py-4 bg-stone-800 hover:bg-stone-700 text-stone-300 rounded-xl font-bold transition">
@@ -386,76 +386,69 @@
                     </div>
                 </div>
 
-                <!-- HTML Editor Tab -->
-                <div id="tab-htmleditor" class="tab-content hidden">
-                    <div class="space-y-6">
-                        <!-- Header -->
-                        <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-6">
-                            <div class="flex items-center gap-3">
-                                <div class="p-2 bg-amber-500/10 rounded-lg">
-                                    <i data-lucide="code" class="h-6 w-6 text-amber-500"></i>
+                <!-- Promociones Tab -->
+                <div id="tab-promos" class="tab-content hidden">
+                    <div class="space-y-8">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="p-3 bg-amber-500/10 rounded-xl">
+                                    <i data-lucide="flame" class="h-6 w-6 text-amber-500"></i>
                                 </div>
-                                <h2 class="text-2xl font-bold text-white tracking-tight">Editor Maestro <span class="text-amber-500">HTML</span></h2>
+                                <div>
+                                    <h2 class="text-2xl font-black text-white">Promociones</h2>
+                                    <p class="text-stone-400 text-sm">Publica fechas disponibles para los tours</p>
+                                </div>
                             </div>
-                            
-                            <div class="flex flex-wrap items-center gap-3 w-full xl:w-auto">
-                                <select id="html-page-select" title="Página a editar"
-                                    class="bg-stone-900 border border-white/10 text-white px-4 py-3 rounded-xl text-sm focus:border-amber-500 outline-none flex-1 xl:flex-none appearance-none cursor-pointer pr-10 bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23fbbf24%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22/%3E%3C/svg%3E')] bg-[length:12px_12px] bg-[position:right_16px_center] bg-no-repeat"
-                                    onchange="loadHtmlEditor()">
-                                    <option value="index.html">Página Principal (index.html)</option>
-                                    <option value="admin.html">Panel Admin (admin.html)</option>
-                                    <option value="tours.html">Tours List (tours.html)</option>
-                                    <option value="contacto.html">Contacto (contacto.html)</option>
-                                    <option value="blog.html">Blog (blog.html)</option>
-                                </select>
-                                
-                                <button onclick="saveHtmlContent()" id="save-html-btn"
-                                    class="warm-gradient-btn text-white px-6 py-3 rounded-xl text-sm font-black transition flex items-center gap-2 shadow-lg shadow-amber-500/20">
-                                    <i data-lucide="save" class="h-4 w-4"></i>
-                                    Guardar Cambios
-                                </button>
-                                
-                                <button onclick="restoreHtmlBackup()"
-                                    class="bg-stone-800 hover:bg-stone-700 text-stone-300 px-5 py-3 rounded-xl text-sm font-bold border border-white/5 transition flex items-center gap-2"
-                                    title="Restaurar backup (.bak)">
-                                    <i data-lucide="undo" class="h-4 w-4"></i>
-                                    Backup
-                                </button>
-                            </div>
+                            <button onclick="loadPromotionsTab()"
+                                class="bg-stone-800 hover:bg-stone-700 text-stone-300 px-5 py-2.5 rounded-xl text-sm font-bold border border-white/5 transition flex items-center gap-2">
+                                <i data-lucide="refresh-cw" class="h-4 w-4"></i>
+                                Refrescar
+                            </button>
                         </div>
 
-                        <!-- Editor splitter -->
-                        <div class="flex flex-col lg:flex-row gap-6" style="height: 70vh;">
-                            <!-- Code editor -->
-                            <div class="flex-1 flex flex-col glass-card rounded-2xl overflow-hidden border border-white/5 shadow-2xl">
-                                <div class="bg-black/40 px-5 py-3 text-[10px] text-stone-400 uppercase font-black flex justify-between items-center border-b border-white/5 tracking-widest">
-                                    <div class="flex items-center gap-2">
-                                        <span class="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/40"></span>
-                                        <span class="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/40"></span>
-                                        <span class="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/40"></span>
-                                        <span class="ml-2 font-mono" id="html-filename-label">index.html</span>
-                                    </div>
-                                    <span id="html-char-count" class="font-mono text-stone-600"></span>
+                        <!-- Formulario nueva promo -->
+                        <div class="glass-card rounded-2xl p-6 border border-amber-500/20">
+                            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                <i data-lucide="plus-circle" class="h-5 w-5 text-amber-500"></i>
+                                Nueva Promoción
+                            </h3>
+                            <form id="promo-form" onsubmit="return submitPromotion(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-semibold text-stone-300 mb-1">Tour *</label>
+                                    <select id="promo-tour-id" required title="Selecciona el tour para la promoción"
+                                        class="w-full px-4 py-3 bg-stone-900/60 border border-white/10 rounded-xl text-white focus:border-amber-500 outline-none appearance-none cursor-pointer">
+                                        <option value="">Cargando tours...</option>
+                                    </select>
                                 </div>
-                                <textarea id="html-raw-editor"
-                                    class="flex-1 w-full bg-stone-950/80 text-amber-200/90 font-mono text-sm p-6 resize-none outline-none overflow-auto selection:bg-amber-500/30"
-                                    spellcheck="false" placeholder="Invocando código..." oninput="updateHtmlCharCount()"
-                                    style="tab-size:2; -moz-tab-size:2; line-height: 1.6;"></textarea>
-                            </div>
-
-                            <!-- Live preview -->
-                            <div class="flex-1 flex flex-col glass-card rounded-2xl overflow-hidden border border-white/5 shadow-2xl">
-                                <div class="bg-black/40 px-5 py-3 text-[10px] text-stone-400 uppercase font-black flex justify-between items-center border-b border-white/5 tracking-widest">
-                                    <span>Vista Previa Dinámica</span>
-                                    <button onclick="refreshHtmlPreview()"
-                                        class="text-amber-500 hover:text-amber-400 font-bold flex items-center gap-1.5 transition-colors group">
-                                        <i data-lucide="refresh-cw" class="h-3 w-3 group-hover:rotate-180 transition-transform duration-700"></i>
-                                        Refrescar
+                                <div>
+                                    <label class="block text-sm font-semibold text-stone-300 mb-1">Fecha Disponible *</label>
+                                    <input type="date" id="promo-date" required
+                                        class="w-full px-4 py-3 bg-stone-900/60 border border-white/10 rounded-xl text-white focus:border-amber-500 outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-stone-300 mb-1">Cupos</label>
+                                    <input type="number" id="promo-spots" min="1" max="100" value="10" placeholder="10"
+                                        class="w-full px-4 py-3 bg-stone-900/60 border border-white/10 rounded-xl text-white focus:border-amber-500 outline-none">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-semibold text-stone-300 mb-1">Nota (opcional)</label>
+                                    <input type="text" id="promo-note" placeholder="Ej: Primera salida del mes, snorkel incluido..."
+                                        class="w-full px-4 py-3 bg-stone-900/60 border border-white/10 rounded-xl text-white focus:border-amber-500 outline-none">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <button type="submit"
+                                        class="warm-gradient-btn text-white px-8 py-3.5 rounded-xl font-black transition shadow-lg shadow-amber-500/10 flex items-center gap-2">
+                                        Publicar Promocion
                                     </button>
                                 </div>
-                                <iframe id="html-preview-iframe" title="Vista previa" src="/"
-                                    class="flex-1 w-full bg-white/95" sandbox="allow-same-origin allow-scripts">
-                                </iframe>
+                            </form>
+                        </div>
+
+                        <!-- Lista de promos -->
+                        <div>
+                            <h3 class="text-xl font-black text-white mb-4">Promociones Activas</h3>
+                            <div id="promos-list" class="space-y-4">
+                                <p class="text-stone-500 text-center py-8">Cargando...</p>
                             </div>
                         </div>
                     </div>
@@ -464,19 +457,13 @@
         </div>
     </div>
 
-    <!-- SCRIPTS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <!-- Config & Services -->
     <script src="./js/config/supabase.js"></script>
     <script src="./js/admin-api-headers.js"></script>
-    <script src="./js/services/observer.service.js"></script>
-    <script src="./js/services/theme.service.js"></script>
     <script src="./js/services/tours.service.js"></script>
     <script src="./js/services/gallery.service.js"></script>
     <script src="./js/services/reviews.service.js"></script>
+    <script src="./js/services/promotions.service.js"></script>
     <script src="./js/components/admin-panel.ui.js"></script>
     <!-- Admin Auth Script -->
     <script>
@@ -588,7 +575,7 @@
                 if (!tours || tours.length === 0) {
                     container.innerHTML = `
                         <div class="col-span-full text-center py-12 text-gray-400">
-                            <p class="text-4xl mb-3">🗺️</p>
+                             <p class="text-4xl mb-3"></p>
                             <p>No hay tours. Crea uno primero en la pestaña <strong>Tours</strong>.</p>
                         </div>`;
                     return;
@@ -603,13 +590,13 @@
                                 <p class="text-xs text-gray-400 truncate">${tour.description}</p>
                                 <a href="./galeria.html?isla=${tour.id}" target="_blank"
                                    class="text-xs text-cyan-400 hover:text-cyan-300 transition">
-                                   🔗 Ver galería pública
+                                   Ver galeria publica
                                 </a>
                             </div>
                         </div>
                         <!-- Miniaturas -->
                         <div id="admin-gallery-${tour.id}" class="grid grid-cols-3 gap-2 mb-4 min-h-[80px]">
-                            <p class="text-gray-500 text-xs col-span-3 text-center pt-6">⏳ Cargando...</p>
+                            <p class="text-gray-500 text-xs col-span-3 text-center pt-6">Cargando...</p>
                         </div>
                         <!-- Upload -->
                         <div class="flex items-center gap-3">
@@ -617,7 +604,7 @@
                                 <input type="file" id="file-input-${tour.id}" accept="image/*" class="hidden"
                                     onchange="uploadGalleryPhoto('${tour.id}', this)">
                                 <div class="bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-bold px-4 py-2 rounded-lg transition text-center flex items-center justify-center gap-2">
-                                    <span>📷</span> Subir Foto
+                                    <span></span> Subir Foto
                                 </div>
                             </label>
                         </div>
@@ -631,13 +618,13 @@
                 if (window.lucide) lucide.createIcons();
 
             } catch(e) {
-                console.error('❌ Error en renderGalleries:', e);
+                console.error('Error en renderGalleries:', e);
                 if (container) container.innerHTML = `
                     <div class="col-span-full text-center py-12 text-red-400">
-                        <p class="text-3xl mb-3">❌</p>
+                        <p class="text-3xl mb-3"></p>
                         <p>Error al cargar galerías: ${e.message}</p>
                         <button onclick="renderGalleries()" class="mt-4 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm">
-                            🔄 Reintentar
+                            Reintentar
                         </button>
                     </div>`;
             }
@@ -650,7 +637,7 @@
             try {
                 const photos = await GalleryService.getPhotos(islandId);
                 if (!photos || photos.length === 0) {
-                    container.innerHTML = '<p class="text-gray-500 text-xs col-span-3 text-center py-4">📷 Sin fotos aún. Sube la primera.</p>';
+                    container.innerHTML = '<p class="text-gray-500 text-xs col-span-3 text-center py-4">Sin fotos aun. Sube la primera.</p>';
                     return;
                 }
                 container.innerHTML = photos.map(photo => `
@@ -665,7 +652,7 @@
                     </div>
                 `).join('');
             } catch (e) {
-                container.innerHTML = `<p class="text-red-400 text-xs col-span-3">❌ ${e.message}</p>`;
+                container.innerHTML = `<p class="text-red-400 text-xs col-span-3">${e.message}</p>`;
             }
         }
 
@@ -675,7 +662,7 @@
             const file = input.files[0];
             if (!file) return;
             const btn = input.closest('label').querySelector('div');
-            if (btn) btn.textContent = '⏳ Subiendo...';
+            if (btn) btn.textContent = 'Subiendo...';
             try {
                 await GalleryService.uploadPhoto(islandId, file);
                 await loadAdminGallery(islandId);
@@ -689,7 +676,7 @@
                 alert(`Error al subir: ${e.message}`);
             } finally {
                 input.value = '';
-                if (btn) btn.innerHTML = '<span>📷</span> Subir Foto';
+                if (btn) btn.innerHTML = '<span></span> Subir Foto';
             }
         }
 
@@ -716,133 +703,102 @@
             if (typeof AdminPanel !== 'undefined') {
                 await AdminPanel.updateStats();
                 await AdminPanel.renderTours();
-                AdminPanel._toast('🔄 Tours restaurados a los 6 originales');
+                AdminPanel._toast('Tours restaurados a los 6 originales');
             }
         }
 
-        // ══════════════════════════════════════════════════════════════════════
-        // EDITOR HTML — funciones
-        // ══════════════════════════════════════════════════════════════════════
+        // =========================================================
+        // PROMOCIONES — funciones
+        // =========================================================
 
-        function _htmlStatus(msg, ok = true) {
-            const el = document.getElementById('html-editor-status');
-            if (!el) return;
-            el.textContent = msg;
-            el.className = `text-sm px-4 py-2 rounded-lg ${ok ? 'bg-green-900/40 text-green-300 border border-green-700/50' : 'bg-red-900/40 text-red-300 border border-red-700/50'}`;
-            el.classList.remove('hidden');
-            clearTimeout(el._t);
-            el._t = setTimeout(() => el.classList.add('hidden'), 4000);
-        }
-
-        async function loadHtmlEditor() {
-            const page = document.getElementById('html-page-select')?.value || 'index.html';
-            document.getElementById('html-filename-label').textContent = page;
-            const ta = document.getElementById('html-raw-editor');
-            if (!ta) return;
-            ta.value = 'Cargando...';
-            ta.disabled = true;
-            try {
-                const res = await fetch(`/api/content?page=${page}`, { headers: { ...adminApiHeaders() } });
-                const data = await res.json();
-                if (data.error) throw new Error(data.error);
-                ta.value = data.content;
-                updateHtmlCharCount();
-                _htmlStatus(`✅ ${page} cargado — ${data.content.length.toLocaleString()} caracteres`);
-            } catch (e) {
-                ta.value = '';
-                _htmlStatus(`❌ Error al cargar: ${e.message}`, false);
+        async function loadPromotionsTab() {
+            // Poblar selector de tours
+            const sel = document.getElementById('promo-tour-id');
+            if (sel) {
+                try {
+                    const tours = await ToursService.getAllTours();
+                    sel.innerHTML = '<option value="">— Selecciona un tour —</option>' +
+                        tours.map(t => `<option value="${t.id}">${t.title}</option>`).join('');
+                } catch { sel.innerHTML = '<option value="">Error cargando tours</option>'; }
             }
-            ta.disabled = false;
+            // Cargar lista de promos
+            await renderPromosList();
         }
 
-        async function saveHtmlContent() {
-            const page = document.getElementById('html-page-select')?.value || 'index.html';
-            const content = document.getElementById('html-raw-editor')?.value;
-            if (!content?.trim()) { _htmlStatus('❌ El contenido está vacío', false); return; }
-            if (!confirm(`¿Guardar cambios en "${page}"?\n\nSe creará un backup automático antes de guardar.`)) return;
-
-            const btn = document.getElementById('save-html-btn');
-            if (btn) { btn.disabled = true; btn.textContent = '⏳ Guardando...'; }
-
+        async function renderPromosList() {
+            const container = document.getElementById('promos-list');
+            if (!container) return;
+            container.innerHTML = '<p class="text-stone-500 text-center py-8">Cargando...</p>';
             try {
-                const res = await fetch('/api/content', {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', ...adminApiHeaders() },
-                    body: JSON.stringify({ page, content })
-                });
-                const data = await res.json();
-                if (data.error) throw new Error(data.error);
-                _htmlStatus(`✅ "${page}" guardado. Backup: ${data.backup}`);
-                // Refrescar preview
-                setTimeout(refreshHtmlPreview, 800);
-            } catch (e) {
-                _htmlStatus(`❌ Error al guardar: ${e.message}`, false);
-            }
-            if (btn) { btn.disabled = false; btn.textContent = '💾 Guardar'; }
-        }
-
-        async function restoreHtmlBackup() {
-            const page = document.getElementById('html-page-select')?.value || 'index.html';
-            const backup = page + '.bak';
-            if (!confirm(`¿Restaurar "${page}" desde el backup "${backup}"?\n\nEl archivo actual se sobreescribirá.`)) return;
-            try {
-                // Cargar el .bak
-                const res = await fetch(`/api/content?page=${backup}`, { headers: { ...adminApiHeaders() } });
-                const data = await res.json();
-                if (data.error) throw new Error(`No se encontró backup: ${data.error}`);
-                // Guardarlo como el archivo original
-                const saveRes = await fetch('/api/content', {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', ...adminApiHeaders() },
-                    body: JSON.stringify({ page, content: data.content })
-                });
-                const saved = await saveRes.json();
-                if (saved.error) throw new Error(saved.error);
-                await loadHtmlEditor();
-                _htmlStatus(`✅ Backup restaurado en "${page}"`);
-            } catch (e) {
-                _htmlStatus(`❌ Error al restaurar: ${e.message}`, false);
-            }
-        }
-
-        function refreshHtmlPreview() {
-            const iframe = document.getElementById('html-preview-iframe');
-            const page = document.getElementById('html-page-select')?.value || 'index.html';
-            if (iframe) iframe.src = `/${page}?_=${Date.now()}`;
-        }
-
-        function updateHtmlCharCount() {
-            const ta = document.getElementById('html-raw-editor');
-            const el = document.getElementById('html-char-count');
-            if (ta && el) el.textContent = `${ta.value.length.toLocaleString()} chars`;
-        }
-
-        // Cargar páginas disponibles al abrir el editor
-        async function loadAvailablePages() {
-            const sel = document.getElementById('html-page-select');
-            if (!sel) return;
-            try {
-                const res = await fetch('/api/pages', { headers: { ...adminApiHeaders() } });
-                const data = await res.json();
-                if (data.pages) {
-                    sel.innerHTML = data.pages.map(p => {
-                        const label = p === 'index.html' ? 'index.html (Página Principal)'
-                            : p === 'admin.html' ? 'admin.html (Este panel)'
-                                : p;
-                        return `<option value="${p}">${label}</option>`;
-                    }).join('');
+                const promos = await PromotionsService.getAll();
+                if (!promos.length) {
+                    container.innerHTML = '<div class="text-center py-12"><p class="text-4xl mb-3"></p><p class="text-stone-500">No hay promociones activas. Crea la primera.</p></div>';
+                    return;
                 }
-            } catch { }
+                container.innerHTML = promos.map(p => {
+                    const dateObj = new Date(p.date_available + 'T12:00:00');
+                    const dateStr = dateObj.toLocaleDateString('es-EC', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                    return `
+                    <div class="glass-card rounded-2xl p-5 flex flex-col md:flex-row items-start md:items-center gap-4 border border-white/5 hover:border-amber-500/20 transition-all">
+                        <img src="${p.tour_image || ''}" alt="${p.tour_title || ''}" class="w-20 h-16 object-cover rounded-lg flex-shrink-0" onerror="this.src='https://placehold.co/80x64/1f2937/6b7280?text=Tour'">
+                        <div class="flex-1 min-w-0">
+                            <p class="text-white font-bold leading-tight">${p.tour_title || 'Tour #' + p.tour_id}</p>
+                            <div class="flex flex-wrap gap-3 mt-1 text-sm">
+                                <span class="text-amber-400">${dateStr}</span>
+                                <span class="text-stone-400">${p.spots} cupos</span>
+                            </div>
+                            ${p.note ? `<p class="text-stone-400 text-sm mt-1">${p.note}</p>` : ''}
+                        </div>
+                        <button onclick="deletePromotion(${p.id})"
+                            class="p-2 text-stone-600 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all shrink-0" title="Eliminar">
+                            <i data-lucide="trash-2" class="h-5 w-5"></i>
+                        </button>
+                    </div>`;
+                }).join('');
+                if (window.lucide) lucide.createIcons();
+            } catch (e) {
+                container.innerHTML = `<p class="text-red-400 text-center">Error: ${e.message}</p>`;
+            }
+        }
+
+        async function submitPromotion(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('[type=submit]');
+            if (btn) { btn.disabled = true; btn.textContent = 'Publicando...'; }
+            try {
+                await PromotionsService.create({
+                    tour_id: document.getElementById('promo-tour-id').value,
+                    date_available: document.getElementById('promo-date').value,
+                    spots: document.getElementById('promo-spots').value || 10,
+                    note: document.getElementById('promo-note').value
+                });
+                e.target.reset();
+                await renderPromosList();
+                if (typeof AdminPanel !== 'undefined') AdminPanel._toast('Promocion publicada');
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+            if (btn) { btn.disabled = false; btn.textContent = 'Publicar Promocion'; }
+            return false;
+        }
+
+        async function deletePromotion(id) {
+            if (!confirm('¿Eliminar esta promoción?')) return;
+            try {
+                await PromotionsService.remove(id);
+                await renderPromosList();
+                if (typeof AdminPanel !== 'undefined') AdminPanel._toast('Promocion eliminada');
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
         }
 
         // Event Listeners
         document.getElementById('admin-login-form').addEventListener('submit', login);
 
-        // Verificar auth al cargar
         document.addEventListener('DOMContentLoaded', () => {
             checkAdminAuth();
             if (window.lucide) lucide.createIcons();
-            loadAvailablePages();
         });
 
         // =========================================================
@@ -866,9 +822,9 @@
                 const fives = reviews.filter(r => r.rating === 5).length;
 
                 document.getElementById('rev-stats').innerHTML = [
-                    { label: 'Total Registros', value: total, icon: '📝', color: 'text-white' },
-                    { label: 'Rating Global', value: `${avg} ⭐`, icon: '⭐', color: 'text-amber-400' },
-                    { label: 'Excelencia (5★)', value: fives, icon: '🏆', color: 'text-orange-400' },
+                    { label: 'Total Registros', value: total, icon: '', color: 'text-white' },
+                    { label: 'Rating Global', value: `${avg}`, icon: '', color: 'text-amber-400' },
+                    { label: 'Excelencia (5)', value: fives, icon: '', color: 'text-orange-400' },
                 ].map(s => `
             <div class="glass-card rounded-2xl px-5 py-5 flex items-center gap-4 border border-white/5">
                 <div class="w-12 h-12 flex items-center justify-center bg-white/5 rounded-xl text-2xl">${s.icon}</div>
@@ -911,7 +867,7 @@
                 listEl.classList.remove('hidden');
 
             } catch (err) {
-                loading.innerHTML = `<p class="text-red-400 text-center">❌ Error: ${err.message}</p>`;
+                loading.innerHTML = `<p class="text-red-400 text-center">Error: ${err.message}</p>`;
             }
         }
 
@@ -921,7 +877,7 @@
                 await ReviewsService.remove(id);
                 const row = document.getElementById(`rev-row-${id}`);
                 if (row) row.remove();
-                if (typeof AdminPanel !== 'undefined') AdminPanel._toast('🗑 Reseña eliminada');
+                if (typeof AdminPanel !== 'undefined') AdminPanel._toast('Resena eliminada');
             } catch (err) {
                 alert('Error: ' + err.message);
             }
@@ -933,7 +889,7 @@
             if (!summary || !list) return;
 
             summary.innerHTML = '';
-            list.innerHTML = '<p class="text-gray-400">⏳ Cargando...</p>';
+            list.innerHTML = '<p class="text-gray-400">Cargando...</p>';
 
             try {
                 const [tours, reviews] = await Promise.all([
@@ -974,7 +930,7 @@
                     `;
                 }).join('') || '<p class="text-stone-500 text-center py-10">No hay tours disponibles en el ecosistema.</p>';
             } catch (e) {
-                list.innerHTML = `<p class="text-red-400">❌ Error: ${e.message}</p>`;
+                list.innerHTML = `<p class="text-red-400">Error: ${e.message}</p>`;
             }
         }
     </script>

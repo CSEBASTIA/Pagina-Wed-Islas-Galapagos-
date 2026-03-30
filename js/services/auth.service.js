@@ -1,7 +1,7 @@
 // js/services/auth.service.js
 // Servicio de autenticación
 
-console.log('📦 Cargando auth.service.js...');
+
 
 const AUTH_STORAGE_KEY = 'isabela_user';
 
@@ -24,7 +24,7 @@ const AuthService = {
         };
 
         this.saveUser(userData);
-        console.log('✅ Usuario logueado:', userData.name);
+
         return userData;
     },
 
@@ -38,14 +38,14 @@ const AuthService = {
         };
 
         this.saveUser(newUser);
-        console.log('✅ Usuario registrado:', newUser.name);
+
         return newUser;
     },
 
     logout() {
         try {
             localStorage.removeItem(AUTH_STORAGE_KEY);
-            console.log('✅ Sesión cerrada');
+
             return true;
         } catch (error) {
             console.error('Error al cerrar sesión:', error);
@@ -103,5 +103,4 @@ Object.defineProperty(window, 'currentUser', {
         return AuthService.getCurrentUser();
     }
 });
-
-console.log('✅ auth.service.js cargado');
+

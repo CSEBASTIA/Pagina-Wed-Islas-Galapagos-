@@ -10,6 +10,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://unpkg.com">
+    <!-- Tailwind CDN (sincrónico para aplicar estilos antes del primer pintado) -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: no bloqueante -->
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" onload="this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"></noscript>
@@ -38,6 +40,7 @@
                         class="text-cyan-600 font-semibold border-b-2 border-cyan-500 pb-0.5">Inicio</a>
                     <a href="./tours.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Tours</a>
                     <a href="./blog.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Blog</a>
+                    <a href="./promociones.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Promociones</a>
                     <a href="./contact.html"
                         class="text-gray-600 hover:text-cyan-600 font-medium transition">Contacto</a>
                 </div>
@@ -56,6 +59,7 @@
             <a href="./tours.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Tours &
                 Galería</a>
             <a href="./blog.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Blog</a>
+            <a href="./promociones.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Promociones</a>
             <a href="./contact.html" onclick="toggleMobileMenu()"
                 class="text-left text-gray-800 font-medium">Contacto</a>
         </div>
@@ -259,10 +263,7 @@
         </div>
     </footer>
 
-    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./js/config/supabase.js"></script>
     <script src="./js/services/tours.service.js"></script>
     <script src="./js/services/gallery.service.js"></script>
     <script src="./js/components/navigation.ui.js"></script>

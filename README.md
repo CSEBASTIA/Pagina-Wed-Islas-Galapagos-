@@ -1,10 +1,10 @@
-# 🏝️ Golden Ray I — Isabela Tours · Galápagos
+# Golden Ray I — Isabela Tours · Galápagos
 
 Sitio web de tours para la lancha **Golden Ray I** en Isla Isabela, Galápagos. Permite a los clientes explorar destinos, ver galerías de fotos, dejar reseñas y contactar directamente por WhatsApp. Incluye un panel de administración completo para gestionar tours, fotos y reseñas.
 
 ---
 
-## 🚀 Stack Tecnológico
+## Stack Tecnologico
 
 | Capa | Tecnología |
 |------|-----------|
@@ -17,7 +17,7 @@ Sitio web de tours para la lancha **Golden Ray I** en Isla Isabela, Galápagos. 
 
 ---
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 golden-ray/
@@ -94,7 +94,7 @@ golden-ray/
 
 ---
 
-## 🌐 Páginas del Sitio
+## Paginas del Sitio
 
 ### `index.html` — Inicio
 Presenta la empresa con secciones en este orden:
@@ -125,7 +125,7 @@ Panel protegido por clave (`ADMIN_SECRET`). Funcionalidades:
 
 ---
 
-## 🔌 API REST
+## API REST
 
 Todos los endpoints viven en `/api/*` y son manejados por Vercel Serverless Functions.
 
@@ -162,7 +162,7 @@ La autenticación admin usa el header `Authorization: Bearer <secret>` o `X-Admi
 
 ---
 
-## ⚙️ Variables de Entorno
+## Variables de Entorno
 
 Crea un archivo `.env` en la raíz (nunca lo subas a git):
 
@@ -181,7 +181,7 @@ En Vercel: **Project → Settings → Environment Variables**
 
 ---
 
-## 🗄️ Base de Datos (Supabase)
+## Base de Datos (Supabase)
 
 Ejecuta `supabase-setup.sql` en el SQL Editor de Supabase para crear las tablas, políticas RLS y el bucket de galerías.
 
@@ -202,7 +202,7 @@ Islas disponibles: `tortuga`, `cormorant`, `hermanos`
 
 ---
 
-## 💻 Desarrollo Local
+## Desarrollo Local
 
 El proyecto incluye `server.py`, un servidor Python con SQLite y live reload para trabajar sin internet ni Vercel CLI.
 
@@ -217,7 +217,7 @@ En local la API usa SQLite (`tours.db`). En producción (Vercel) usa Supabase.
 
 ---
 
-## 🚢 Despliegue en Vercel
+## Despliegue en Vercel
 
 1. Conecta el repositorio en [vercel.com](https://vercel.com)
 2. Agrega las variables de entorno (`ADMIN_SECRET`, `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`)
@@ -227,7 +227,7 @@ Las rutas de la API están definidas en `vercel.json` con rewrites para mapear U
 
 ---
 
-## 🔒 Seguridad
+## Seguridad
 
 - La `SUPABASE_SERVICE_KEY` (clave con permisos totales) **nunca va al frontend**, solo en las Vercel Functions del servidor
 - El frontend solo usa la `SUPABASE_ANON_KEY` (clave pública)
@@ -237,7 +237,7 @@ Las rutas de la API están definidas en `vercel.json` con rewrites para mapear U
 
 ---
 
-## 📱 Flujo del Cliente
+## Flujo del Cliente
 
 1. El visitante explora los tours en la página de inicio o en `/tours.html`
 2. Hace clic en **"Dejar Reseña"** → se abre un modal con selector de estrellas

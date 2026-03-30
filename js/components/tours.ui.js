@@ -13,7 +13,7 @@
 //
 // ════════════════════════════════════════════════════════════════════════════
 
-console.log('📦 Cargando tours.ui.js (Strategy Pattern)...');
+
 
 // ── Estrategias de Filtrado ───────────────────────────────────────────────────
 
@@ -60,7 +60,7 @@ const ToursUI = {
     // ── Cambiar estrategia en tiempo de ejecución ────────────────────────────
     setStrategy(strategy) {
         this._strategy = strategy;
-        console.log(`🎯 Strategy cambiada a: ${strategy.getName()}`);
+
     },
 
     // ── Cargar tours desde la BD y renderizar ────────────────────────────────
@@ -87,13 +87,13 @@ const ToursUI = {
 
             // Aplicar la estrategia activa
             const filtered = await this._strategy.apply(this._allTours);
-            console.log(`✅ Strategy "${this._strategy.getName()}": ${filtered.length} tours`);
+
 
             grid.innerHTML = '';
             if (!filtered.length) {
                 grid.innerHTML = `
                     <div class="col-span-full text-center py-16">
-                        <p class="text-4xl mb-3">🔍</p>
+                        <p class="text-4xl mb-3"></p>
                         <p class="text-white/70 text-lg">No hay tours para este filtro.</p>
                     </div>`;
                 return;
@@ -101,7 +101,7 @@ const ToursUI = {
             filtered.forEach(tour => grid.appendChild(this.createTourCard(tour)));
 
         } catch (err) {
-            console.error('❌ Error cargando tours:', err);
+            console.error('Error cargando tours:', err);
             grid.innerHTML = `<p class="col-span-full text-center text-red-400 py-12">Error al cargar tours.</p>`;
         }
 
@@ -128,7 +128,7 @@ const ToursUI = {
         if (!filtered.length) {
             grid.innerHTML = `
                 <div class="col-span-full text-center py-16">
-                    <p class="text-4xl mb-3">🔍</p>
+                    <p class="text-4xl mb-3"></p>
                     <p class="text-white/70 text-lg">No hay tours para "${strategy.getName()}".</p>
                 </div>`;
         } else {
@@ -166,7 +166,7 @@ const ToursUI = {
         <button onclick="ReviewModal.open('${tour.title.replace(/'/g, "\\'")}')"
             class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 text-sm font-bold rounded-lg transition shadow"
         >
-            ⭐ Dejar Reseña
+            Dejar Resena
         </button>
     </div>
 </div>
@@ -178,12 +178,12 @@ const ToursUI = {
     startObserver() {
         window.addEventListener('storage', async (event) => {
             if (event.key === 'isabela_tours') {
-                console.log('🔄 Observer: tours cambiados, re-renderizando...');
+
                 this._allTours = [];              // limpiar caché
                 await this.renderTours();
             }
         });
-        console.log('👁️ Observer de tours activo');
+
     },
 
     // ── Alias legacy ─────────────────────────────────────────────────────────
@@ -202,5 +202,4 @@ window.ToursUI = ToursUI;
 window.renderTours = () => ToursUI.renderTours();
 
 ToursUI.startObserver();
-
-console.log('✅ tours.ui.js cargado — Strategy Pattern activo');
+

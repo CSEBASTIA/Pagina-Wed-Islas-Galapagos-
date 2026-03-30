@@ -19,7 +19,7 @@ const ReviewModal = {
                 <!-- Header -->
                 <div class="bg-gradient-to-r from-yellow-400 to-yellow-500 px-6 py-5 flex justify-between items-center">
                     <div>
-                        <h2 class="text-gray-900 text-xl font-bold">⭐ Dejar Reseña</h2>
+                        <h2 class="text-gray-900 text-xl font-bold">Dejar Resena</h2>
                         <p id="review-tour-name" class="text-yellow-900 text-sm mt-0.5 font-medium"></p>
                     </div>
                     <button onclick="ReviewModal.close()" class="text-yellow-900/80 hover:text-yellow-900 text-2xl leading-none">&times;</button>
@@ -57,7 +57,7 @@ const ReviewModal = {
                     <div class="flex gap-3 pt-2">
                         <button onclick="ReviewModal.submit()"
                             class="flex-1 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold py-3 rounded-lg transition text-sm">
-                            ⭐ Enviar Reseña
+                            Enviar Resena
                         </button>
                         <button onclick="ReviewModal.close()"
                             class="px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-lg transition text-sm font-medium">
@@ -68,7 +68,7 @@ const ReviewModal = {
 
                 <!-- Éxito -->
                 <div id="review-step-2" class="hidden px-6 py-10 text-center">
-                    <div class="text-6xl mb-4">🎉</div>
+                    <div class="text-6xl mb-4"></div>
                     <h3 class="text-2xl font-bold text-gray-800 mb-2">¡Gracias por tu reseña!</h3>
                     <p class="text-gray-500 mb-6">Tu opinión nos ayuda a mejorar y a otros viajeros a elegir mejor.</p>
                     <button onclick="ReviewModal.close()"
@@ -126,12 +126,12 @@ const ReviewModal = {
         errEl.classList.add('hidden');
 
         if (!name) {
-            errEl.textContent = '❌ Por favor ingresa tu nombre';
+            errEl.textContent = 'Por favor ingresa tu nombre';
             errEl.classList.remove('hidden');
             return;
         }
         if (!rating || rating < 1) {
-            errEl.textContent = '❌ Por favor selecciona una calificación';
+            errEl.textContent = 'Por favor selecciona una calificación';
             errEl.classList.remove('hidden');
             return;
         }
@@ -148,7 +148,7 @@ const ReviewModal = {
             document.getElementById('review-step-2').classList.remove('hidden');
 
         } catch (err) {
-            errEl.textContent = '❌ Error: ' + err.message;
+            errEl.textContent = 'Error: ' + err.message;
             errEl.classList.remove('hidden');
         }
     }

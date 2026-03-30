@@ -1,28 +1,28 @@
 // js/components/history-modal.ui.js
 // Componente del modal de historial
 
-console.log('📦 Cargando history-modal.ui.js...');
+
 
 const HistoryModal = {
   modal: null,
   historyList: null,
 
   init() {
-    console.log('🔧 Inicializando HistoryModal...');
+
 
     this.modal = document.getElementById('history-modal');
     this.historyList = document.getElementById('history-list');
 
     if (!this.modal) {
-      console.error('❌ No se encontró history-modal');
+      console.error('No se encontró history-modal');
       return;
     }
 
-    console.log('✅ HistoryModal inicializado');
+
   },
 
   open() {
-    console.log('📖 Abriendo historial de reservas...');
+
 
     if (!this.modal || !this.historyList) return;
 
@@ -43,7 +43,7 @@ const HistoryModal = {
 
     const bookings = BookingsService.getBookingsSortedByDate();
 
-    console.log(`📊 Mostrando ${bookings.length} reservas`);
+
 
     if (bookings.length === 0) {
       this.showEmptyState();
@@ -124,5 +124,4 @@ const HistoryModal = {
 window.HistoryModal = HistoryModal;
 window.openHistoryModal = () => HistoryModal.open();
 window.closeHistoryModal = () => HistoryModal.close();
-
-console.log('✅ history-modal.ui.js cargado');
+

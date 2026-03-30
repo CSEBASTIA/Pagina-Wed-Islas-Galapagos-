@@ -1,5 +1,4 @@
-﻿// js/components/navigation.ui.js
-console.log('📦 Cargando navigation.ui.js...');
+// js/components/navigation.ui.js
 
 const Navigation = {
     views: { home: null, tours: null, blog: null, contact: null },

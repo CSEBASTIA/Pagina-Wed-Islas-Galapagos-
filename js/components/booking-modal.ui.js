@@ -1,7 +1,7 @@
 // js/components/booking-modal.ui.js
 // Componente del modal de reservas
 
-console.log('📦 Cargando booking-modal.ui.js...');
+
 
 const BookingModal = {
     modal: null,
@@ -11,7 +11,7 @@ const BookingModal = {
     currentTour: null,
 
     init() {
-        console.log('🔧 Inicializando BookingModal...');
+
 
         this.modal = document.getElementById('booking-modal');
         this.modalDetails = document.getElementById('modal-step-details');
@@ -19,12 +19,12 @@ const BookingModal = {
         this.modalStep2 = document.getElementById('modal-step-2');
 
         if (!this.modal) {
-            console.error('❌ No se encontró booking-modal');
+            console.error('No se encontró booking-modal');
             return;
         }
 
         this.initializeEventListeners();
-        console.log('✅ BookingModal inicializado');
+
     },
 
     initializeEventListeners() {
@@ -40,7 +40,7 @@ const BookingModal = {
     },
 
     async open(tourId, isBlog = false) {
-        console.log(`📖 Abriendo modal para tour ${tourId} (blog: ${isBlog})`);
+
 
         if (!this.modal) return;
 
@@ -53,7 +53,7 @@ const BookingModal = {
             : await ToursService.getTourById(tourId);
 
         if (!tour) {
-            console.error(`❌ No se encontró el tour ${tourId}`);
+            console.error(`No se encontró el tour ${tourId}`);
             return;
         }
 
@@ -175,30 +175,30 @@ const BookingModal = {
             customerPhone: phone
         };
 
-        console.log('📝 Creando reserva:', formData);
+
 
         const booking = BookingsService.createBooking(formData);
 
         if (booking) {
-            console.log('✅ Reserva creada exitosamente');
+
             // =========================
-            // 📲 REDIRECCIÓN A WHATSAPP
+            // REDIRECCION A WHATSAPP
             // =========================
             const whatsappNumber = '593994891081';
             const message = `
            Hola, estoy interesando en un tour de las islas galapagos
 
-           🛥️ Tour: ${tourTitle}// se inserta el nombre del tour
-           📅 Fecha: ${date}//  se inserta la fecha
-           👥 Personas: ${guests}// se inserta el numero de personas
-           👤 Nombre: ${name}// se inserta el nombre
-           📞 Teléfono: ${phone}// se inserta el telefono
+           Tour: ${tourTitle}// se inserta el nombre del tour
+           Fecha: ${date}//  se inserta la fecha
+           Personas: ${guests}// se inserta el numero de personas
+           Nombre: ${name}// se inserta el nombre
+           Telefono: ${phone}// se inserta el telefono
            `.trim();
             const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`; //envia a whatsapp
             window.open(whatsappURL, '_blank');
             this.showSuccessMessage();
         } else {
-            console.error('❌ Error al crear reserva');
+            console.error('Error al crear reserva');
         }
     },
     showSuccessMessage() {
@@ -216,5 +216,4 @@ window.BookingModal = BookingModal;
 window.openModal = (tourId, isBlog) => BookingModal.open(tourId, isBlog);
 window.closeModal = () => BookingModal.close();
 window.goToBookingForm = () => BookingModal.goToBookingForm();
-
-console.log('✅ booking-modal.ui.js cargado');
+

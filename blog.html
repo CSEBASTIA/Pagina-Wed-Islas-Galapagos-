@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog — Golden Ray I · Galapagos</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CDN (sincrónico para aplicar estilos antes del primer pintado) -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/animations.css">
     <link rel="stylesheet" href="./css/blog.css">
@@ -27,6 +29,7 @@
                         <a href="./index.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Inicio</a>
                         <a href="./tours.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Tours</a>
                         <span class="text-cyan-600 font-semibold border-b-2 border-cyan-500 pb-0.5">Blog</span>
+                        <a href="./promociones.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Promociones</a>
                         <a href="./contact.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Contacto</a>
                     </div>
                     <div class="md:hidden">
@@ -42,6 +45,7 @@
                 <a href="./index.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Inicio</a>
                 <a href="./tours.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Tours</a>
                 <span class="text-cyan-600 font-semibold">Blog</span>
+                <a href="./promociones.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Promociones</a>
                 <a href="./contact.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Contacto</a>
             </div>
         </div>
@@ -76,24 +80,13 @@
             <div class="flex gap-6">
                 <a href="./index.html" class="hover:text-cyan-400 transition">Inicio</a>
                 <a href="./tours.html" class="hover:text-cyan-400 transition">Tours</a>
+                <a href="./promociones.html" class="hover:text-cyan-400 transition">Promociones</a>
                 <a href="./contact.html" class="hover:text-cyan-400 transition">Contacto</a>
             </div>
         </div>
     </footer>
 
-    <!-- Preconnect a CDNs externos -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://unpkg.com">
-    <link rel="preconnect" href="https://cdn.tailwindcss.com">
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <!-- Google Fonts: no bloqueante -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" onload="this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"></noscript>
-    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    <script src="./js/config/supabase.js" defer></script>
     <script src="./js/services/tours.service.js" defer></script>
     <script src="./js/services/reviews.service.js" defer></script>
     <script src="./js/components/blog.ui.js" defer></script>

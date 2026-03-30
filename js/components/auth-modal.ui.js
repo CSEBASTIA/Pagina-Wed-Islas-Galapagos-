@@ -1,7 +1,7 @@
 // js/components/auth-modal.ui.js
 // Componente del modal de autenticación
 
-console.log('📦 Cargando auth-modal.ui.js...');
+
 
 const AuthModal = {
     modal: null,
@@ -9,19 +9,19 @@ const AuthModal = {
     registerMode: null,
 
     init() {
-        console.log('🔧 Inicializando AuthModal...');
+
 
         this.modal = document.getElementById('auth-modal');
         this.loginMode = document.getElementById('auth-login-mode');
         this.registerMode = document.getElementById('auth-register-mode');
 
         if (!this.modal) {
-            console.error('❌ No se encontró auth-modal');
+            console.error('No se encontró auth-modal');
             return;
         }
 
         this.initializeEventListeners();
-        console.log('✅ AuthModal inicializado');
+
     },
 
     initializeEventListeners() {
@@ -37,7 +37,7 @@ const AuthModal = {
     },
 
     open(mode = 'login') {
-        console.log(`📖 Abriendo modal de autenticación (modo: ${mode})`);
+
 
         if (!this.modal) return;
 
@@ -76,16 +76,16 @@ const AuthModal = {
             email: document.getElementById('login-email').value
         };
 
-        console.log('🔐 Iniciando sesión...');
+
 
         const user = AuthService.login(credentials);
 
         if (user) {
             this.close();
             AuthUI.updateUI();
-            console.log('✅ Sesión iniciada correctamente');
+
         } else {
-            console.error('❌ Error al iniciar sesión');
+            console.error('Error al iniciar sesión');
         }
     },
 
@@ -99,16 +99,16 @@ const AuthModal = {
             dateOfBirth: document.getElementById('reg-dob').value
         };
 
-        console.log('📝 Registrando usuario...');
+
 
         const user = AuthService.register(userData);
 
         if (user) {
             this.close();
             AuthUI.updateUI();
-            console.log('✅ Usuario registrado correctamente');
+
         } else {
-            console.error('❌ Error al registrar usuario');
+            console.error('Error al registrar usuario');
         }
     }
 };
@@ -118,5 +118,4 @@ window.AuthModal = AuthModal;
 window.openAuthModal = () => AuthModal.open('login');
 window.closeAuthModal = () => AuthModal.close();
 window.switchAuthMode = (mode) => AuthModal.switchMode(mode);
-
-console.log('✅ auth-modal.ui.js cargado');
+

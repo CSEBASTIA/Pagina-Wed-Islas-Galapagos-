@@ -1,11 +1,11 @@
 // js/components/auth.ui.js
 // Componente UI de autenticación
 
-console.log('📦 Cargando auth.ui.js...');
+
 
 const AuthUI = {
   updateUI() {
-    console.log('🔄 Actualizando UI de autenticación...');
+
 
     this.updateDesktopAuth();
     this.updateMobileAuth();
@@ -13,16 +13,16 @@ const AuthUI = {
 
     const user = AuthService.getCurrentUser();
     if (user) {
-      console.log(`✅ Usuario logueado: ${user.name}`);
+
     } else {
-      console.log('ℹ️ No hay usuario logueado');
+
     }
   },
 
   updateDesktopAuth() {
     const container = document.getElementById('desktop-auth-container');
     if (!container) {
-      console.warn('⚠️ No se encontró desktop-auth-container');
+      console.warn('No se encontró desktop-auth-container');
       return;
     }
 
@@ -40,7 +40,7 @@ const AuthUI = {
   updateMobileAuth() {
     const container = document.getElementById('mobile-auth-container');
     if (!container) {
-      console.warn('⚠️ No se encontró mobile-auth-container');
+      console.warn('No se encontró mobile-auth-container');
       return;
     }
 
@@ -112,7 +112,7 @@ const AuthUI = {
   },
 
   handleLogout() {
-    console.log('👋 Cerrando sesión...');
+
 
     AuthService.logout();
     this.updateUI();
@@ -135,5 +135,4 @@ const AuthUI = {
 window.AuthUI = AuthUI;
 window.updateAuthUI = () => AuthUI.updateUI();
 window.logout = () => AuthUI.handleLogout();
-
-console.log('✅ auth.ui.js cargado');
+

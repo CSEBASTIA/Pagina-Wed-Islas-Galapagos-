@@ -158,7 +158,7 @@ def init_db():
         try:
             conn.execute("ALTER TABLE tours DROP COLUMN price")
             conn.commit()
-            print("  ⚙️  Migración: columna 'price' eliminada de tours")
+            print("  Migracion: columna 'price' eliminada de tours")
         except Exception:
             pass  # Ya no existía, sin problema
         conn.execute("""
@@ -187,6 +187,18 @@ def init_db():
                 created_at    TEXT    NOT NULL DEFAULT (datetime('now','localtime'))
             )
         """)
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS promotions (
+                id              INTEGER PRIMARY KEY AUTOINCREMENT,
+                tour_id         INTEGER NOT NULL,
+                date_available  TEXT    NOT NULL,
+                spots           INTEGER NOT NULL DEFAULT 10,
+                discount_pct    INTEGER NOT NULL DEFAULT 0,
+                note            TEXT    DEFAULT '',
+                active          INTEGER NOT NULL DEFAULT 1,
+                created_at      TEXT    NOT NULL DEFAULT (datetime('now','localtime'))
+            )
+        """)
         count = conn.execute("SELECT COUNT(*) FROM tours").fetchone()[0]
         if count == 0:
             conn.executemany(
@@ -199,7 +211,7 @@ def init_db():
                 DEFAULT_TOURS,
             )
             print(
-                f"  🌱  Base de datos inicializada con {len(DEFAULT_TOURS)} tours por defecto"
+                f"  Base de datos inicializada con {len(DEFAULT_TOURS)} tours por defecto"
             )
         conn.commit()
 
@@ -208,6 +220,56 @@ def row_to_dict(row):
     d = dict(row)
     d["tags"] = [t.strip() for t in d.get("tags", "").split(",") if t.strip()]
     return d
+
+
+def promo_row_to_dict(row):
+    """Convierte fila de promotions a dict, incluyendo nombre del tour."""
+    d = dict(row)
+    return d
+
+
+# ── Promotions DB helpers ────────────────────────────────────────────────────
+
+def db_get_all_promotions():
+    """Devuelve todas las promociones activas con el nombre del tour."""
+    with get_db() as conn:
+        rows = conn.execute("""
+            SELECT p.*, t.title AS tour_title, t.image AS tour_image
+            FROM promotions p
+            LEFT JOIN tours t ON t.id = p.tour_id
+            WHERE p.active = 1
+            ORDER BY p.date_available ASC
+        """).fetchall()
+        return [dict(r) for r in rows]
+
+
+def db_create_promotion(data):
+    with get_db() as conn:
+        cur = conn.execute(
+            """INSERT INTO promotions (tour_id, date_available, spots, discount_pct, note)
+               VALUES (?, ?, ?, ?, ?)""",
+            (
+                int(data.get("tour_id", 0)),
+                data.get("date_available", ""),
+                int(data.get("spots", 10)),
+                int(data.get("discount_pct", 0)),
+                data.get("note", ""),
+            ),
+        )
+        conn.commit()
+        row = conn.execute(
+            """SELECT p.*, t.title AS tour_title, t.image AS tour_image
+               FROM promotions p LEFT JOIN tours t ON t.id = p.tour_id
+               WHERE p.id = ?""",
+            (cur.lastrowid,),
+        ).fetchone()
+        return dict(row) if row else {"id": cur.lastrowid}
+
+
+def db_delete_promotion(promo_id):
+    with get_db() as conn:
+        conn.execute("DELETE FROM promotions WHERE id = ?", (promo_id,))
+        conn.commit()
 
 
 # ── Operaciones CRUD ───────────────────────────────────────────────────────────
@@ -425,8 +487,7 @@ def _parse_multipart(body_bytes, content_type):
     Parser minimal de multipart/form-data sin depender del módulo cgi.
     Retorna dict {field_name: {"filename": str, "data": bytes}} o str para campos simples.
     """
-    import re as _re
-    m = _re.search(r'boundary=([^;\s]+)', content_type)
+    m = re.search(r'boundary=([^;\s]+)', content_type)
     if not m:
         return {}
     boundary = m.group(1).strip('"').encode()
@@ -444,11 +505,11 @@ def _parse_multipart(body_bytes, content_type):
             continue
         content = content.rstrip(b'\r\n')
         headers_text = header_block.decode('utf-8', errors='replace')
-        cd_match = _re.search(r'Content-Disposition:[^\n]+name="([^"]+)"', headers_text, _re.IGNORECASE)
+        cd_match = re.search(r'Content-Disposition:[^\n]+name="([^"]+)"', headers_text, re.IGNORECASE)
         if not cd_match:
             continue
         field_name = cd_match.group(1)
-        fn_match = _re.search(r'filename="([^"]+)"', headers_text, _re.IGNORECASE)
+        fn_match = re.search(r'filename="([^"]+)"', headers_text, re.IGNORECASE)
         if fn_match:
             parts[field_name] = {"filename": fn_match.group(1), "data": content}
         else:
@@ -505,7 +566,7 @@ def _watch_files(interval: float = 0.8):
         if current != snapshots:
             changed = [p for p in current if current[p] != snapshots.get(p)]
             for p in changed:
-                print(f"  🔄  Cambio detectado: {p}")
+                print(f"  Cambio detectado: {p}")
             snapshots = current
             _notify_clients()
 
@@ -656,16 +717,14 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
             self._json({"pages": sorted(pages)})
             return
 
-        # API Admin — ping/validación de clave (necesario para el login del panel)
-        if p == "/api/admin/ping":
-            if not self._require_admin():
-                return
-            self._json({"ok": True, "status": "autorizado"})
-            return
-
         # API Reseñas — GET todas (público para el blog)
         if p == "/api/reviews":
             self._json(db_get_all_reviews())
+            return
+
+        # API Promociones — GET todas activas (público)
+        if p == "/api/promotions":
+            self._json(db_get_all_promotions())
             return
 
         # API Galerías — listar fotos de una isla
@@ -698,9 +757,6 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
 
         super().do_GET()
 
-    def send_head(self):
-        """Override para añadir headers de caché en archivos estáticos."""
-        return super().send_head()
 
     def end_headers(self):
         """Inyectar Cache-Control según el tipo de archivo."""
@@ -739,7 +795,7 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
                 self._error(f"Campos requeridos: {', '.join(missing)}")
                 return
             reservation = db_create_reservation(data)
-            print(f"  📅  Nueva reserva: {data.get('tour_name')} — {data.get('customer_name')}")
+            print(f"  Nueva reserva: {data.get('tour_name')} — {data.get('customer_name')}")
             self._json(reservation, 201)
             return
 
@@ -761,7 +817,7 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
                 self._error("customer_name es obligatorio")
                 return
             review = db_create_review(data)
-            print(f"  ⭐  Nueva reseña de {data.get('customer_name')} para {data.get('tour_name', 'tour')}")
+            print(f"  Nueva resena de {data.get('customer_name')} para {data.get('tour_name', 'tour')}")
             self._json(review, 201)
             return
 
@@ -801,7 +857,7 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
                     dest = os.path.join(gallery_dir, safe_name)
                 with open(dest, "wb") as f:
                     f.write(file_item["data"])
-                print(f"  📸  Foto subida: galleries/{island}/{safe_name}")
+                print(f"  Foto subida: galleries/{island}/{safe_name}")
                 self._json(
                     {
                         "ok": True,
@@ -812,6 +868,19 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
                 )
             except Exception as e:
                 self._error(str(e), 500)
+            return
+
+        # API Promociones — POST (admin)
+        if p == "/api/promotions":
+            if not self._require_admin():
+                return
+            data = self._read_body()
+            if not data.get("tour_id") or not data.get("date_available"):
+                self._error("tour_id y date_available son obligatorios")
+                return
+            promo = db_create_promotion(data)
+            print(f"  Nueva promocion: tour_id={data.get('tour_id')} fecha={data.get('date_available')}")
+            self._json(promo, 201)
             return
 
         self._error("Ruta no encontrada", 404)
@@ -846,7 +915,7 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
                     shutil.copy2(filepath, backup)
                 with open(filepath, "w", encoding="utf-8") as f:
                     f.write(content)
-                print(f"  💾  Página guardada: {page}")
+                print(f"  Pagina guardada: {page}")
                 self._json(
                     {"ok": True, "page": page, "backup": os.path.basename(backup)}
                 )
@@ -918,6 +987,15 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
             return
 
         m_del = re.match(r"^/api/gallery/([a-z0-9_-]+)/(.+)$", p)
+
+        # API Promociones — DELETE (admin)
+        m_promo_del = re.match(r"^/api/promotions/(\d+)$", p)
+        if m_promo_del:
+            if not self._require_admin():
+                return
+            db_delete_promotion(int(m_promo_del.group(1)))
+            self._json({"ok": True})
+            return
         if m_del:
             if not self._require_admin():
                 return
@@ -1001,7 +1079,7 @@ def run(port: int = DEFAULT_PORT):
     with socketserver.ThreadingTCPServer((HOST, port), LiveReloadHandler) as httpd:
         url = f"http://{HOST}:{port}"
         print("=" * 52)
-        print("  🌊  Servidor Islas Galápagos  (Live Reload ✅)")
+        print("  Servidor Islas Galapagos  (Live Reload)")
         print("=" * 52)
         print(f"  URL    → {url}")
         print(f"  Admin  → {url}/admin.html")
@@ -1014,7 +1092,7 @@ def run(port: int = DEFAULT_PORT):
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:
-            print("\n\n  🛑  Servidor detenido. ¡Hasta luego!\n")
+            print("\n\n  Servidor detenido. Hasta luego!\n")
 
 
 if __name__ == "__main__":
@@ -1026,7 +1104,7 @@ if __name__ == "__main__":
                 raise ValueError
         except ValueError:
             print(
-                f"  ⚠️  Puerto inválido '{sys.argv[1]}'. Debe ser un número entre 1024 y 65535."
+                f"  Puerto invalido '{sys.argv[1]}'. Debe ser un numero entre 1024 y 65535."
             )
             sys.exit(1)
     run(port)

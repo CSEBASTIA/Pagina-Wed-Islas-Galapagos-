@@ -11,7 +11,7 @@ const GalleryService = {
             const data = await res.json();
             return data.photos || [];
         } catch (e) {
-            console.error(`❌ Error cargando galería ${islandId}:`, e);
+            console.error(`Error cargando galería ${islandId}:`, e);
             return [];
         }
     },
@@ -25,12 +25,12 @@ const GalleryService = {
             return tours.map(tour => ({
                 id: tour.id,            // slug numérico para la galería
                 name: tour.title,
-                icon: '🌊',
+                icon: '',
                 description: (tour.tags || []).join(' · ') || tour.difficulty || '',
-                wa: encodeURIComponent(`Hola, me interesa el ${tour.title} 🌊`),
+                wa: encodeURIComponent(`Hola, me interesa el ${tour.title}`),
             }));
         } catch (e) {
-            console.error('❌ Error cargando tours para galería:', e);
+            console.error('Error cargando tours para galería:', e);
             return [];
         }
     },

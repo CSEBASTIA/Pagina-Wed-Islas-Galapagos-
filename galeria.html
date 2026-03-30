@@ -67,7 +67,7 @@
 
         <!-- Estado: vacío -->
         <div id="gallery-empty" class="hidden text-center py-20">
-            <p class="text-5xl mb-4">📷</p>
+            <p class="text-5xl mb-4"></p>
             <p class="text-gray-400 text-lg">Aún no hay fotos en esta galería.</p>
             <p class="text-gray-500 text-sm mt-2">El administrador puede subir fotos desde el panel admin.</p>
         </div>
@@ -88,12 +88,12 @@
 
         <!-- CTA WhatsApp -->
         <div class="mt-16 bg-gradient-to-r from-green-900/40 to-emerald-900/30 border border-green-500/20 rounded-2xl p-8 text-center">
-            <p class="text-2xl mb-2">🌊</p>
+            <p class="text-2xl mb-2"></p>
             <h2 class="text-xl font-bold text-white mb-2">¿Te gustó lo que viste?</h2>
             <p class="text-gray-400 text-sm mb-6">Reserva ahora tu tour y vive esta experiencia en persona.</p>
             <a id="cta-whatsapp" href="#" target="_blank"
                class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-400 text-white font-bold px-8 py-3 rounded-xl transition shadow-lg shadow-green-900/40">
-                💬 Consultar por WhatsApp
+                Consultar por WhatsApp
             </a>
         </div>
     </main>
@@ -165,14 +165,14 @@
             const tour = _allTours.find(t => String(t.id) === String(islandId));
             if (tour) {
                 document.title = `${tour.title} – Galería | Golden Ray I`;
-                document.getElementById('gallery-title').textContent = `🌊 ${tour.title}`;
+                document.getElementById('gallery-title').textContent = `${tour.title}`;
                 document.getElementById('gallery-subtitle').textContent =
                     (tour.tags || []).join(' · ') || tour.difficulty || '';
                 document.getElementById('cta-whatsapp').href =
-                    `https://wa.me/593994891081?text=${encodeURIComponent('Hola, me interesa el ' + tour.title + ' 🌊')}`;
+                    `https://wa.me/593994891081?text=${encodeURIComponent('Hola, me interesa el ' + tour.title)}`;
             } else {
                 // Fallback si no se encontró el tour
-                document.getElementById('gallery-title').textContent = `🌊 Galería`;
+                document.getElementById('gallery-title').textContent = `Galeria`;
                 document.getElementById('gallery-subtitle').textContent = '';
             }
         }
@@ -200,7 +200,7 @@
 
             } catch (e) {
                 document.getElementById('gallery-loading').innerHTML =
-                    `<p class="text-red-400">❌ Error al cargar: ${e.message}</p>`;
+                    `<p class="text-red-400">Error al cargar: ${e.message}</p>`;
             }
         }
 

@@ -1,5 +1,4 @@
 // js/main.js
-console.log('🚀 Isabela Tours - Initializing...');
 
 document.addEventListener('DOMContentLoaded', async () => {
     const open = (new URLSearchParams(window.location.search).get('open') || '').toLowerCase().trim();

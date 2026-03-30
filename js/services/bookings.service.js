@@ -1,7 +1,7 @@
 // js/services/bookings.service.js
 // Servicio de gestión de reservas
 
-console.log('📦 Cargando bookings.service.js...');
+
 
 const STORAGE_KEY = 'isabela_bookings';
 
@@ -40,7 +40,7 @@ const BookingsService = {
         bookings.push(newBooking);
         this.saveBookings(bookings);
 
-        console.log('✅ Reserva creada:', newBooking);
+
         return newBooking;
     },
 
@@ -96,5 +96,4 @@ const BookingsService = {
 
 // Hacer disponible globalmente
 window.BookingsService = BookingsService;
-
-console.log('✅ bookings.service.js cargado');
+

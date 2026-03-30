@@ -1,7 +1,7 @@
 // js/services/tours.service.js
 // Servicio de Tours — API local SQLite (http://localhost:8000/api/tours)
 
-console.log('📦 Cargando tours.service.js...');
+
 
 const API_BASE = '/api/tours';
 
@@ -30,7 +30,7 @@ async function apiCall(path, method = 'GET', body = null) {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return await res.json();
     } catch (err) {
-        console.warn(`⚠️ API ${method} ${path} falló:`, err.message);
+        console.warn(`API ${method} ${path} falló:`, err.message);
         return null;
     }
 }
@@ -42,7 +42,7 @@ const ToursService = {
     async getAllTours() {
         const data = await apiCall(API_BASE);
         if (data) return data;
-        console.warn('⚠️ Sin API — usando tours por defecto');
+        console.warn('Sin API — usando tours por defecto');
         return JSON.parse(JSON.stringify(DEFAULT_TOURS));
     },
 
@@ -79,12 +79,12 @@ const ToursService = {
     async addTour(data) {
         const tour = await apiCall(API_BASE, 'POST', data);
         if (tour) {
-            console.log('✅ Tour guardado en BD:', tour.title);
+
             return tour;
         }
         // Fallback: solo en memoria
         const fallback = { ...data, id: Date.now() };
-        console.warn('💾 Tour guardado solo en memoria (sin servidor)');
+        console.warn('Tour guardado solo en memoria (sin servidor)');
         return fallback;
     },
 
@@ -92,7 +92,7 @@ const ToursService = {
     async updateTour(id, changes) {
         const tour = await apiCall(`${API_BASE}/${id}`, 'PUT', changes);
         if (tour) {
-            console.log('✅ Tour actualizado en BD:', tour.title);
+
             return tour;
         }
         return null;
@@ -102,7 +102,7 @@ const ToursService = {
     async deleteTour(id) {
         const result = await apiCall(`${API_BASE}/${id}`, 'DELETE');
         if (result?.ok) {
-            console.log('🗑️ Tour eliminado de BD:', id);
+
             return true;
         }
         return false;
@@ -112,12 +112,11 @@ const ToursService = {
     async resetToDefaults() {
         const result = await apiCall(`${API_BASE}/reset`, 'POST');
         if (result?.ok) {
-            console.log('🔄 Tours restaurados en BD');
+
             return result.tours;
         }
         return DEFAULT_TOURS;
     },
 };
 
-window.ToursService = ToursService;
-console.log('✅ tours.service.js cargado — API local SQLite');
+window.ToursService = ToursService;
