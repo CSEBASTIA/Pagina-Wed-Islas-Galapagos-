@@ -194,7 +194,7 @@
                     </button>
                     <button onclick="switchTab('promos', event); loadPromotionsTab()"
                         class="tab-btn px-6 py-3 text-sm font-bold text-stone-400 hover:text-stone-200 whitespace-nowrap">
-                        Promociones
+                        Actividades
                     </button>
                 </div>
 
@@ -386,7 +386,7 @@
                     </div>
                 </div>
 
-                <!-- Promociones Tab -->
+                <!-- Actividades Tab -->
                 <div id="tab-promos" class="tab-content hidden">
                     <div class="space-y-8">
                         <div class="flex items-center justify-between">
@@ -395,7 +395,7 @@
                                     <i data-lucide="flame" class="h-6 w-6 text-amber-500"></i>
                                 </div>
                                 <div>
-                                    <h2 class="text-2xl font-black text-white">Promociones</h2>
+                                    <h2 class="text-2xl font-black text-white">Actividades</h2>
                                     <p class="text-stone-400 text-sm">Publica fechas disponibles para los tours</p>
                                 </div>
                             </div>
@@ -410,12 +410,12 @@
                         <div class="glass-card rounded-2xl p-6 border border-amber-500/20">
                             <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
                                 <i data-lucide="plus-circle" class="h-5 w-5 text-amber-500"></i>
-                                Nueva Promoción
+                                Nueva Actividad
                             </h3>
                             <form id="promo-form" onsubmit="return submitPromotion(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-semibold text-stone-300 mb-1">Tour *</label>
-                                    <select id="promo-tour-id" required title="Selecciona el tour para la promoción"
+                                    <select id="promo-tour-id" required title="Selecciona el tour para la actividad"
                                         class="w-full px-4 py-3 bg-stone-900/60 border border-white/10 rounded-xl text-white focus:border-amber-500 outline-none appearance-none cursor-pointer">
                                         <option value="">Cargando tours...</option>
                                     </select>
@@ -438,7 +438,7 @@
                                 <div class="md:col-span-2">
                                     <button type="submit"
                                         class="warm-gradient-btn text-white px-8 py-3.5 rounded-xl font-black transition shadow-lg shadow-amber-500/10 flex items-center gap-2">
-                                        Publicar Promocion
+                                        Publicar Actividad
                                     </button>
                                 </div>
                             </form>
@@ -446,7 +446,7 @@
 
                         <!-- Lista de promos -->
                         <div>
-                            <h3 class="text-xl font-black text-white mb-4">Promociones Activas</h3>
+                            <h3 class="text-xl font-black text-white mb-4">Actividades Activas</h3>
                             <div id="promos-list" class="space-y-4">
                                 <p class="text-stone-500 text-center py-8">Cargando...</p>
                             </div>
@@ -463,7 +463,7 @@
     <script src="./js/services/tours.service.js"></script>
     <script src="./js/services/gallery.service.js"></script>
     <script src="./js/services/reviews.service.js"></script>
-    <script src="./js/services/promotions.service.js"></script>
+    <script src="./js/services/activities.service.js"></script>
     <script src="./js/components/admin-panel.ui.js"></script>
     <!-- Admin Auth Script -->
     <script>
@@ -730,9 +730,9 @@
             if (!container) return;
             container.innerHTML = '<p class="text-stone-500 text-center py-8">Cargando...</p>';
             try {
-                const promos = await PromotionsService.getAll();
+                const promos = await ActivitiesService.getAll();
                 if (!promos.length) {
-                    container.innerHTML = '<div class="text-center py-12"><p class="text-4xl mb-3"></p><p class="text-stone-500">No hay promociones activas. Crea la primera.</p></div>';
+                    container.innerHTML = '<div class="text-center py-12"><p class="text-4xl mb-3"></p><p class="text-stone-500">No hay actividades activas. Crea la primera.</p></div>';
                     return;
                 }
                 container.innerHTML = promos.map(p => {
@@ -766,7 +766,7 @@
             const btn = e.target.querySelector('[type=submit]');
             if (btn) { btn.disabled = true; btn.textContent = 'Publicando...'; }
             try {
-                await PromotionsService.create({
+                await ActivitiesService.create({
                     tour_id: document.getElementById('promo-tour-id').value,
                     date_available: document.getElementById('promo-date').value,
                     spots: document.getElementById('promo-spots').value || 10,
@@ -774,20 +774,20 @@
                 });
                 e.target.reset();
                 await renderPromosList();
-                if (typeof AdminPanel !== 'undefined') AdminPanel._toast('Promocion publicada');
+                if (typeof AdminPanel !== 'undefined') AdminPanel._toast('Actividad publicada');
             } catch (err) {
                 alert('Error: ' + err.message);
             }
-            if (btn) { btn.disabled = false; btn.textContent = 'Publicar Promocion'; }
+            if (btn) { btn.disabled = false; btn.textContent = 'Publicar Actividad'; }
             return false;
         }
 
         async function deletePromotion(id) {
-            if (!confirm('¿Eliminar esta promoción?')) return;
+            if (!confirm('¿Eliminar esta actividad?')) return;
             try {
-                await PromotionsService.remove(id);
+                await ActivitiesService.remove(id);
                 await renderPromosList();
-                if (typeof AdminPanel !== 'undefined') AdminPanel._toast('Promocion eliminada');
+                if (typeof AdminPanel !== 'undefined') AdminPanel._toast('Actividad eliminada');
             } catch (err) {
                 alert('Error: ' + err.message);
             }

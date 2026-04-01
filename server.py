@@ -187,8 +187,14 @@ def init_db():
                 created_at    TEXT    NOT NULL DEFAULT (datetime('now','localtime'))
             )
         """)
+        try:
+            conn.execute("ALTER TABLE promotions RENAME TO activities")
+            conn.commit()
+            print("  Migracion: tabla 'promotions' renombrada a 'activities'")
+        except Exception:
+            pass
         conn.execute("""
-            CREATE TABLE IF NOT EXISTS promotions (
+            CREATE TABLE IF NOT EXISTS activities (
                 id              INTEGER PRIMARY KEY AUTOINCREMENT,
                 tour_id         INTEGER NOT NULL,
                 date_available  TEXT    NOT NULL,
@@ -222,20 +228,20 @@ def row_to_dict(row):
     return d
 
 
-def promo_row_to_dict(row):
-    """Convierte fila de promotions a dict, incluyendo nombre del tour."""
+def activity_row_to_dict(row):
+    """Convierte fila de activities a dict, incluyendo nombre del tour."""
     d = dict(row)
     return d
 
 
-# ── Promotions DB helpers ────────────────────────────────────────────────────
+# ── Activities DB helpers ────────────────────────────────────────────────────
 
-def db_get_all_promotions():
-    """Devuelve todas las promociones activas con el nombre del tour."""
+def db_get_all_activities():
+    """Devuelve todas las actividades activas con el nombre del tour."""
     with get_db() as conn:
         rows = conn.execute("""
             SELECT p.*, t.title AS tour_title, t.image AS tour_image
-            FROM promotions p
+            FROM activities p
             LEFT JOIN tours t ON t.id = p.tour_id
             WHERE p.active = 1
             ORDER BY p.date_available ASC
@@ -243,10 +249,10 @@ def db_get_all_promotions():
         return [dict(r) for r in rows]
 
 
-def db_create_promotion(data):
+def db_create_activity(data):
     with get_db() as conn:
         cur = conn.execute(
-            """INSERT INTO promotions (tour_id, date_available, spots, discount_pct, note)
+            """INSERT INTO activities (tour_id, date_available, spots, discount_pct, note)
                VALUES (?, ?, ?, ?, ?)""",
             (
                 int(data.get("tour_id", 0)),
@@ -259,16 +265,16 @@ def db_create_promotion(data):
         conn.commit()
         row = conn.execute(
             """SELECT p.*, t.title AS tour_title, t.image AS tour_image
-               FROM promotions p LEFT JOIN tours t ON t.id = p.tour_id
+               FROM activities p LEFT JOIN tours t ON t.id = p.tour_id
                WHERE p.id = ?""",
             (cur.lastrowid,),
         ).fetchone()
         return dict(row) if row else {"id": cur.lastrowid}
 
 
-def db_delete_promotion(promo_id):
+def db_delete_activity(activity_id):
     with get_db() as conn:
-        conn.execute("DELETE FROM promotions WHERE id = ?", (promo_id,))
+        conn.execute("DELETE FROM activities WHERE id = ?", (activity_id,))
         conn.commit()
 
 
@@ -722,9 +728,9 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
             self._json(db_get_all_reviews())
             return
 
-        # API Promociones — GET todas activas (público)
-        if p == "/api/promotions":
-            self._json(db_get_all_promotions())
+        # API Actividades — GET todas activas (público)
+        if p == "/api/activities":
+            self._json(db_get_all_activities())
             return
 
         # API Galerías — listar fotos de una isla
@@ -870,17 +876,17 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
                 self._error(str(e), 500)
             return
 
-        # API Promociones — POST (admin)
-        if p == "/api/promotions":
+        # API Actividades — POST (admin)
+        if p == "/api/activities":
             if not self._require_admin():
                 return
             data = self._read_body()
             if not data.get("tour_id") or not data.get("date_available"):
                 self._error("tour_id y date_available son obligatorios")
                 return
-            promo = db_create_promotion(data)
-            print(f"  Nueva promocion: tour_id={data.get('tour_id')} fecha={data.get('date_available')}")
-            self._json(promo, 201)
+            activity = db_create_activity(data)
+            print(f"  Nueva actividad: tour_id={data.get('tour_id')} fecha={data.get('date_available')}")
+            self._json(activity, 201)
             return
 
         self._error("Ruta no encontrada", 404)
@@ -988,12 +994,12 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
 
         m_del = re.match(r"^/api/gallery/([a-z0-9_-]+)/(.+)$", p)
 
-        # API Promociones — DELETE (admin)
-        m_promo_del = re.match(r"^/api/promotions/(\d+)$", p)
-        if m_promo_del:
+        # API Actividades — DELETE (admin)
+        m_activity_del = re.match(r"^/api/activities/(\d+)$", p)
+        if m_activity_del:
             if not self._require_admin():
                 return
-            db_delete_promotion(int(m_promo_del.group(1)))
+            db_delete_activity(int(m_activity_del.group(1)))
             self._json({"ok": True})
             return
         if m_del:

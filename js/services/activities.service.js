@@ -1,25 +1,25 @@
-// js/services/promotions.service.js
-// Servicio para gestionar promociones (fechas disponibles de tours)
+// js/services/activities.service.js
+// Servicio para gestionar actividades (fechas disponibles de tours)
 
-const PromotionsService = {
+const ActivitiesService = {
 
     async getAll() {
-        const res = await fetch('/api/promotions');
-        if (!res.ok) throw new Error('Error al cargar promociones');
+        const res = await fetch('/api/activities');
+        if (!res.ok) throw new Error('Error al cargar actividades');
         return await res.json();
     },
 
     async create(data) {
         const headers = { 'Content-Type': 'application/json' };
         if (typeof adminApiHeaders === 'function') Object.assign(headers, adminApiHeaders());
-        const res = await fetch('/api/promotions', {
+        const res = await fetch('/api/activities', {
             method: 'POST',
             headers,
             body: JSON.stringify(data)
         });
         if (!res.ok) {
             const err = await res.json().catch(() => ({}));
-            throw new Error(err.error || 'Error al crear promoción');
+            throw new Error(err.error || 'Error al crear actividad');
         }
         return await res.json();
     },
@@ -27,13 +27,13 @@ const PromotionsService = {
     async remove(id) {
         const headers = {};
         if (typeof adminApiHeaders === 'function') Object.assign(headers, adminApiHeaders());
-        const res = await fetch(`/api/promotions/${id}`, {
+        const res = await fetch(`/api/activities/${id}`, {
             method: 'DELETE',
             headers
         });
-        if (!res.ok) throw new Error('Error al eliminar promoción');
+        if (!res.ok) throw new Error('Error al eliminar actividad');
         return await res.json();
     }
 };
 
-window.PromotionsService = PromotionsService;
+window.ActivitiesService = ActivitiesService;
