@@ -18,6 +18,7 @@
     <script src="https://unpkg.com/lucide@latest" defer></script>
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/animations.css">
+    <link rel="stylesheet" href="./css/translate.css?v=2">
 </head>
 <body class="bg-gray-950 text-white min-h-screen flex flex-col">
 
@@ -34,7 +35,13 @@
                 <i data-lucide="anchor" class="h-6 w-6 text-cyan-400"></i>
                 Golden Ray <span class="text-cyan-400">I</span>
             </a>
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-4 lg:gap-6">
+                <div class="lang-toggle-wrapper">
+                    <div class="lang-toggle-group">
+                        <div class="lang-toggle-option active" data-lang="es">ES</div>
+                        <div class="lang-toggle-option" data-lang="en">EN</div>
+                    </div>
+                </div>
                 <a href="./tours.html" class="flex items-center gap-1 text-gray-400 hover:text-cyan-400 transition text-sm">
                     <i data-lucide="arrow-left" class="h-4 w-4"></i>
                     Volver a Tours
@@ -294,5 +301,8 @@
             if (window.lucide) lucide.createIcons();
         });
     </script>
+    <div id="google_translate_element"></div>
+    <script src="./js/components/translate.ui.js"></script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" defer></script>
 </body>
 </html>

@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/animations.css">
     <link rel="stylesheet" href="./css/tours.css">
+    <link rel="stylesheet" href="./css/translate.css?v=2">
 </head>
 
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen tours-page">
@@ -43,6 +44,12 @@
                         <a href="./blog.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Blog</a>
                         <a href="./actividades.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Actividades</a>
                         <a href="./contact.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Contacto</a>
+                        <div class="lang-toggle-wrapper flex items-center ml-4">
+                            <div class="lang-toggle-group">
+                                <div class="lang-toggle-option active" data-lang="es">ES</div>
+                                <div class="lang-toggle-option" data-lang="en">EN</div>
+                            </div>
+                        </div>
                     </div>
                     <div class="md:hidden">
                         <button id="mobile-menu-btn" class="text-gray-600" aria-label="Abrir menu">
@@ -60,6 +67,14 @@
                 <a href="./blog.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Blog</a>
                 <a href="./actividades.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Actividades</a>
                 <a href="./contact.html" onclick="toggleMobileMenu()" class="text-left text-gray-800 font-medium">Contacto</a>
+                <div class="pt-4 mt-2 border-t border-gray-100 flex justify-center pb-2">
+                    <div class="lang-toggle-wrapper">
+                        <div class="lang-toggle-group">
+                            <div class="lang-toggle-option active" data-lang="es">ES</div>
+                            <div class="lang-toggle-option" data-lang="en">EN</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -311,6 +326,9 @@
             await renderDestinationTours();
         });
     </script>
+    <div id="google_translate_element"></div>
+    <script src="./js/components/translate.ui.js"></script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" defer></script>
 </body>
 
 </html>
