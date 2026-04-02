@@ -1,6 +1,18 @@
 {
     "rewrites": [
         {
+            "source": "/api/auth/google",
+            "destination": "/api/auth/google"
+        },
+        {
+            "source": "/api/auth/callback",
+            "destination": "/api/auth/callback"
+        },
+        {
+            "source": "/api/admin/ping",
+            "destination": "/api/admin/ping"
+        },
+        {
             "source": "/api/tours/reset",
             "destination": "/api/tours/reset"
         },
@@ -11,14 +23,6 @@
         {
             "source": "/api/tours",
             "destination": "/api/tours/index"
-        },
-        {
-            "source": "/api/reservations/:id",
-            "destination": "/api/reservations/[id]"
-        },
-        {
-            "source": "/api/reservations",
-            "destination": "/api/reservations/index"
         },
         {
             "source": "/api/reviews",
@@ -35,6 +39,14 @@
         {
             "source": "/api/gallery/:island",
             "destination": "/api/gallery/list?island=:island"
+        },
+        {
+            "source": "/api/activities/:id",
+            "destination": "/api/activities/[id]"
+        },
+        {
+            "source": "/api/activities",
+            "destination": "/api/activities/index"
         }
     ]
 }

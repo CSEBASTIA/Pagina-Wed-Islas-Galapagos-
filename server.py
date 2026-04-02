@@ -42,6 +42,16 @@ WATCH_EXTENSIONS = {".html", ".css", ".js", ".json", ".svg", ".png", ".jpg", ".j
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+# Cargar variables de entorno desde .env si existe
+env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
+if os.path.exists(env_path):
+    with open(env_path, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith("#") and "=" in line:
+                k, v = line.split("=", 1)
+                os.environ[k.strip()] = v.strip()
+
 # ══════════════════════════════════════════════════════════════════════════════
 # BASE DE DATOS SQLITE
 # ══════════════════════════════════════════════════════════════════════════════
@@ -229,21 +239,21 @@ def row_to_dict(row):
 
 
 def activity_row_to_dict(row):
-    """Convierte fila de activities a dict, incluyendo nombre del tour."""
-    d = dict(row)
-    return d
+    """Convierte fila de activities a dict con datos de tour unido."""
+    return dict(row)
 
 
 # ── Activities DB helpers ────────────────────────────────────────────────────
 
 def db_get_all_activities():
-    """Devuelve todas las actividades activas con el nombre del tour."""
+    """Devuelve actividades activas FUTURAS (>= hoy) con el nombre del tour."""
     with get_db() as conn:
         rows = conn.execute("""
             SELECT p.*, t.title AS tour_title, t.image AS tour_image
             FROM activities p
             LEFT JOIN tours t ON t.id = p.tour_id
             WHERE p.active = 1
+              AND p.date_available >= date('now')
             ORDER BY p.date_available ASC
         """).fetchall()
         return [dict(r) for r in rows]
@@ -355,9 +365,19 @@ def db_update(tour_id, data):
 
 
 def db_delete(tour_id):
+    """Elimina el tour y en cascada sus actividades, resenas y fotos de galeria."""
+    # Eliminar fotos del disco antes de borrar el registro
+    gallery_dir = os.path.join("assets", "images", "galleries", str(tour_id))
+    if os.path.exists(gallery_dir):
+        import shutil
+        shutil.rmtree(gallery_dir, ignore_errors=True)
+        print(f"  Galeria eliminada: galleries/{tour_id}")
     with get_db() as conn:
+        conn.execute("DELETE FROM activities WHERE tour_id = ?", (tour_id,))
+        conn.execute("DELETE FROM reviews WHERE tour_id = ?", (tour_id,))
         conn.execute("DELETE FROM tours WHERE id = ?", (tour_id,))
         conn.commit()
+        print(f"  Tour {tour_id} eliminado con actividades y resenas relacionadas")
 
 
 # ── Reservaciones CRUD ────────────────────────────────────────────────────────
@@ -624,13 +644,17 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
         return self.path.split("?", 1)[0]
 
     def _admin_authorized(self):
-        """Si ADMIN_SECRET está definido (>=16), exige Bearer o X-Admin-Secret."""
-        secret = os.environ.get("ADMIN_SECRET", "4veoeE8TyFTTB3nJ").strip()
+        """Requiere ADMIN_SECRET definido en .env o variable de entorno.
+        Si no esta definido o tiene menos de 16 caracteres, rechaza todo acceso admin.
+        """
+        secret = os.environ.get("ADMIN_SECRET", "").strip()
         if len(secret) < 16:
-            return True
+            # Sin secreto configurado: bloquear en produccion, permitir en dev local
+            is_local = self.client_address[0] in ("127.0.0.1", "::1", "localhost")
+            return is_local
         auth = self.headers.get("Authorization", "")
         token = auth[7:].strip() if auth.startswith("Bearer ") else self.headers.get("X-Admin-Secret", "").strip()
-        if len(token) != len(secret):
+        if not token or len(token) != len(secret):
             return False
         try:
             return hmac.compare_digest(token.encode("utf-8"), secret.encode("utf-8"))
@@ -816,11 +840,27 @@ class LiveReloadHandler(http.server.SimpleHTTPRequestHandler):
             self._json(tour, 201)
             return
 
-        # API Reseñas — POST (público, cualquiera puede dejar una reseña)
+        # API Reseñas — POST (público, con límite básico anti-spam)
         if p == "/api/reviews":
             data = self._read_body()
-            if not data.get("customer_name"):
+            if not data.get("customer_name") or not str(data.get("customer_name", "")).strip():
                 self._error("customer_name es obligatorio")
+                return
+            comment = str(data.get("comment", "")).strip()
+            if len(comment) < 5:
+                self._error("El comentario debe tener al menos 5 caracteres")
+                return
+            if len(comment) > 1000:
+                self._error("El comentario no puede superar 1000 caracteres")
+                return
+            # Limite: max 10 resenas globales en los ultimos 10 minutos (anti-spam basico)
+            with get_db() as conn:
+                recent = conn.execute(
+                    """SELECT COUNT(*) FROM reviews
+                       WHERE created_at >= datetime('now', '-10 minutes')"""
+                ).fetchone()[0]
+            if recent >= 10:
+                self._error("Demasiadas reseñas enviadas recientemente. Intenta más tarde.", 429)
                 return
             review = db_create_review(data)
             print(f"  Nueva resena de {data.get('customer_name')} para {data.get('tour_name', 'tour')}")
