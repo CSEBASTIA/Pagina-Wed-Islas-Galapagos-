@@ -57,9 +57,7 @@ export default async function handler(req, res) {
     const jwtSecret = process.env.JWT_SECRET || process.env.ADMIN_SECRET || 'fallback_secret_change_me';
     const adminEmails = (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
 
-    const baseUrl = process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : (process.env.BASE_URL || 'http://localhost:8000');
+    const baseUrl = process.env.BASE_URL || 'https://golden-ray-1-galapagos.vercel.app';
 
     const redirectUri = `${baseUrl}/api/auth/callback`;
 

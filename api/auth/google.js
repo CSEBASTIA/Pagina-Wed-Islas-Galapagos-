@@ -12,11 +12,8 @@ export default function handler(req, res) {
         return res.status(503).json({ error: 'GOOGLE_CLIENT_ID no configurado en variables de entorno' });
     }
 
-    // URL base del sitio (para construir el callback)
-    const baseUrl = process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : (process.env.BASE_URL || 'http://localhost:8000');
-
+    // BASE_URL tiene prioridad absoluta — siempre apunta al dominio de producción
+    const baseUrl = process.env.BASE_URL || 'https://golden-ray-1-galapagos.vercel.app';
     const redirectUri = `${baseUrl}/api/auth/callback`;
 
     const params = new URLSearchParams({
