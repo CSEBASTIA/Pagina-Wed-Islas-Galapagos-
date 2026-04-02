@@ -81,4 +81,30 @@ window.googleTranslateElementInit = function() {
 
 document.addEventListener('DOMContentLoaded', () => {
     TranslateUI.init();
+    
+    // Ocultador activo de la barra de Google Translate mediante JavaScript
+    const observer = new MutationObserver((mutations) => {
+        // En lugar de "remove()", forzamos display none mediante JS para no romper el motor interno de traducción
+        const banners = document.querySelectorAll('.goog-te-banner-frame, .VIpgJd-ZVi9od-ORHb-OEVmcd, iframe.skiptranslate');
+        banners.forEach(b => {
+            if (b) {
+                b.style.setProperty('display', 'none', 'important');
+                b.style.setProperty('visibility', 'hidden', 'important');
+                b.style.setProperty('opacity', '0', 'important');
+            }
+        });
+        
+        // Corregir margen impuesto por Google
+        if (document.body.style.top !== '0px' && document.body.style.top !== '') {
+            document.body.style.setProperty('top', '0px', 'important');
+            document.body.style.setProperty('margin-top', '0px', 'important');
+        }
+        if (document.documentElement.style.top !== '0px' && document.documentElement.style.top !== '') {
+            document.documentElement.style.setProperty('top', '0px', 'important');
+            document.documentElement.style.setProperty('margin-top', '0px', 'important');
+        }
+    });
+    
+    observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] });
 });

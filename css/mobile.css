@@ -1,0 +1,367 @@
+/* ============================================================
+   MOBILE.CSS — Adaptación completa para teléfonos
+   Golden Ray I · Islas Galápagos
+   ============================================================ */
+
+/* ── 1. PREVENIR DESBORDAMIENTO HORIZONTAL ─────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+/* ── 2. NAVEGACIÓN MÓVIL ────────────────────────────────────── */
+/* Asegurar que el menú móvil no cause overflow */
+#mobile-menu {
+    position: sticky;
+    top: 80px; /* altura del nav */
+    left: 0;
+    right: 0;
+    width: 100%;
+}
+
+/* Icono del menú hamburguesa más táctil */
+#mobile-menu-btn {
+    padding: 8px;
+    border-radius: 8px;
+    touch-action: manipulation;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── 3. HERO (index.html) ───────────────────────────────────── */
+@media (max-width: 767px) {
+    .section-hero {
+        height: auto !important;
+        min-height: 480px;
+        padding: 2rem 0;
+    }
+
+    .hero-glass {
+        padding: 1.5rem 1rem !important;
+        border-radius: 1.25rem !important;
+        margin: 0 0.5rem;
+    }
+
+    .hero-glass h1 {
+        font-size: 2rem !important;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+    }
+
+    .hero-glass p {
+        font-size: 0.95rem !important;
+        margin-bottom: 1.5rem;
+    }
+}
+
+/* ── 4. CARDS DE INFORMACIÓN (home) ────────────────────────── */
+@media (max-width: 767px) {
+    .home-info-card {
+        padding: 1.5rem !important;
+    }
+
+    /* Stack icons centrado en móvil */
+    .home-icon-ring {
+        width: 3.5rem;
+        height: 3.5rem;
+    }
+
+    /* Sección "¿Por qué elegirnos?" */
+    .home-feature-showcase {
+        border-radius: 1.25rem !important;
+    }
+
+    .home-feature-showcase .grid {
+        gap: 1.5rem !important;
+    }
+
+    .home-feature-showcase .p-8,
+    .home-feature-showcase .md\:p-12,
+    .home-feature-showcase .lg\:p-14 {
+        padding: 1.25rem !important;
+    }
+
+    .home-feature-photo {
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+}
+
+/* ── 5. SECCIÓN TOURS (index.html — reviews cards) ─────────── */
+@media (max-width: 767px) {
+    #tours-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    #section-tours-reviews {
+        padding: 3rem 1rem !important;
+    }
+}
+
+/* ── 6. FOOTER (index.html — 4 columnas → 2 → 1) ───────────── */
+@media (max-width: 767px) {
+    footer .grid-cols-1.md\:grid-cols-4 {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 1.5rem !important;
+    }
+}
+@media (max-width: 480px) {
+    footer .grid-cols-1.md\:grid-cols-4 {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ── 7. PÁGINA DE TOURS ─────────────────────────────────────── */
+@media (max-width: 767px) {
+    /* Sección "Somos Golden Ray I" */
+    .tours-about-nosotros {
+        padding-top: 2rem !important;
+        padding-bottom: 1rem !important;
+    }
+
+    .tours-about-nosotros .grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+
+    .tours-about-media {
+        min-height: 220px;
+        border-radius: 1rem !important;
+    }
+
+    .tours-about-media img {
+        min-height: 220px !important;
+    }
+
+    /* Stats row */
+    .tours-stats-row {
+        gap: 1.5rem !important;
+    }
+
+    /* Grid de destinos: 1 columna en móvil */
+    #tours-destinations-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem !important;
+    }
+
+    /* Mini galería dentro de tarjetas de tour */
+    #tours-destinations-grid .grid-cols-3 {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 0.25rem !important;
+    }
+
+    /* Botones dentro de tarjetas */
+    #tours-destinations-grid .flex.gap-2 {
+        flex-direction: column !important;
+    }
+
+    #tours-destinations-grid .flex-1 {
+        width: 100%;
+    }
+}
+
+/* ── 8. PÁGINA DE ACTIVIDADES ───────────────────────────────── */
+@media (max-width: 767px) {
+    /* Filtros por mes — scroll horizontal */
+    #month-filters {
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        justify-content: flex-start !important;
+        padding-bottom: 0.5rem;
+        gap: 0.5rem !important;
+        scroll-snap-type: x mandatory;
+    }
+
+    #month-filters button {
+        flex-shrink: 0;
+        scroll-snap-align: start;
+        white-space: nowrap;
+        font-size: 0.8rem !important;
+        padding: 0.4rem 0.85rem !important;
+    }
+
+    /* Tarjetas de actividad: imagen arriba, texto abajo (ya tiene flex-col en móvil) */
+    #activities-public-list article .flex-col {
+        flex-direction: column !important;
+    }
+
+    #activities-public-list article .md\:w-72 {
+        width: 100% !important;
+    }
+
+    #activities-public-list article img {
+        width: 100% !important;
+        height: 180px !important;
+        object-fit: cover !important;
+    }
+
+    #activities-public-list article .flex-1 {
+        padding: 1.25rem !important;
+    }
+
+    /* Botón reservar: ancho completo */
+    #activities-public-list .flex-wrap.gap-3 {
+        flex-direction: column;
+    }
+
+    #activities-public-list .flex-wrap.gap-3 a {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ── 9. PÁGINA DE CONTACTO ──────────────────────────────────── */
+@media (max-width: 767px) {
+    /* Hero de contacto */
+    .contact-card {
+        padding: 1.5rem !important;
+    }
+
+    /* Grid de tarjetas de canal: 2 columnas en SM → 1 en XS */
+    .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 1rem !important;
+    }
+
+    /* Sección ubicación + CTA */
+    section .grid.md\:grid-cols-2 {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+
+    .info-row {
+        padding: 0.75rem 1rem !important;
+    }
+
+    /* CTA WhatsApp */
+    .contact-card h1 {
+        font-size: 1.75rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .grid.grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ── 10. GALERÍA ────────────────────────────────────────────── */
+@media (max-width: 767px) {
+    /* Tabs de tours: scroll horizontal */
+    #island-tabs {
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        justify-content: flex-start !important;
+        padding-bottom: 0.5rem;
+        scroll-snap-type: x mandatory;
+    }
+
+    #island-tabs button {
+        flex-shrink: 0;
+        scroll-snap-align: start;
+        font-size: 0.8rem !important;
+        padding: 0.5rem 1rem !important;
+    }
+
+    /* Grid de fotos: 2 columnas en móvil */
+    #photos-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.5rem !important;
+    }
+
+    /* Header de galería */
+    #gallery-header {
+        padding: 2rem 1rem !important;
+    }
+
+    #gallery-title {
+        font-size: 1.75rem !important;
+    }
+
+    /* Lightbox — botones más grandes y táctiles */
+    #lightbox button {
+        min-width: 44px;
+        min-height: 44px;
+    }
+}
+
+/* ── 11. BLOG ────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+    .blog-page-header {
+        padding: 2.5rem 1rem !important;
+    }
+
+    .blog-page-header h1 {
+        font-size: 2rem !important;
+    }
+
+    /* Tarjetas de blog */
+    #blog-tours-root {
+        padding: 0 1rem 3rem !important;
+        gap: 3rem !important;
+    }
+}
+
+/* ── 12. MEJORAS TÁCTILES GLOBALES ──────────────────────────── */
+/* Áreas de toque mínimas de 44px para botones y enlaces */
+a, button {
+    touch-action: manipulation;
+}
+
+/* Botón WhatsApp flotante */
+.whatsapp-btn {
+    bottom: 16px !important;
+    right: 16px !important;
+}
+
+/* Títulos más pequeños en pantallas muy pequeñas */
+@media (max-width: 380px) {
+    .text-4xl { font-size: 1.75rem !important; }
+    .text-3xl { font-size: 1.5rem !important; }
+    .text-2xl { font-size: 1.25rem !important; }
+
+    .hero-glass h1 {
+        font-size: 1.6rem !important;
+    }
+}
+
+/* ── 13. SCROLL SUAVE EN FILTROS (scrollbar oculto) ────────── */
+#month-filters::-webkit-scrollbar,
+#island-tabs::-webkit-scrollbar {
+    display: none;
+}
+#month-filters,
+#island-tabs {
+    -ms-overflow-style: none;
+}
+
+/* ── 14. NAV HEIGHT FIX ─────────────────────────────────────── */
+@media (max-width: 767px) {
+    nav .h-20 {
+        height: 4rem !important; /* 64px en móvil en vez de 80px */
+    }
+
+    /* Logo texto más pequeño */
+    nav .text-2xl {
+        font-size: 1.1rem !important;
+    }
+
+    /* Logo imagen */
+    nav .h-10.w-10 {
+        height: 2rem !important;
+        width: 2rem !important;
+    }
+}
+
+/* ── 15. IMÁGENES RESPONSIVAS ───────────────────────────────── */
+img {
+    max-width: 100%;
+    height: auto;
+}

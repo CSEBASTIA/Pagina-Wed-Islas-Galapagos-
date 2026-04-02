@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/animations.css">
     <link rel="stylesheet" href="./css/translate.css?v=2">
+    <link rel="stylesheet" href="./css/mobile.css">
 </head>
 <body class="bg-gray-950 text-white min-h-screen flex flex-col">
 
@@ -176,7 +177,7 @@
                 document.getElementById('gallery-subtitle').textContent =
                     (tour.tags || []).join(' · ') || tour.difficulty || '';
                 document.getElementById('cta-whatsapp').href =
-                    `https://wa.me/593994891081?text=${encodeURIComponent('Hola, me interesa el ' + tour.title)}`;
+                    `https://wa.me/593994981081?text=${encodeURIComponent('Hola, me interesa el ' + tour.title)}`;
             } else {
                 // Fallback si no se encontró el tour
                 document.getElementById('gallery-title').textContent = `Galeria`;
