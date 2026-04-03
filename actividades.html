@@ -1,17 +1,188 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actividades — Golden Ray I · Galapagos</title>
-    <meta name="description" content="Fechas disponibles y actividades para tours en las Islas Galápagos con Golden Ray I">
+    <meta name="description"
+        content="Fechas disponibles y actividades para tours en las Islas Galápagos con Golden Ray I">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/animations.css">
     <link rel="stylesheet" href="./css/translate.css?v=2">
     <link rel="stylesheet" href="./css/mobile.css">
+    <style>
+        /* ── Tarjeta de actividad ── */
+        .activity-card {
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+            border: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.25s, transform 0.25s;
+        }
+
+        .activity-card:hover {
+            box-shadow: 0 8px 32px rgba(6, 182, 212, 0.13);
+            transform: translateY(-3px);
+        }
+
+        .activity-card .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .activity-card .card-body {
+            padding: 22px 24px 20px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            gap: 10px;
+        }
+
+        .card-badge-spots {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #fef3c7;
+            color: #b45309;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 999px;
+            width: fit-content;
+        }
+
+        .card-badge-spots.low {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #111827;
+            line-height: 1.3;
+            margin: 0;
+        }
+
+        .card-date {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #0891b2;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: capitalize;
+        }
+
+        .card-date svg {
+            flex-shrink: 0;
+        }
+
+        .card-note {
+            font-size: 13.5px;
+            color: #6b7280;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .card-footer {
+            padding: 0 24px 22px;
+        }
+
+        .btn-whatsapp {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #16a34a;
+            color: #fff;
+            font-weight: 700;
+            font-size: 14px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            width: 100%;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(22, 163, 74, 0.15);
+        }
+
+        .btn-whatsapp:hover {
+            background: #15803d;
+            box-shadow: 0 4px 16px rgba(22, 163, 74, 0.25);
+        }
+
+        /* ── Grid simétrico ── */
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 28px;
+        }
+
+        @media (max-width: 640px) {
+            .activities-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ── Filtros de mes ── */
+        .month-filter-btn {
+            padding: 8px 20px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1.5px solid #e5e7eb;
+            background: #fff;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.18s;
+            text-transform: capitalize;
+        }
+
+        .month-filter-btn:hover {
+            border-color: #06b6d4;
+            color: #0891b2;
+        }
+
+        .month-filter-btn.active {
+            background: #0891b2;
+            border-color: #0891b2;
+            color: #fff;
+            box-shadow: 0 2px 10px rgba(8, 145, 178, 0.2);
+        }
+
+        /* ── Hero section ── */
+        .hero-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 5px 16px;
+            border-radius: 999px;
+            margin-bottom: 16px;
+        }
+
+        /* ── Divider decorativo ── */
+        .section-divider {
+            width: 48px;
+            height: 4px;
+            background: linear-gradient(90deg, #06b6d4, #0891b2);
+            border-radius: 2px;
+            margin: 0 auto 32px;
+        }
+    </style>
 </head>
+
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
     <div class="fixed inset-0 z-[-1]" aria-hidden="true">
         <img src="./assets/images/fondo de pagina.png" alt="" class="w-full h-full object-cover">
@@ -27,11 +198,14 @@
                         <span class="text-2xl font-bold text-gray-800 tracking-tight">Golden Ray I</span>
                     </a>
                     <div class="hidden md:flex space-x-8">
-                        <a href="./index.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Inicio</a>
-                        <a href="./tours.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Tours</a>
+                        <a href="./index.html"
+                            class="text-gray-600 hover:text-cyan-600 font-medium transition">Inicio</a>
+                        <a href="./tours.html"
+                            class="text-gray-600 hover:text-cyan-600 font-medium transition">Tours</a>
                         <a href="./blog.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Blog</a>
                         <span class="text-cyan-600 font-semibold border-b-2 border-cyan-500 pb-0.5">Actividades</span>
-                        <a href="./contact.html" class="text-gray-600 hover:text-cyan-600 font-medium transition">Contacto</a>
+                        <a href="./contact.html"
+                            class="text-gray-600 hover:text-cyan-600 font-medium transition">Contacto</a>
                         <div class="lang-toggle-wrapper flex items-center ml-4">
                             <div class="lang-toggle-group">
                                 <div class="lang-toggle-option active" data-lang="es">ES</div>
@@ -47,7 +221,8 @@
                 </div>
             </div>
         </nav>
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-gray-200 p-4 absolute w-full z-40 shadow-lg">
+        <div id="mobile-menu"
+            class="hidden md:hidden bg-white border-b border-gray-200 p-4 absolute w-full z-40 shadow-lg">
             <div class="flex flex-col space-y-4">
                 <a href="./index.html" class="text-left text-gray-800 font-medium">Inicio</a>
                 <a href="./tours.html" class="text-left text-gray-800 font-medium">Tours</a>
@@ -67,25 +242,31 @@
     </header>
 
     <main class="flex-1 bg-white/95 backdrop-blur-[2px]">
-        <section class="py-16 md:py-24 px-4 relative overflow-hidden">
-            <div class="max-w-4xl mx-auto text-center relative z-10">
-                <span class="inline-block mb-3 py-1 px-3 rounded-full bg-amber-100 text-amber-700 text-xs font-bold uppercase tracking-wide">
-                    Fechas Disponibles
-                </span>
-                <h1 class="text-3xl md:text-5xl font-bold text-gray-900 mb-4">Actividades</h1>
-                <p class="text-gray-600 text-lg">Reserva tu lugar en las próximas salidas a las Islas Galápagos</p>
+        <!-- Hero -->
+        <section class="py-16 md:py-24 px-4 text-center">
+            <div class="max-w-2xl mx-auto">
+                <span class="hero-badge">📅 Fechas Disponibles</span>
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+                    Próximas Actividades
+                </h1>
+                <p class="text-gray-500 text-lg">Reserva tu lugar en las próximas salidas a las Islas Galápagos</p>
             </div>
         </section>
 
-        <section class="max-w-5xl mx-auto px-4 pb-20">
-            <!-- Menú de filtros por mes -->
+        <section class="max-w-6xl mx-auto px-4 pb-24">
+            <!-- Filtros por mes -->
             <div id="month-filters" class="flex flex-wrap justify-center gap-3 mb-10"></div>
-            
-            <div id="activities-public-list" class="space-y-6">
-                <div class="flex justify-center items-center py-16">
+
+            <!-- Divider -->
+            <div class="section-divider"></div>
+
+            <!-- Grid de actividades -->
+            <div id="activities-public-list">
+                <div class="flex justify-center items-center py-20">
                     <div class="flex flex-col items-center gap-3 text-gray-400">
-                        <div class="w-8 h-8 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
-                        <p class="text-sm">Cargando actividades...</p>
+                        <div class="w-9 h-9 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin">
+                        </div>
+                        <p class="text-sm font-medium">Cargando actividades...</p>
                     </div>
                 </div>
             </div>
@@ -93,7 +274,8 @@
     </main>
 
     <footer class="bg-gray-900 text-white py-10 mt-auto border-t border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+        <div
+            class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
             <p>© Golden Ray I · Isla Isabela</p>
             <div class="flex gap-6">
                 <a href="./index.html" class="hover:text-cyan-400 transition">Inicio</a>
@@ -109,16 +291,11 @@
     <script src="./js/services/activities.service.js" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
-            // Mobile menu toggle
             const btn = document.getElementById('mobile-menu-btn');
             const menu = document.getElementById('mobile-menu');
-            if (btn && menu) {
-                btn.addEventListener('click', () => menu.classList.toggle('hidden'));
-            }
-
+            if (btn && menu) btn.addEventListener('click', () => menu.classList.toggle('hidden'));
             if (window.lucide) lucide.createIcons();
 
-            // Load activities
             const container = document.getElementById('activities-public-list');
             const filtersContainer = document.getElementById('month-filters');
             if (!container) return;
@@ -129,47 +306,35 @@
                 if (!activities.length) {
                     container.innerHTML = `
                         <div class="text-center py-20">
-                            <p class="text-5xl mb-4"></p>
+                            <p class="text-6xl mb-5">🐢</p>
                             <h2 class="text-2xl font-bold text-gray-700 mb-2">Próximamente</h2>
-                            <p class="text-gray-500">Estamos preparando nuevas fechas. ¡Vuelve pronto!</p>
+                            <p class="text-gray-400">Estamos preparando nuevas fechas. ¡Vuelve pronto!</p>
                         </div>`;
                     return;
                 }
 
-                // Generar lista de meses únicos
+                // Meses únicos
                 const monthsMap = new Map();
                 activities.forEach(p => {
-                    const dateObj = new Date(p.date_available + 'T12:00:00');
-                    const monthYear = dateObj.toLocaleDateString('es-EC', { month: 'long', year: 'numeric' });
-                    // usar yyyy-mm como clave para ordenar
-                    const key = p.date_available.substring(0, 7); 
+                    const key = p.date_available.substring(0, 7);
                     if (!monthsMap.has(key)) {
-                        monthsMap.set(key, monthYear);
+                        const dateObj = new Date(p.date_available + 'T12:00:00');
+                        monthsMap.set(key, dateObj.toLocaleDateString('es-EC', { month: 'long', year: 'numeric' }));
                     }
                 });
-
-                // Ordenar meses
                 const sortedMonthKeys = Array.from(monthsMap.keys()).sort();
 
-                // Renderizar botones de filtro
                 let currentFilter = 'all';
 
                 const renderFilters = () => {
                     if (!filtersContainer) return;
-                    let html = `<button data-month="all" class="px-5 py-2 rounded-full font-medium transition-colors ${currentFilter === 'all' ? 'bg-cyan-600 text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'}">Todos</button>`;
-                    
+                    let html = `<button data-month="all" class="month-filter-btn ${currentFilter === 'all' ? 'active' : ''}">Todos</button>`;
                     sortedMonthKeys.forEach(key => {
-                        const label = monthsMap.get(key);
-                        const isActive = currentFilter === key;
-                        const btnClass = isActive ? 'bg-cyan-600 text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50';
-                        html += `<button data-month="${key}" class="capitalize px-5 py-2 rounded-full font-medium transition-colors ${btnClass}">${label}</button>`;
+                        html += `<button data-month="${key}" class="month-filter-btn ${currentFilter === key ? 'active' : ''}">${monthsMap.get(key)}</button>`;
                     });
-                    
                     filtersContainer.innerHTML = html;
-
-                    // Agregar eventos
-                    filtersContainer.querySelectorAll('button').forEach(btn => {
-                        btn.addEventListener('click', (e) => {
+                    filtersContainer.querySelectorAll('button').forEach(b => {
+                        b.addEventListener('click', e => {
                             currentFilter = e.target.getAttribute('data-month');
                             renderFilters();
                             renderActivities();
@@ -178,58 +343,57 @@
                 };
 
                 const renderActivities = () => {
-                    const filteredActivities = currentFilter === 'all' 
-                        ? activities 
+                    const filtered = currentFilter === 'all'
+                        ? activities
                         : activities.filter(p => p.date_available.startsWith(currentFilter));
 
-                    if (!filteredActivities.length) {
-                        container.innerHTML = `<p class="text-center text-gray-500 py-10">No hay actividades para este mes.</p>`;
+                    if (!filtered.length) {
+                        container.innerHTML = `<p class="text-center text-gray-400 py-14">No hay actividades para este mes.</p>`;
                         return;
                     }
 
-                    container.innerHTML = filteredActivities.map(p => {
+                    container.innerHTML = `<div class="activities-grid">${filtered.map(p => {
                         const dateObj = new Date(p.date_available + 'T12:00:00');
                         const dateStr = dateObj.toLocaleDateString('es-EC', {
                             weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
                         });
+                        const isLowSpots = p.spots <= 3;
                         const whatsappMsg = encodeURIComponent(
                             `Hola! Me interesa la actividad "${p.tour_title}" del ${dateStr}. ¿Hay cupos disponibles?`
                         );
                         const whatsappUrl = `https://wa.me/593994981081?text=${whatsappMsg}`;
 
                         return `
-                        <article class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                            <div class="flex flex-col md:flex-row">
-                                <div class="md:w-72 flex-shrink-0">
-                                    <img src="${p.tour_image || ''}" alt="${p.tour_title || ''}"
-                                        class="w-full h-48 md:h-full object-cover"
-                                        onerror="this.src='https://placehold.co/400x300/f1f5f9/64748b?text=Tour'">
+                        <div class="activity-card">
+                            <img
+                                src="${p.tour_image || ''}"
+                                alt="${p.tour_title || 'Tour'}"
+                                class="card-image"
+                                onerror="this.src='https://placehold.co/400x200/e0f2fe/0891b2?text=Tour+Galápagos'"
+                            >
+                            <div class="card-body">
+                                <span class="card-badge-spots ${isLowSpots ? 'low' : ''}">
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                    ${p.spots} cupo${p.spots !== 1 ? 's' : ''} disponible${p.spots !== 1 ? 's' : ''}
+                                </span>
+
+                                <h2 class="card-title">${p.tour_title || 'Tour Galápagos'}</h2>
+
+                                <div class="card-date">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                    ${dateStr}
                                 </div>
-                                <div class="flex-1 p-6 md:p-8 flex flex-col justify-between">
-                                    <div>
-                                        <div class="flex flex-wrap items-center gap-2 mb-3">
-                                            <span class="bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1 rounded-full">
-                                                ${p.spots} cupos disponibles
-                                            </span>
-                                        </div>
-                                        <h2 class="text-2xl font-bold text-gray-900 mb-2">${p.tour_title || 'Tour'}</h2>
-                                        <div class="flex items-center gap-2 text-cyan-600 font-semibold mb-3">
-                                            <i data-lucide="calendar" class="h-5 w-5"></i>
-                                            <span class="capitalize">${dateStr}</span>
-                                        </div>
-                                        ${p.note ? `<p class="text-gray-600 mb-4">${p.note}</p>` : ''}
-                                    </div>
-                                    <div class="flex flex-wrap gap-3 mt-4">
-                                        <a href="${whatsappUrl}" target="_blank" rel="noopener"
-                                            class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-3 rounded-xl transition-colors shadow-md">
-                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                                        Reservar por WhatsApp
-                                    </a>
-                                </div>
+
+                                ${p.note ? `<p class="card-note">${p.note}</p>` : ''}
                             </div>
-                        </div>
-                    </article>`;
-                    }).join('');
+                            <div class="card-footer">
+                                <a href="${whatsappUrl}" target="_blank" rel="noopener" class="btn-whatsapp">
+                                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                                    Reservar por WhatsApp
+                                </a>
+                            </div>
+                        </div>`;
+                    }).join('')}</div>`;
 
                     if (window.lucide) lucide.createIcons();
                 };
@@ -246,4 +410,5 @@
     <script src="./js/components/translate.ui.js"></script>
     <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" defer></script>
 </body>
+
 </html>
