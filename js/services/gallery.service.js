@@ -1,10 +1,7 @@
 // js/services/gallery.service.js
-// Gestión de galerías de fotos por tour — API con el servidor local
 
 const GalleryService = {
 
-    // Obtener fotos de un tour/isla desde el servidor
-    // islandId puede ser un ID numérico de tour (ej: 107) o un slug legacy (ej: 'tortuga')
     async getPhotos(islandId) {
         try {
             const res = await fetch(`/api/gallery/${islandId}`);
@@ -16,14 +13,13 @@ const GalleryService = {
         }
     },
 
-    // Obtener lista dinámica de todos los tours disponibles como galerías
     async getIslandsFromTours() {
         try {
             const res = await fetch('/api/tours');
             const tours = await res.json();
             if (!Array.isArray(tours)) return [];
             return tours.map(tour => ({
-                id: tour.id,            // slug numérico para la galería
+                id: tour.id,
                 name: tour.title,
                 icon: '',
                 description: (tour.tags || []).join(' · ') || tour.difficulty || '',
@@ -35,110 +31,96 @@ const GalleryService = {
         }
     },
 
-    // Helper para comprimir imagen antes de subir para evitar error 413 Payload Too Large en Vercel
-    async compressImage(file, maxWidth = 1920, maxHeight = 1920, quality = 0.8) {
-        if (!file.type.startsWith('image/')) return file; // Only compress images
-        
-        return new Promise((resolve, reject) => {
+    // Compresión agresiva: máx 1200px, calidad 0.65, con segunda pasada si sigue > 3.5MB
+    async compressImage(file, maxWidth = 1200, maxHeight = 1200, quality = 0.65) {
+        if (!file.type.startsWith('image/')) return file;
+
+        return new Promise((resolve) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = event => {
                 const img = new Image();
                 img.src = event.target.result;
                 img.onload = () => {
-                    let width = img.width;
-                    let height = img.height;
-                    
+                    let { width, height } = img;
+
                     if (width > maxWidth || height > maxHeight) {
                         const ratio = Math.min(maxWidth / width, maxHeight / height);
                         width = Math.round(width * ratio);
                         height = Math.round(height * ratio);
                     }
-                    
+
                     const canvas = document.createElement('canvas');
                     canvas.width = width;
                     canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    
-                    // Force JPEG for better compression, unless it's a small PNG etc.
-                    // But to avoid 413, forcing jpeg is safer
-                    canvas.toBlob(blob => {
-                        if (blob) {
-                            // Cambiar la extensión si es necesario
-                            let newName = file.name;
-                            if (!newName.toLowerCase().endsWith('.jpeg') && !newName.toLowerCase().endsWith('.jpg')) {
-                                newName = newName.replace(/\.[^/.]+$/, "") + ".jpg";
+                    canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+
+                    // Reducir calidad en pasadas hasta quedar bajo 3.5 MB
+                    const tryCompress = (q) => {
+                        canvas.toBlob(blob => {
+                            if (!blob) { resolve(file); return; }
+                            if (blob.size > 3.5 * 1024 * 1024 && q > 0.3) {
+                                tryCompress(parseFloat((q - 0.15).toFixed(2)));
+                                return;
                             }
-                            resolve(new File([blob], newName, {
+                            console.log(`Imagen comprimida a ${(blob.size / 1024).toFixed(0)} KB (calidad ${q})`);
+                            resolve(new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), {
                                 type: 'image/jpeg',
-                                lastModified: Date.now()
+                                lastModified: Date.now(),
                             }));
-                        } else {
-                            resolve(file); // Fallback
-                        }
-                    }, 'image/jpeg', quality);
+                        }, 'image/jpeg', q);
+                    };
+
+                    tryCompress(quality);
                 };
-                img.onerror = () => resolve(file); // Si falla, intenta con la original
+                img.onerror = () => resolve(file);
             };
             reader.onerror = () => resolve(file);
         });
     },
 
-    // Subir una foto a la galería de un tour
     async uploadPhoto(islandId, file) {
         try {
-            // Comprimir la imagen antes de subirla
             file = await this.compressImage(file);
         } catch (e) {
-            console.warn('Error comprimiendo imagen localmente, se intentará subir la original', e);
+            console.warn('Compresión falló, usando original:', e);
         }
 
         const formData = new FormData();
         formData.append('photo', file);
-        // IMPORTANTE: NO incluir Content-Type manualmente con FormData.
-        // El browser necesita poner ese header solo, con el boundary correcto.
-        // Solo pasamos Authorization para autenticación con el servidor.
-        const adminHdrs = typeof window.adminApiHeaders === 'function' ? window.adminApiHeaders() : {};
+
+        // NO poner Content-Type manualmente con FormData —
+        // el navegador lo agrega solo con el multipart boundary correcto.
         const headers = {};
-        if (adminHdrs.Authorization) headers.Authorization = adminHdrs.Authorization;
-        if (adminHdrs['X-Admin-Secret']) headers['X-Admin-Secret'] = adminHdrs['X-Admin-Secret'];
+        if (typeof window.adminApiHeaders === 'function') {
+            const h = window.adminApiHeaders();
+            if (h.Authorization) headers.Authorization = h.Authorization;
+        }
+
         const res = await fetch(`/api/gallery/${islandId}/upload`, {
             method: 'POST',
             headers,
             body: formData,
         });
-        
+
         if (!res.ok) {
-            const errText = await res.text();
-            let errMsg;
-            try {
-               const errObj = JSON.parse(errText);
-               errMsg = errObj.error || 'Error al subir la foto';
-            } catch (e) {
-               // Si Vercel devuelve HTML "Request Entity Too Large", lo mostramos claro
-               if (errText.includes('413') || errText.includes('Too Large')) {
-                   errMsg = 'La imagen sigue siendo demasiado pesada para el servidor.';
-               } else {
-                   errMsg = errText.substring(0, 50) || 'Error al subir la foto';
-               }
-            }
-            throw new Error(errMsg);
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.error || `Error ${res.status} al subir la foto`);
         }
         return await res.json();
     },
 
-    // Eliminar una foto de la galería de un tour
     async deletePhoto(islandId, filename) {
-        const headers = {
-            ...(typeof window.adminApiHeaders === 'function' ? window.adminApiHeaders() : {}),
-        };
+        const headers = {};
+        if (typeof window.adminApiHeaders === 'function') {
+            Object.assign(headers, window.adminApiHeaders());
+        }
         const res = await fetch(`/api/gallery/${islandId}/${filename}`, {
             method: 'DELETE',
             headers,
         });
         if (!res.ok) {
-            const err = await res.json();
+            const err = await res.json().catch(() => ({}));
             throw new Error(err.error || 'Error al eliminar la foto');
         }
         return await res.json();

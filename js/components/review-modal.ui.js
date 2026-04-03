@@ -1,12 +1,11 @@
 // js/components/review-modal.ui.js
-// Modal para dejar reseñas de tours
+// Modal para dejar reseñas — guarda tour_id además del tour_name
 
 const ReviewModal = {
 
     _tourName: '',
-    _tourId: null,
+    _tourId: null,   // ← nuevo: guardamos el ID numérico del tour
 
-    // Crear el modal en el DOM si no existe
     _ensureModal() {
         if (document.getElementById('review-modal')) return;
 
@@ -17,7 +16,6 @@ const ReviewModal = {
 
         modal.innerHTML = `
             <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
-                <!-- Header -->
                 <div class="bg-gradient-to-r from-yellow-400 to-yellow-500 px-6 py-5 flex justify-between items-center">
                     <div>
                         <h2 class="text-gray-900 text-xl font-bold">Dejar Resena</h2>
@@ -26,7 +24,6 @@ const ReviewModal = {
                     <button onclick="ReviewModal.close()" class="text-yellow-900/80 hover:text-yellow-900 text-2xl leading-none">&times;</button>
                 </div>
 
-                <!-- Formulario -->
                 <div id="review-step-1" class="px-6 py-6 space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Tu Nombre *</label>
@@ -34,7 +31,6 @@ const ReviewModal = {
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 outline-none transition">
                     </div>
 
-                    <!-- Estrellas -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Calificación *</label>
                         <div class="flex gap-2" id="star-selector">
@@ -67,9 +63,8 @@ const ReviewModal = {
                     </div>
                 </div>
 
-                <!-- Éxito -->
                 <div id="review-step-2" class="hidden px-6 py-10 text-center">
-                    <div class="text-6xl mb-4"></div>
+                    <div class="text-6xl mb-4">🎉</div>
                     <h3 class="text-2xl font-bold text-gray-800 mb-2">¡Gracias por tu reseña!</h3>
                     <p class="text-gray-500 mb-6">Tu opinión nos ayuda a mejorar y a otros viajeros a elegir mejor.</p>
                     <button onclick="ReviewModal.close()"
@@ -83,12 +78,12 @@ const ReviewModal = {
         document.body.appendChild(modal);
     },
 
-    open(tourName, tourId) {
+    // Ahora acepta tourId como segundo parámetro (opcional para compatibilidad)
+    open(tourName, tourId = null) {
         this._ensureModal();
         this._tourName = tourName;
-        this._tourId = tourId || null;
+        this._tourId = tourId ? parseInt(tourId) : null;
 
-        // Reset formulario
         document.getElementById('review-name').value = '';
         document.getElementById('review-rating').value = '0';
         document.getElementById('review-comment').value = '';
@@ -141,7 +136,7 @@ const ReviewModal = {
         try {
             await ReviewsService.create({
                 tour_name: this._tourName,
-                tour_id: this._tourId,
+                tour_id: this._tourId,    // ← ahora se envía el ID numérico
                 customer_name: name,
                 rating,
                 comment,
