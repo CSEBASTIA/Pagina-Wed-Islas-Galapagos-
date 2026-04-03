@@ -42,7 +42,8 @@ export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     if (req.method !== 'GET') return res.status(405).json({ error: 'Método no permitido' });
 
-    const baseUrl = process.env.BASE_URL || 'https://golden-ray-1-galapagos.vercel.app';
+    // URL fija de producción — NO depende de env vars
+    const baseUrl = 'https://golden-ray-1-galapagos.vercel.app';
     const { code, error } = req.query;
 
     if (error) {
