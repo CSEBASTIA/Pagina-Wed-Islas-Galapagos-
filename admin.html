@@ -873,9 +873,9 @@
             if (btn) { btn.disabled = true; btn.textContent = 'Publicando...'; }
             try {
                 await ActivitiesService.create({
-                    tour_id: document.getElementById('promo-tour-id').value,
+                    tour_id: parseInt(document.getElementById('promo-tour-id').value, 10),
                     date_available: document.getElementById('promo-date').value,
-                    spots: document.getElementById('promo-spots').value || 10,
+                    spots: parseInt(document.getElementById('promo-spots').value, 10) || 10,
                     note: document.getElementById('promo-note').value
                 });
                 e.target.reset();

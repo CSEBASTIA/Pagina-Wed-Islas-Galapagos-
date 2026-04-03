@@ -61,16 +61,23 @@ const GalleryService = {
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
                     
+                    // Force JPEG for better compression, unless it's a small PNG etc.
+                    // But to avoid 413, forcing jpeg is safer
                     canvas.toBlob(blob => {
                         if (blob) {
-                            resolve(new File([blob], file.name, {
-                                type: file.type,
+                            // Cambiar la extensión si es necesario
+                            let newName = file.name;
+                            if (!newName.toLowerCase().endsWith('.jpeg') && !newName.toLowerCase().endsWith('.jpg')) {
+                                newName = newName.replace(/\.[^/.]+$/, "") + ".jpg";
+                            }
+                            resolve(new File([blob], newName, {
+                                type: 'image/jpeg',
                                 lastModified: Date.now()
                             }));
                         } else {
                             resolve(file); // Fallback
                         }
-                    }, file.type, quality);
+                    }, 'image/jpeg', quality);
                 };
                 img.onerror = () => resolve(file); // Si falla, intenta con la original
             };
@@ -89,17 +96,34 @@ const GalleryService = {
 
         const formData = new FormData();
         formData.append('photo', file);
-        const headers = {
-            ...(typeof window.adminApiHeaders === 'function' ? window.adminApiHeaders() : {}),
-        };
+        // IMPORTANTE: NO incluir Content-Type manualmente con FormData.
+        // El browser necesita poner ese header solo, con el boundary correcto.
+        // Solo pasamos Authorization para autenticación con el servidor.
+        const adminHdrs = typeof window.adminApiHeaders === 'function' ? window.adminApiHeaders() : {};
+        const headers = {};
+        if (adminHdrs.Authorization) headers.Authorization = adminHdrs.Authorization;
+        if (adminHdrs['X-Admin-Secret']) headers['X-Admin-Secret'] = adminHdrs['X-Admin-Secret'];
         const res = await fetch(`/api/gallery/${islandId}/upload`, {
             method: 'POST',
             headers,
             body: formData,
         });
+        
         if (!res.ok) {
-            const err = await res.json();
-            throw new Error(err.error || 'Error al subir la foto');
+            const errText = await res.text();
+            let errMsg;
+            try {
+               const errObj = JSON.parse(errText);
+               errMsg = errObj.error || 'Error al subir la foto';
+            } catch (e) {
+               // Si Vercel devuelve HTML "Request Entity Too Large", lo mostramos claro
+               if (errText.includes('413') || errText.includes('Too Large')) {
+                   errMsg = 'La imagen sigue siendo demasiado pesada para el servidor.';
+               } else {
+                   errMsg = errText.substring(0, 50) || 'Error al subir la foto';
+               }
+            }
+            throw new Error(errMsg);
         }
         return await res.json();
     },

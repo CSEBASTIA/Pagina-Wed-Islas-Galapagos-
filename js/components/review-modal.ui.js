@@ -4,6 +4,7 @@
 const ReviewModal = {
 
     _tourName: '',
+    _tourId: null,
 
     // Crear el modal en el DOM si no existe
     _ensureModal() {
@@ -82,9 +83,10 @@ const ReviewModal = {
         document.body.appendChild(modal);
     },
 
-    open(tourName) {
+    open(tourName, tourId) {
         this._ensureModal();
         this._tourName = tourName;
+        this._tourId = tourId || null;
 
         // Reset formulario
         document.getElementById('review-name').value = '';
@@ -139,6 +141,7 @@ const ReviewModal = {
         try {
             await ReviewsService.create({
                 tour_name: this._tourName,
+                tour_id: this._tourId,
                 customer_name: name,
                 rating,
                 comment,

@@ -19,7 +19,7 @@ export default async function handler(req, res) {
 
     // POST /api/reviews
     if (req.method === 'POST') {
-        const { tour_name, customer_name, rating, comment } = req.body;
+        const { tour_id, tour_name, customer_name, rating, comment } = req.body;
 
         if (!tour_name || !customer_name || !rating) {
             return res.status(400).json({ error: 'tour_name, customer_name y rating son obligatorios' });
@@ -31,7 +31,13 @@ export default async function handler(req, res) {
 
         const { data, error } = await supabase
             .from('reviews')
-            .insert([{ tour_name, customer_name, rating: parseInt(rating), comment: comment || '' }])
+            .insert([{
+                tour_id: tour_id ? parseInt(tour_id, 10) : null,
+                tour_name,
+                customer_name,
+                rating: parseInt(rating),
+                comment: comment || ''
+            }])
             .select()
             .single();
 

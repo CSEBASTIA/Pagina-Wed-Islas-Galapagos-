@@ -153,3 +153,45 @@ CREATE POLICY "galleries_service_write" ON storage.objects USING (
     bucket_id = 'galleries'
     AND auth.role() = 'service_role'
 );
+
+-- ── Tabla de Reseñas ──────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS reviews (
+    id          BIGSERIAL PRIMARY KEY,
+    tour_id     INTEGER   DEFAULT 0,
+    tour_name   TEXT      DEFAULT '',
+    customer_name TEXT    NOT NULL,
+    rating      INTEGER   NOT NULL DEFAULT 5 CHECK (rating >= 1 AND rating <= 5),
+    comment     TEXT      DEFAULT '',
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+-- RLS para reviews
+ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
+-- Lectura pública (el blog las muestra)
+CREATE POLICY "reviews_select_public" ON reviews
+    FOR SELECT USING (true);
+-- Inserción pública (visitantes pueden dejar reseñas)
+CREATE POLICY "reviews_insert_public" ON reviews
+    FOR INSERT WITH CHECK (true);
+-- Escritura/borrado solo desde el servidor (service_role = admin)
+CREATE POLICY "reviews_all_service" ON reviews
+    USING (auth.role() = 'service_role');
+
+-- ── Tabla de Actividades ──────────────────────────────────────
+CREATE TABLE IF NOT EXISTS activities (
+    id              BIGSERIAL PRIMARY KEY,
+    tour_id         INTEGER   NOT NULL,
+    date_available  DATE      NOT NULL,
+    spots           INTEGER   NOT NULL DEFAULT 10,
+    discount_pct    INTEGER   NOT NULL DEFAULT 0,
+    note            TEXT      DEFAULT '',
+    active          INTEGER   NOT NULL DEFAULT 1,
+    created_at      TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+-- RLS para activities
+ALTER TABLE activities ENABLE ROW LEVEL SECURITY;
+-- Lectura pública
+CREATE POLICY "activities_select_public" ON activities
+    FOR SELECT USING (true);
+-- Escritura/borrado solo desde el servidor
+CREATE POLICY "activities_all_service" ON activities
+    USING (auth.role() = 'service_role');

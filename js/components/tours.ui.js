@@ -163,7 +163,7 @@ const ToursUI = {
     <h3 class="text-xl font-bold text-gray-800 leading-tight mb-2">${tour.title}</h3>
     <p class="text-gray-600 text-sm mb-6 line-clamp-2">${tour.description || ''}</p>
     <div class="mt-auto pt-4 border-t border-gray-100">
-        <button onclick="ReviewModal.open('${tour.title.replace(/'/g, "\\'")}')"
+        <button onclick="ReviewModal.open('${tour.title.replace(/'/g, "\\'")}', ${tour.id})"
             class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 text-sm font-bold rounded-lg transition shadow"
         >
             Dejar Resena
