@@ -42,13 +42,14 @@ export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     if (req.method !== 'GET') return res.status(405).json({ error: 'Método no permitido' });
 
+    const baseUrl = process.env.BASE_URL || 'https://golden-ray-1-galapagos.vercel.app';
     const { code, error } = req.query;
 
     if (error) {
-        return res.redirect(302, `/admin.html?auth_error=${encodeURIComponent(error)}`);
+        return res.redirect(302, `${baseUrl}/admin.html?auth_error=${encodeURIComponent(error)}`);
     }
     if (!code) {
-        return res.redirect(302, '/admin.html?auth_error=no_code');
+        return res.redirect(302, `${baseUrl}/admin.html?auth_error=no_code`);
     }
 
     // ── Variables de entorno ──────────────────────────────────────────────────
@@ -57,12 +58,10 @@ export default async function handler(req, res) {
     const jwtSecret = process.env.JWT_SECRET || process.env.ADMIN_SECRET || 'fallback_secret_change_me';
     const adminEmails = (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
 
-    const baseUrl = process.env.BASE_URL || 'https://golden-ray-1-galapagos.vercel.app';
-
     const redirectUri = `${baseUrl}/api/auth/callback`;
 
     if (!clientId || !clientSecret) {
-        return res.redirect(302, '/admin.html?auth_error=config_missing');
+        return res.redirect(302, `${baseUrl}/admin.html?auth_error=config_missing`);
     }
 
     // ── Intercambiar code por access_token ────────────────────────────────────
@@ -81,11 +80,11 @@ export default async function handler(req, res) {
         });
         tokenData = await tokenRes.json();
     } catch (e) {
-        return res.redirect(302, '/admin.html?auth_error=token_fetch_failed');
+        return res.redirect(302, `${baseUrl}/admin.html?auth_error=token_fetch_failed`);
     }
 
     if (tokenData.error) {
-        return res.redirect(302, `/admin.html?auth_error=${encodeURIComponent(tokenData.error)}`);
+        return res.redirect(302, `${baseUrl}/admin.html?auth_error=${encodeURIComponent(tokenData.error)}`);
     }
 
     // ── Obtener info del usuario ──────────────────────────────────────────────
@@ -96,14 +95,14 @@ export default async function handler(req, res) {
         });
         userInfo = await infoRes.json();
     } catch (e) {
-        return res.redirect(302, '/admin.html?auth_error=userinfo_failed');
+        return res.redirect(302, `${baseUrl}/admin.html?auth_error=userinfo_failed`);
     }
 
     const email = (userInfo.email || '').toLowerCase();
 
     // ── Verificar si el email está autorizado ─────────────────────────────────
     if (!adminEmails.includes(email)) {
-        return res.redirect(302, `/admin.html?auth_error=not_authorized&email=${encodeURIComponent(email)}`);
+        return res.redirect(302, `${baseUrl}/admin.html?auth_error=not_authorized&email=${encodeURIComponent(email)}`);
     }
 
     // ── Generar JWT propio (válido 8 horas) ───────────────────────────────────
@@ -116,5 +115,6 @@ export default async function handler(req, res) {
     }, jwtSecret);
 
     // ── Redirigir al admin con el token en el hash (nunca en query) ───────────
-    return res.redirect(302, `/admin.html#token=${jwt}`);
+    // Usar URL absoluta para que siempre vuelva al dominio de producción
+    return res.redirect(302, `${baseUrl}/admin.html#token=${jwt}`);
 }
