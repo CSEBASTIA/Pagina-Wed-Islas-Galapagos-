@@ -77,9 +77,13 @@ No hace falta configurar nada: la web se conecta al proyecto de Supabase «Islas
 
 ## Sube tu experiencia
 
-La página `/galeria/subir` acepta hasta **5 fotos** por envío. Antes de aceptar un archivo, el navegador comprueba su firma binaria (JPG, PNG o WEBP), que se pueda abrir como imagen, que mida al menos 400 px por lado y que no pese más de 10 MB. Además, pide autorización expresa para publicar las fotos.
+La página `/galeria/subir` acepta hasta **5 fotos** por envío:
 
-El envío todavía no está conectado: `src/services/experiences.js` es el punto de integración con Supabase Storage. Cuando se active, el servidor debe repetir las mismas validaciones y guardar las fotos como pendientes de revisión antes de publicarlas.
+1. **En el navegador** (`src/photoCheck.js`) se comprueba la firma binaria (JPG, PNG o WEBP), que la foto se pueda abrir, que mida al menos 400 px por lado y que el original no pese más de 25 MB. Luego se **optimiza**: lado mayor de 1600 px, JPEG de calidad 0,82 y sin metadatos (se elimina la ubicación GPS). Dos fotos de 12 MB quedan en unos 600 KB.
+2. **En Supabase**, la Edge Function `subir-experiencia` ([`supabase/functions/subir-experiencia`](supabase/functions/subir-experiencia/index.ts)) repite las validaciones (máx. 10 MB, mín. 400 px, formato real), limita a **3 envíos por hora por IP** (guardada como huella SHA-256) y **60 al día**, y guarda las fotos como pendientes en el bucket privado `envios`. Además borra los envíos sin revisar con más de 30 días.
+3. **En el panel**, la sección «Fotos de visitantes» muestra las pendientes. *Aprobar* copia la foto al bucket `galeria`, la agrega a la galería (título, categoría, crédito y opción de carrusel) y borra el original; *Rechazar* la borra.
+
+Para cambiar de almacenamiento más adelante (otro proveedor o un NAS), solo hay que cambiar `src/services/experiences.js` y la función.
 
 ## Gestión
 
@@ -112,7 +116,7 @@ Proyecto de Supabase: **Islas Galapagos** (`lmgecsbrkpfkeifshxot`). El esquema c
 | `envios` | Privado: fotos de visitantes pendientes de revisión. Solo los administradores las ven |
 
 - Los permisos se controlan con Row Level Security: los visitantes solo leen; crear, editar y borrar exige ser administrador (`private.is_admin()`).
-- Las fotos de los visitantes se guardarán desde una Edge Function con la clave de servicio, que repite las validaciones del formulario.
+- Las fotos de los visitantes llegan por la Edge Function `subir-experiencia`, que usa la clave de servicio y repite las validaciones del formulario.
 - Las tablas de la web anterior están en el esquema `legacy`, que no se expone por la API.
 - Para dar acceso a un administrador: crea el usuario en Supabase (**Authentication → Users → Add user**) y agrégalo a la tabla `admins`:
 
@@ -123,7 +127,7 @@ Proyecto de Supabase: **Islas Galapagos** (`lmgecsbrkpfkeifshxot`). El esquema c
 
 ## Pendiente
 
-- Activar el envío de **Sube tu experiencia** (Edge Function) y la revisión de fotos en el panel.
+- Copia de seguridad de las fotos (por ejemplo, en un NAS propio).
 - Reemplazar las fotos de la galería por las definitivas.
 
 ## Licencia
