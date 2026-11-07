@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Brand } from '../components/Layout.jsx';
+import { photoCategories } from '../photos.js';
 import {
-  currentAdmin, deleteDeparture, deleteTour, loadAdminData, onSignedOut, saveDeparture, saveTour, signIn, signOut,
+  approvePhoto, currentAdmin, deleteDeparture, deleteTour, loadAdminData, loadSubmissions, onSignedOut, rejectPhoto,
+  saveDeparture, saveTour, signIn, signOut,
 } from '../services/admin.js';
 import { todayInGalapagos } from '../services/mappers.js';
 import { formatDate } from '../site.js';
@@ -11,6 +13,26 @@ const blankTour = {
 };
 const blankDeparture = { tourId: '', date: '', time: '08:00', spots: 10, note: '' };
 const emptyData = { tours: [], departures: [], imageChoices: [] };
+const formatDateTime = (value) => new Intl.DateTimeFormat('es-EC', {
+  day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: 'Pacific/Galapagos',
+}).format(new Date(value));
+
+function ReviewPhoto({ submission, photo, defaultTitle, busy, onApprove, onReject }) {
+  const [title, setTitle] = useState(defaultTitle);
+  const [category, setCategory] = useState('Vida marina');
+  const [featured, setFeatured] = useState(false);
+  return <div className="review-photo">
+    <a href={photo.url} target="_blank" rel="noopener noreferrer" title="Ver en tamaño completo"><img src={photo.url} alt="Foto enviada por un visitante" /></a>
+    <small>{photo.width}×{photo.height} px · {Math.round(photo.size / 1024)} KB</small>
+    <label>Título en la galería<input maxLength="80" value={title} onChange={(event) => setTitle(event.target.value)} /></label>
+    <label>Categoría<select value={category} onChange={(event) => setCategory(event.target.value)}>{photoCategories.map((item) => <option key={item}>{item}</option>)}</select></label>
+    <label className="checkbox-label"><input type="checkbox" checked={featured} onChange={(event) => setFeatured(event.target.checked)} /> Mostrar también en el carrusel</label>
+    <div className="review-actions">
+      <button type="button" className="button button--dark" disabled={busy || title.trim().length < 2} onClick={() => onApprove(submission, photo, { title, category, featured })}>Aprobar</button>
+      <button type="button" className="plain-button danger" disabled={busy} onClick={() => onReject(submission, photo)}>Rechazar</button>
+    </div>
+  </div>;
+}
 
 export default function ManageSite() {
   const [checking, setChecking] = useState(true);
@@ -23,9 +45,14 @@ export default function ManageSite() {
   const [editingDeparture, setEditingDeparture] = useState('');
   const [message, setMessage] = useState(null);
   const [busy, setBusy] = useState(false);
+  const [submissions, setSubmissions] = useState([]);
   const today = todayInGalapagos();
 
-  const refresh = async () => setData(await loadAdminData());
+  const refresh = async () => {
+    const [adminData, pending] = await Promise.all([loadAdminData(), loadSubmissions()]);
+    setData(adminData);
+    setSubmissions(pending);
+  };
   const notify = (type, text) => setMessage({ type, text });
 
   useEffect(() => {
@@ -33,7 +60,7 @@ export default function ManageSite() {
       .then(async (found) => { setAccount(found); if (found?.isAdmin) await refresh(); })
       .catch((error) => notify('error', error.message))
       .finally(() => setChecking(false));
-    return onSignedOut(() => { setAccount(null); setData(emptyData); });
+    return onSignedOut(() => { setAccount(null); setData(emptyData); setSubmissions([]); });
   }, []);
 
   async function submitLogin(event) {
@@ -95,9 +122,23 @@ export default function ManageSite() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  function approve(submission, photo, review) {
+    act(() => approvePhoto(submission, photo, review), 'Foto aprobada: ya aparece en la galería.');
+  }
+
+  function reject(submission, photo) {
+    if (!window.confirm('¿Rechazar esta foto? Se borrará y no se podrá recuperar.')) return;
+    act(() => rejectPhoto(submission, photo), 'Foto rechazada y borrada.');
+  }
+
+  function rejectAll(submission) {
+    if (!window.confirm(`¿Rechazar las ${submission.photos.length} fotos de este envío? Se borrarán y no se podrán recuperar.`)) return;
+    act(async () => { for (const photo of submission.photos) await rejectPhoto(submission, photo); }, 'Envío rechazado y borrado.');
+  }
+
   async function logout() {
     await signOut();
-    setAccount(null); setData(emptyData); setMessage(null);
+    setAccount(null); setData(emptyData); setSubmissions([]); setMessage(null);
   }
 
   const imageChoices = data.imageChoices.some((choice) => choice.value === tourForm.image)
@@ -176,6 +217,28 @@ export default function ManageSite() {
           </div>)}{data.departures.length === 0 && <p>Todavía no hay salidas publicadas.</p>}</div>
         </section>
       </div>
+      <section className="manage-panel review-panel" aria-labelledby="review-title">
+        <div className="manage-panel__heading">
+          <h2 id="review-title">Fotos de visitantes ({submissions.reduce((sum, item) => sum + item.photos.length, 0)} pendientes)</h2>
+          <p>Las fotos aprobadas pasan a la galería y las rechazadas se borran. Los envíos sin revisar se borran solos a los 30 días.</p>
+        </div>
+        {submissions.length === 0 && <p>No hay fotos pendientes de revisión.</p>}
+        {submissions.map((submission) => {
+          const tourTitle = data.tours.find((tour) => tour.id === submission.tourId)?.title;
+          return <article className="review-item" key={submission.id}>
+            <header>
+              <strong>{submission.name || 'Visitante sin nombre'}</strong>
+              <span>{tourTitle || 'Sin tour indicado'} · {formatDateTime(submission.createdAt)}</span>
+              {submission.comment && <p>«{submission.comment}»</p>}
+            </header>
+            <div className="review-photos">
+              {submission.photos.map((photo) => <ReviewPhoto key={photo.id} submission={submission} photo={photo}
+                defaultTitle={tourTitle || 'Experiencia en Galápagos'} busy={busy} onApprove={approve} onReject={reject} />)}
+            </div>
+            {submission.photos.length > 1 && <button type="button" className="plain-button danger" disabled={busy} onClick={() => rejectAll(submission)}>Rechazar todo el envío</button>}
+          </article>;
+        })}
+      </section>
     </>}
   </main>;
 }

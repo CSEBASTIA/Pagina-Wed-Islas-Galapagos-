@@ -346,6 +346,18 @@ body:has(dialog[open]){overflow:hidden}
 .upload-tips strong{color:#193e42}
 .manage-account{display:flex;align-items:center;gap:14px;font-size:.82rem;color:#5c7770}
 .manage-row--past{opacity:.55}
+.review-panel{max-width:1200px;margin:0 auto 24px}
+.review-item{border-top:1px solid #e2eae4;padding:20px 0}
+.review-item header{display:flex;flex-direction:column;gap:4px;margin-bottom:14px}
+.review-item header span{font-size:.78rem;color:#789086}
+.review-item header p{margin:6px 0 0;font-size:.86rem;color:#4f6965;font-style:italic}
+.review-photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;margin-bottom:12px}
+.review-photo{display:flex;flex-direction:column;gap:10px;border:1px solid #dce7de;border-radius:8px;padding:12px;background:#f8faf8}
+.review-photo img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;background:#dce8e4}
+.review-photo small{font-size:.72rem;color:#789086}
+.review-actions{display:flex;align-items:center;gap:14px}
+.review-actions .button{padding:10px 16px}
+.plain-button.danger{color:#b4483e}
 @keyframes driftOne{to{transform:translate(100px,60px) scale(1.1)}}
 @keyframes driftTwo{to{transform:translate(-90px,-50px) scale(.9)}}
 @keyframes riseIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}

@@ -113,6 +113,92 @@ export async function saveDeparture(form, editingId) {
   if (error) fail(error);
 }
 
+// ---------------------------------------------------------------------------
+// Fotos enviadas por visitantes
+// ---------------------------------------------------------------------------
+const SUBMISSIONS_BUCKET = 'envios';
+const GALLERY_BUCKET = 'galeria';
+
+export async function loadSubmissions() {
+  const { data, error } = await supabase.from('photo_submissions')
+    .select('id,name,tour_id,comment,created_at,submission_photos(id,storage_path,width,height,size_bytes,status)')
+    .eq('status', 'pendiente').order('created_at', { ascending: false });
+  if (error) fail(error);
+  const pending = data.map((item) => ({
+    ...item,
+    photos: (item.submission_photos || []).filter((photo) => photo.status === 'pendiente')
+      .sort((a, b) => a.storage_path.localeCompare(b.storage_path)),
+  }));
+  const paths = pending.flatMap((item) => item.photos.map((photo) => photo.storage_path));
+  const urls = {};
+  if (paths.length) {
+    const signed = await supabase.storage.from(SUBMISSIONS_BUCKET).createSignedUrls(paths, 3600);
+    if (signed.error) fail(signed.error);
+    for (const entry of signed.data) if (entry.signedUrl) urls[entry.path] = entry.signedUrl;
+  }
+  return pending.map((item) => ({
+    id: item.id,
+    name: item.name,
+    tourId: item.tour_id,
+    comment: item.comment,
+    createdAt: item.created_at,
+    photos: item.photos.map((photo) => ({
+      id: photo.id, path: photo.storage_path, url: urls[photo.storage_path] || '',
+      width: photo.width, height: photo.height, size: photo.size_bytes,
+    })),
+  }));
+}
+
+async function markPhoto(id, status) {
+  const { data, error } = await supabase.from('submission_photos').update({ status }).eq('id', id).select('id');
+  if (error) fail(error);
+  requireRows(data, 'No se actualizó la foto: puede que ya se haya revisado o que tu sesión no tenga permisos.');
+}
+
+async function closeIfReviewed(submissionId) {
+  const { data, error } = await supabase.from('submission_photos').select('status').eq('submission_id', submissionId);
+  if (error) fail(error);
+  if (data.some((photo) => photo.status === 'pendiente')) return;
+  const { data: { user } } = await supabase.auth.getUser();
+  const update = await supabase.from('photo_submissions')
+    .update({ status: 'revisado', reviewed_at: new Date().toISOString(), reviewed_by: user?.id ?? null })
+    .eq('id', submissionId);
+  if (update.error) fail(update.error);
+}
+
+export async function approvePhoto(submission, photo, { title, category, featured }) {
+  if (title.trim().length < 2) throw new Error('Escribe un título para la foto.');
+  const destination = `visitantes/${photo.path}`;
+  const copy = await supabase.storage.from(SUBMISSIONS_BUCKET).copy(photo.path, destination, { destinationBucket: GALLERY_BUCKET });
+  if (copy.error) fail(copy.error);
+  const last = await supabase.from('gallery_photos').select('sort_order').order('sort_order', { ascending: false }).limit(1);
+  const insert = await supabase.from('gallery_photos').insert({
+    image: destination,
+    title: title.trim().slice(0, 80),
+    detail: submission.name ? `Foto de ${submission.name}` : 'Foto de un visitante',
+    category,
+    featured,
+    source: 'visitante',
+    credit: submission.name || null,
+    submission_photo_id: photo.id,
+    sort_order: (last.data?.[0]?.sort_order || 0) + 10,
+  });
+  if (insert.error) {
+    await supabase.storage.from(GALLERY_BUCKET).remove([destination]);
+    fail(insert.error);
+  }
+  await markPhoto(photo.id, 'aprobada');
+  await supabase.storage.from(SUBMISSIONS_BUCKET).remove([photo.path]);
+  await closeIfReviewed(submission.id);
+}
+
+export async function rejectPhoto(submission, photo) {
+  const removal = await supabase.storage.from(SUBMISSIONS_BUCKET).remove([photo.path]);
+  if (removal.error) fail(removal.error);
+  await markPhoto(photo.id, 'rechazada');
+  await closeIfReviewed(submission.id);
+}
+
 export async function deleteDeparture(id) {
   const { data, error } = await supabase.from('departures').delete().eq('id', id).select('id');
   if (error) fail(error);
