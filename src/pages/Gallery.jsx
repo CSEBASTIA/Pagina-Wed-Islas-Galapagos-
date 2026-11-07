@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import PhotoCarousel from '../PhotoCarousel.jsx';
 import { PageHero } from '../components/Layout.jsx';
 import { photoCategories, photos } from '../photos.js';
-import { usePageTitle } from '../router.jsx';
+import { Link, usePageTitle } from '../router.jsx';
 import { INSTAGRAM } from '../site.js';
 
 function Lightbox({ items, index, onChange, onClose }) {
@@ -62,6 +62,14 @@ export default function GalleryPage() {
             <img src={photo.src} alt="" loading="lazy" />
             <span className="gallery-item__caption"><strong>{photo.title}</strong><span>{photo.category}</span></span>
           </button>)}
+        </div>
+        <div className="share-cta">
+          <div>
+            <p className="eyebrow">¿VIAJASTE CON NOSOTROS?</p>
+            <h3>Sube tu experiencia aquí</h3>
+            <p>Comparte hasta 5 fotos de tu salida con Golden Ray I. Las revisamos y las sumamos a esta galería.</p>
+          </div>
+          <Link className="button button--dark" to="/galeria/subir">Subir mis fotos <span aria-hidden="true">→</span></Link>
         </div>
       </div>
     </section>

@@ -5,6 +5,7 @@ import DeparturesPage from './pages/Departures.jsx';
 import GalleryPage from './pages/Gallery.jsx';
 import HomePage from './pages/Home.jsx';
 import TermsPage from './pages/Terms.jsx';
+import UploadPhotosPage from './pages/UploadPhotos.jsx';
 import { Link, usePageTitle, useRouter } from './router.jsx';
 import { request } from './site.js';
 
@@ -37,6 +38,7 @@ export default function App() {
     '/': <HomePage site={site} />,
     '/salidas': <DeparturesPage site={site} />,
     '/galeria': <GalleryPage />,
+    '/galeria/subir': <UploadPhotosPage site={site} />,
     '/contacto': <ContactPage />,
     '/terminos': <TermsPage />,
   };

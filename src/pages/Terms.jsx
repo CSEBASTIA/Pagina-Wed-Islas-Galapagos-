@@ -40,6 +40,15 @@ const sections = [
     ],
   },
   {
+    id: 'fotos',
+    title: 'Fotos enviadas por los visitantes',
+    body: [
+      'Desde la página «Sube tu experiencia» puedes enviarnos hasta cinco fotografías por envío. Al enviarlas confirmas que eres su autor o que tienes permiso para compartirlas, y que las personas que aparecen en ellas están de acuerdo. Si aparecen menores de edad, debes contar con la autorización de sus padres o representantes.',
+      'Al enviar tus fotos autorizas, de forma gratuita y no exclusiva, su publicación en este sitio web. Conservas la autoría de tus fotografías. Todas las fotos se revisan antes de publicarse y podemos no publicar las que no correspondan a una salida, tengan baja calidad, muestren conductas que dañen la fauna o el medio ambiente, o resulten inapropiadas.',
+      `Si quieres que retiremos una foto que enviaste, escríbenos a ${EMAIL} y la quitaremos del sitio.`,
+    ],
+  },
+  {
     id: 'terceros',
     title: 'Enlaces y servicios de terceros',
     body: [
@@ -51,6 +60,7 @@ const sections = [
     title: 'Privacidad',
     body: [
       'Este sitio no tiene formularios de registro ni utiliza cookies de seguimiento o publicidad para los visitantes. La información que compartas al escribirnos por WhatsApp, correo o redes sociales se utiliza únicamente para responder tu consulta.',
+      'En la página «Sube tu experiencia» solo pedimos tus fotos y, de forma opcional, tu nombre, el tour y un comentario. Usamos esos datos únicamente para revisar las fotos y publicarlas con el crédito correspondiente.',
       'Las tipografías del sitio se cargan desde Google Fonts, por lo que tu navegador se conecta a servidores de Google al visitar la página.',
     ],
   },
