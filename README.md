@@ -20,29 +20,27 @@ Sitio informativo de **Golden Ray I**, lancha y equipo local de Puerto Villamil,
 ## Tecnología
 
 - **Frontend:** React 19 + Vite 6, con navegación por páginas sin dependencias extra (`src/router.jsx`).
-- **API:** Node.js + Express (`server/`), con datos en `data/site.json`.
+- **Datos y acceso:** Supabase (Postgres, Auth y Storage) mediante `@supabase/supabase-js`. No hay servidor propio: la web es estática y se publica en Vercel.
 - **Estilos:** CSS propio (`src/styles.css`), sin librerías de componentes ni de iconos.
 
 ## Estructura
 
 ```
 ├── assets/images/          Fotos del sitio (se sirven en /images)
-├── server/
-│   ├── index.js            API Express y servidor de producción
-│   ├── store.js            Lectura y escritura de data/site.json
-│   ├── seed.js             Tours iniciales e imágenes permitidas
-│   └── index.test.js       Pruebas de la API
+├── supabase/migrations/    Esquema de la base de datos (SQL)
+├── vercel.json             Compilación y rutas en Vercel
 └── src/
     ├── main.jsx            Punto de entrada (sitio público o /gestion)
     ├── App.jsx             Rutas y carga de datos
     ├── router.jsx          Navegación, enlaces y títulos de página
     ├── site.js             Contactos, licencia y utilidades
-    ├── photos.js           Fotos de la galería y del carrusel
+    ├── lib/supabase.js     Cliente de Supabase y URL de las fotos
+    ├── photos.js           Fotos de respaldo de la galería (las reales están en Supabase)
     ├── photoCheck.js       Validación de fotos subidas por visitantes
     ├── PhotoCarousel.jsx   Carrusel «Un vistazo a Galápagos»
     ├── components/         Cabecera, pie, cabecera de páginas e Isla Isabela
     ├── pages/              Inicio, Salidas, Galería, Subir fotos, Contacto, Términos y Gestión
-    ├── services/           Integraciones (envío de fotos)
+    ├── services/           Datos públicos, panel, envío de fotos y conversiones (con pruebas)
     └── styles.css
 ```
 
@@ -52,28 +50,26 @@ Requiere Node.js 20 o posterior.
 
 ```bash
 npm install
-cp .env.example .env
 npm run dev
 ```
 
-En PowerShell, copia el ejemplo con `Copy-Item .env.example .env` y define `ADMIN_SECRET` con una clave privada de al menos 16 caracteres.
+No hace falta configurar nada: la web se conecta al proyecto de Supabase «Islas Galapagos» con su clave publicable. Para usar otro proyecto, copia `.env.example` a `.env` y completa las variables.
 
 - Sitio: http://localhost:5173
-- Gestión privada: http://localhost:5173/gestion
-- API: http://localhost:3001/api/health
+- Gestión privada: http://localhost:5173/gestion (cuenta de administrador de Supabase)
 
 | Comando | Uso |
 | --- | --- |
-| `npm run dev` | API y Vite a la vez, con recarga automática |
-| `npm test` | Pruebas de la API |
+| `npm run dev` | Servidor de desarrollo con recarga automática |
+| `npm test` | Pruebas de la conversión de datos |
 | `npm run build` | Compila el sitio en `dist/` |
-| `npm start` | Servidor de producción (API + `dist/`) |
+| `npm start` | Sirve la versión compilada en http://localhost:3001 |
 
 ## Contenido editable
 
 - **Contactos, licencia y mapa:** constantes en `src/site.js` (`WHATSAPP`, `EMAIL`, `INSTAGRAM`, `FACEBOOK`, `LICENSE_HOLDER`, `LICENSE_URL`). Al completar `LICENSE_URL`, «Zallox» se convierte en un enlace en el pie de página y en los términos.
 - **Icono y logo:** la orca de `assets/images/logo-orca.png` se usa como icono de la pestaña (`assets/icons/`) y como logo junto a «GOLDEN RAY I» (`assets/images/orca-marca.png`).
-- **Galería y carrusel:** `src/photos.js`. Las fotos marcadas con `featured: true` también aparecen en el carrusel.
+- **Galería y carrusel:** tabla `gallery_photos` de Supabase. Las fotos con `featured` también aparecen en el carrusel. `src/photos.js` solo se usa mientras carga o si Supabase no responde.
 - **Isla Isabela:** `src/components/IsabelaSection.jsx`.
 - **Aviso «Cuidemos Galápagos» de cada tour:** función `careTip` en `src/pages/Home.jsx`; elige el consejo según las actividades del tour.
 - **Tours y salidas:** desde `/gestion`. Las salidas pasadas se ocultan solas.
@@ -90,20 +86,7 @@ El envío todavía no está conectado: `src/services/experiences.js` es el punto
 
 ## Producción
 
-```bash
-npm ci
-npm run build
-npm start
-```
-
-El servidor sirve `dist/` y la API en el puerto `PORT` (3001 por defecto). Necesita un hosting Node.js con almacenamiento persistente, porque los datos se guardan en `data/site.json`. En un hosting estático o serverless como Vercel se publican las páginas, pero los tours y las salidas no cargan hasta que se conecten con Supabase.
-
-| Variable | Uso |
-| --- | --- |
-| `ADMIN_SECRET` | Clave de gestión, mínimo 16 caracteres |
-| `PORT` | Puerto HTTP, por defecto 3001 |
-| `HOST` | Interfaz HTTP: `127.0.0.1` en desarrollo y `0.0.0.0` con `NODE_ENV=production` |
-| `DATA_FILE` | Ruta opcional del archivo de datos |
+La web se publica en **Vercel** desde la rama `main`: `vercel.json` compila con `npm run build`, sirve `dist/` y redirige todas las rutas a `index.html`, así `/salidas`, `/galeria` o `/gestion` funcionan al abrirlas directamente. Los datos vienen de Supabase, por lo que no hace falta ningún servidor ni variable de entorno.
 
 ## Base de datos (Supabase)
 

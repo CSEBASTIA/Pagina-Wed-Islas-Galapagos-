@@ -18,18 +18,3 @@ export function formatDate(value, options = {}) {
     day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC', ...options,
   }).format(new Date(`${value}T12:00:00Z`));
 }
-
-export async function request(url, options = {}) {
-  const response = await fetch(url, {
-    credentials: 'same-origin',
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Requested-With': 'GoldenRayAdmin',
-      ...options.headers,
-    },
-  });
-  const data = await response.json();
-  if (!response.ok) throw new Error(data.error || 'No se pudo completar la solicitud.');
-  return data;
-}
