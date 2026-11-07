@@ -72,6 +72,7 @@ En PowerShell, copia el ejemplo con `Copy-Item .env.example .env` y define `ADMI
 ## Contenido editable
 
 - **Contactos, licencia y mapa:** constantes en `src/site.js` (`WHATSAPP`, `EMAIL`, `INSTAGRAM`, `FACEBOOK`, `LICENSE_HOLDER`, `LICENSE_URL`). Al completar `LICENSE_URL`, «Zallox» se convierte en un enlace en el pie de página y en los términos.
+- **Icono y logo:** la orca de `assets/images/logo-orca.png` se usa como icono de la pestaña (`assets/icons/`) y como logo junto a «GOLDEN RAY I» (`assets/images/orca-marca.png`).
 - **Galería y carrusel:** `src/photos.js`. Las fotos marcadas con `featured: true` también aparecen en el carrusel.
 - **Isla Isabela:** `src/components/IsabelaSection.jsx`.
 - **Aviso «Cuidemos Galápagos» de cada tour:** función `careTip` en `src/pages/Home.jsx`; elige el consejo según las actividades del tour.
@@ -109,7 +110,6 @@ El servidor sirve `dist/` y la API en el puerto `PORT` (3001 por defecto). Neces
 - Publicar y actualizar **Próximas salidas** desde Supabase.
 - Activar el envío de **Sube tu experiencia** y la revisión de fotos.
 - Reemplazar las fotos de la galería por las definitivas.
-- Agregar el logo de Golden Ray I.
 
 ## Licencia
 

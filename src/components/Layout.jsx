@@ -17,8 +17,11 @@ const navLinks = [
 
 export function Brand() {
   return <Link className="brand" to="/" aria-label="Golden Ray I, inicio">
-    <span className="brand__name">GOLDEN RAY <span>I</span></span>
-    <span className="brand__place">ISABELA · GALÁPAGOS</span>
+    <span className="brand__mark"><img src="/images/orca-marca.png" alt="" width="175" height="120" /></span>
+    <span className="brand__text">
+      <span className="brand__name">GOLDEN RAY <span>I</span></span>
+      <span className="brand__place">ISABELA · GALÁPAGOS</span>
+    </span>
   </Link>;
 }
 
