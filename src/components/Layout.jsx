@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useRouter } from '../router.jsx';
-import { EMAIL, FACEBOOK, INSTAGRAM, whatsappUrl } from '../site.js';
+import { EMAIL, FACEBOOK, INSTAGRAM, LICENSE_HOLDER, LICENSE_URL, whatsappUrl } from '../site.js';
 
+export function LicenseLink() {
+  if (!LICENSE_URL) return <>{LICENSE_HOLDER}</>;
+  return <a className="license-link" href={LICENSE_URL} target="_blank" rel="noopener">{LICENSE_HOLDER}</a>;
+}
 
 const navLinks = [
   { to: '/#destinos', label: 'Tours' },
@@ -51,7 +55,7 @@ export function SiteFooter() {
         <a href={FACEBOOK} target="_blank" rel="noopener noreferrer">Facebook</a>
       </div>
       <p className="footer__location">Puerto Villamil · Isla Isabela · Galápagos</p>
-      <p className="footer__copyright">© {new Date().getFullYear()} Golden Ray I. Todos los derechos reservados.</p>
+      <p className="footer__copyright">© {new Date().getFullYear()} Golden Ray I · Sitio web bajo licencia de <LicenseLink /> · <Link to="/terminos">Términos y condiciones</Link></p>
     </div>
   </footer>;
 }

@@ -4,6 +4,9 @@ export const EMAIL = 'goldenraytuneles@gmail.com';
 export const INSTAGRAM = 'https://www.instagram.com/goldenraytuneles1/';
 export const INSTAGRAM_HANDLE = '@goldenraytuneles1';
 export const FACEBOOK = 'https://www.facebook.com/profile.php?id=61554388881353';
+export const LICENSE_HOLDER = 'Zallox';
+// Página web de Zallox. Mientras esté vacía, "Zallox" se muestra como texto sin enlace.
+export const LICENSE_URL = '';
 export const MAPS = 'https://www.google.com/maps/search/?api=1&query=Puerto%20Villamil%2C%20Isabela%2C%20Gal%C3%A1pagos';
 
 export function whatsappUrl(message) {
