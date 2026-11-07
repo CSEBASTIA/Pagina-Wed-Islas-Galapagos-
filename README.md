@@ -15,7 +15,7 @@ Sitio informativo de **Golden Ray I**, lancha y equipo local de Puerto Villamil,
 | `/galeria/subir` | «Sube tu experiencia»: hasta 5 fotos por envío, validadas en el navegador |
 | `/contacto` | WhatsApp, correo, Instagram, Facebook, ubicación y preguntas frecuentes |
 | `/terminos` | Términos y condiciones del sitio web y su información |
-| `/gestion` | Panel privado para tours y salidas (no aparece en el menú) |
+| *(ruta secreta)* | Panel privado para tours y salidas; ver «Gestión» |
 
 ## Tecnología
 
@@ -30,7 +30,8 @@ Sitio informativo de **Golden Ray I**, lancha y equipo local de Puerto Villamil,
 ├── supabase/migrations/    Esquema de la base de datos (SQL)
 ├── vercel.json             Compilación y rutas en Vercel
 └── src/
-    ├── main.jsx            Punto de entrada (sitio público o /gestion)
+    ├── main.jsx            Punto de entrada (sitio público o panel privado)
+    ├── adminRoute.js       Huella SHA-256 de la ruta secreta del panel
     ├── App.jsx             Rutas y carga de datos
     ├── router.jsx          Navegación, enlaces y títulos de página
     ├── site.js             Contactos, licencia y utilidades
@@ -56,7 +57,7 @@ npm run dev
 No hace falta configurar nada: la web se conecta al proyecto de Supabase «Islas Galapagos» con su clave publicable. Para usar otro proyecto, copia `.env.example` a `.env` y completa las variables.
 
 - Sitio: http://localhost:5173
-- Gestión privada: http://localhost:5173/gestion (cuenta de administrador de Supabase)
+- Panel privado: dirección secreta guardada en tu `.env` (cuenta de administrador de Supabase)
 
 | Comando | Uso |
 | --- | --- |
@@ -72,7 +73,7 @@ No hace falta configurar nada: la web se conecta al proyecto de Supabase «Islas
 - **Galería y carrusel:** tabla `gallery_photos` de Supabase. Las fotos con `featured` también aparecen en el carrusel. `src/photos.js` solo se usa mientras carga o si Supabase no responde.
 - **Isla Isabela:** `src/components/IsabelaSection.jsx`.
 - **Aviso «Cuidemos Galápagos» de cada tour:** función `careTip` en `src/pages/Home.jsx`; elige el consejo según las actividades del tour.
-- **Tours y salidas:** desde `/gestion`. Las salidas pasadas se ocultan solas.
+- **Tours y salidas:** desde el panel privado. Las salidas pasadas se ocultan solas.
 
 ## Sube tu experiencia
 
@@ -82,11 +83,15 @@ El envío todavía no está conectado: `src/services/experiences.js` es el punto
 
 ## Gestión
 
-`/gestion` permite crear, editar, ocultar y eliminar tours y salidas. Se entra con una cuenta de **Supabase Auth** (correo y contraseña) que esté registrada en la tabla `admins`; una cuenta que no esté en esa tabla ve «Cuenta sin acceso». Los cambios se guardan directamente en Supabase y la base de datos rechaza cualquier escritura que no venga de un administrador. Los identificadores de los tours nuevos se generan a partir del título (por ejemplo, `los-tuneles`).
+El panel privado permite crear, editar, ocultar y eliminar tours y salidas.
+
+**Dirección oculta:** el panel no tiene una ruta pública. En el código solo está la huella SHA-256 de su dirección (`src/adminRoute.js`), así que no se puede deducir leyendo el repositorio ni inspeccionando la web; la dirección real está en el `.env` local. El código del panel se descarga aparte, con nombre aleatorio, solo al entrar por esa ruta, y la página lleva `noindex` y `no-referrer`. Para cambiar la dirección, calcula la huella de la nueva ruta con el comando que indica `src/adminRoute.js`.
+
+**Acceso:** Se entra con una cuenta de **Supabase Auth** (correo y contraseña) que esté registrada en la tabla `admins`; una cuenta que no esté en esa tabla ve «Cuenta sin acceso». Los cambios se guardan directamente en Supabase y la base de datos rechaza cualquier escritura que no venga de un administrador. Los identificadores de los tours nuevos se generan a partir del título (por ejemplo, `los-tuneles`).
 
 ## Producción
 
-La web se publica en **Vercel** desde la rama `main`: `vercel.json` compila con `npm run build`, sirve `dist/` y redirige todas las rutas a `index.html`, así `/salidas`, `/galeria` o `/gestion` funcionan al abrirlas directamente. Los datos vienen de Supabase, por lo que no hace falta ningún servidor ni variable de entorno.
+La web se publica en **Vercel** desde la rama `main`: `vercel.json` compila con `npm run build`, sirve `dist/` y redirige todas las rutas a `index.html`, así `/salidas`, `/galeria` o el panel funcionan al abrirlos directamente. Los datos vienen de Supabase, por lo que no hace falta ningún servidor ni variable de entorno.
 
 ## Base de datos (Supabase)
 
@@ -118,7 +123,6 @@ Proyecto de Supabase: **Islas Galapagos** (`lmgecsbrkpfkeifshxot`). El esquema c
 
 ## Pendiente
 
-- Conectar la web y el panel `/gestion` a Supabase (tours, salidas y galería).
 - Activar el envío de **Sube tu experiencia** (Edge Function) y la revisión de fotos en el panel.
 - Reemplazar las fotos de la galería por las definitivas.
 
