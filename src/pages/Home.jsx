@@ -1,6 +1,21 @@
 import React from 'react';
+import IsabelaSection from '../components/IsabelaSection.jsx';
 import { Link, usePageTitle } from '../router.jsx';
 import { formatDate, whatsappUrl } from '../site.js';
+
+function careTip(tour) {
+  const text = `${tour.title} ${(tour.highlights || []).join(' ')}`.toLowerCase();
+  if (/snorkel|marin|buceo/.test(text)) {
+    return 'En el agua mantén al menos 2 metros de distancia de tortugas, rayas, tiburones y lobos marinos. No los toques, no los persigas y no te lleves nada del mar.';
+  }
+  if (/senderismo|volc|caminata/.test(text)) {
+    return 'Camina solo por los senderos señalizados, mantén 2 metros de distancia de la fauna y no te lleves rocas, arena ni plantas.';
+  }
+  if (/aves|fotograf/.test(text)) {
+    return 'Observa las aves a 2 metros de distancia y fotografíalas sin flash, sin molestar sus nidos ni su descanso.';
+  }
+  return 'Mantén 2 metros de distancia de los animales, no los alimentes y llévate todos tus residuos.';
+}
 
 function TourCard({ tour, index }) {
   const next = tour.departures?.[0];
@@ -16,6 +31,10 @@ function TourCard({ tour, index }) {
         {(tour.highlights || []).map((highlight) => <span key={highlight}>{highlight}</span>)}
         {tour.difficulty && tour.difficulty !== 'A consultar' && <span>Dificultad {tour.difficulty.toLowerCase()}</span>}
       </div>
+      <aside className="tour-card__care" aria-label="Cuidado del medio ambiente">
+        <strong>Cuidemos Galápagos</strong>
+        <span>{careTip(tour)}</span>
+      </aside>
       <div className="tour-card__foot">
         {next
           ? <Link className="tour-card__date" to="/salidas">Próxima salida: {formatDate(next.date)}</Link>
@@ -85,6 +104,8 @@ export default function HomePage({ site }) {
         </div>
       </div>
     </section>
+
+    <IsabelaSection />
 
     <section className="shortcuts-section section" aria-labelledby="shortcuts-title">
       <div className="container">
