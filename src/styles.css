@@ -300,7 +300,7 @@ body:has(dialog[open]){overflow:hidden}
 .about-section+.isabela-section{padding-top:0}
 .isabela__intro{grid-template-columns:1fr 1fr}
 .isabela__intro>.isabela__photo{order:2}
-.license-link{text-decoration:underline;text-underline-offset:3px;font-weight:700;color:inherit}
+.license-link{text-decoration:underline;color:inherit}
 .page-hero .license-link:hover,.footer .license-link:hover{color:#fff}
 .terms__body .license-link:hover{color:#1e8275}
 .share-cta{margin-top:44px;display:flex;align-items:center;justify-content:space-between;gap:30px;background:#fff;border:1px solid #dae6e0;border-left:4px solid #2a8774;border-radius:10px;padding:30px 34px}

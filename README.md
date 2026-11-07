@@ -1,6 +1,6 @@
 # Golden Ray I · Tours en Galápagos
 
-> **Sitio web creado y publicado bajo la licencia de Zallox.**
+> **Sitio web creado y publicado bajo la licencia de [Zallox](https://zallox.dev/).**
 > Su diseño, código, estructura, textos y organización de contenidos son propiedad de Zallox y se usan bajo su licencia. No se permite copiarlo, redistribuirlo ni usarlo con fines comerciales sin autorización escrita de Zallox.
 
 Sitio informativo de **Golden Ray I**, lancha y equipo local de Puerto Villamil, Isla Isabela (Galápagos). Presenta los tours, las próximas salidas, una galería de fotos, la información de contacto y una página para que los pasajeros compartan sus fotos. Los precios y las reservas se coordinan directamente con el negocio por WhatsApp; el sitio no tiene pagos, cuentas de cliente ni reservas automáticas.
@@ -113,7 +113,7 @@ El servidor sirve `dist/` y la API en el puerto `PORT` (3001 por defecto). Neces
 
 ## Licencia
 
-Este sitio web fue **creado y se publica bajo la licencia de Zallox**. El diseño, el código, la estructura, los textos y la organización de los contenidos están protegidos por esa licencia; cualquier copia, redistribución, modificación o uso comercial requiere autorización previa y por escrito de Zallox.
+Este sitio web fue **creado y se publica bajo la licencia de [Zallox](https://zallox.dev/)**. El diseño, el código, la estructura, los textos y la organización de los contenidos están protegidos por esa licencia; cualquier copia, redistribución, modificación o uso comercial requiere autorización previa y por escrito de Zallox.
 
 Las fotografías, el nombre comercial Golden Ray I y sus datos de contacto pertenecen a sus respectivos titulares y se muestran con su autorización. Las condiciones de uso del sitio están en [`/terminos`](src/pages/Terms.jsx).
 
