@@ -1,6 +1,8 @@
 export const MAX_PHOTOS = 5;
-export const MAX_MB = 10;
+export const MAX_MB = 25; // tamaño máximo de la foto original; se envía ya optimizada
 export const MIN_SIDE = 400;
+export const MAX_SIDE = 1600; // lado mayor tras optimizar
+export const JPEG_QUALITY = 0.82;
 export const ACCEPTED_TYPES = 'image/jpeg,image/png,image/webp';
 
 // Firmas binarias de cada formato: así se detecta que el archivo es realmente
@@ -28,4 +30,27 @@ export async function checkPhoto(file) {
   } catch {
     return { error: `${file.name}: no se pudo abrir como imagen.` };
   }
+}
+
+// Reduce la foto (lado mayor de 1600 px, sin bajar de 400 px el lado menor) y la
+// convierte a JPEG. Al dibujarla de nuevo se descartan los metadatos, incluida la
+// ubicación GPS que guardan muchos teléfonos.
+export async function optimizePhoto(file) {
+  const bitmap = await createImageBitmap(file);
+  const { width, height } = bitmap;
+  const scale = Math.min(1, Math.max(MAX_SIDE / Math.max(width, height), MIN_SIDE / Math.min(width, height)));
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.round(width * scale);
+  canvas.height = Math.round(height * scale);
+  const context = canvas.getContext('2d');
+  context.fillStyle = '#ffffff';
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.imageSmoothingQuality = 'high';
+  context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  bitmap.close();
+  const blob = await new Promise((resolve, reject) => {
+    canvas.toBlob((result) => (result ? resolve(result) : reject(new Error(`${file.name}: no se pudo optimizar.`))), 'image/jpeg', JPEG_QUALITY);
+  });
+  const name = `${file.name.replace(/\.[^.]+$/, '') || 'foto'}.jpg`;
+  return new File([blob], name, { type: 'image/jpeg', lastModified: file.lastModified });
 }

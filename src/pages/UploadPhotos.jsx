@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { PageHero } from '../components/Layout.jsx';
-import { ACCEPTED_TYPES, MAX_MB, MAX_PHOTOS, checkPhoto } from '../photoCheck.js';
+import { ACCEPTED_TYPES, MAX_MB, MAX_PHOTOS, checkPhoto, optimizePhoto } from '../photoCheck.js';
 import { Link, usePageTitle } from '../router.jsx';
-import { UploadsNotReadyError, submitExperience } from '../services/experiences.js';
+import { submitExperience } from '../services/experiences.js';
 import { whatsappUrl } from '../site.js';
 
 const blankForm = { name: '', tour: '', comment: '', consent: false };
 const fileKey = (file) => `${file.name}-${file.size}-${file.lastModified}`;
+const formatSize = (bytes) => (bytes < 1048576 ? `${Math.round(bytes / 1024)} KB` : `${(bytes / 1048576).toFixed(1).replace('.', ',')} MB`);
 
 export default function UploadPhotosPage({ site }) {
   usePageTitle('Sube tu experiencia');
@@ -41,9 +42,11 @@ export default function UploadPhotosPage({ site }) {
       }
       const result = await checkPhoto(file);
       if (result.error) { issues.push(result.error); continue; }
+      let optimized;
+      try { optimized = await optimizePhoto(file); } catch { issues.push(`${file.name}: no se pudo preparar la foto.`); continue; }
       known.add(fileKey(file));
       nextId.current += 1;
-      accepted.push({ id: nextId.current, key: fileKey(file), file, url: URL.createObjectURL(file) });
+      accepted.push({ id: nextId.current, key: fileKey(file), name: file.name, originalSize: file.size, file: optimized, url: URL.createObjectURL(optimized) });
     }
     setPhotos((list) => [...list, ...accepted]);
     setProblems(issues);
@@ -78,7 +81,7 @@ export default function UploadPhotosPage({ site }) {
       setForm(blankForm);
       setStatus({ type: 'success', text: '¡Gracias! Recibimos tus fotos. Las revisaremos antes de publicarlas en la galería.' });
     } catch (error) {
-      setStatus({ type: 'error', text: error.message, whatsapp: error instanceof UploadsNotReadyError });
+      setStatus({ type: 'error', text: error.message, whatsapp: true });
     } finally {
       setSending(false);
     }
@@ -102,15 +105,16 @@ export default function UploadPhotosPage({ site }) {
             <small>JPG, PNG o WEBP · máximo {MAX_MB} MB cada una · {count}/{MAX_PHOTOS}</small>
           </label>
 
-          {checking && <p className="upload-note" role="status">Revisando fotos…</p>}
+          {checking && <p className="upload-note" role="status">Revisando y optimizando fotos…</p>}
           {problems.length > 0 && <ul className="upload-problems" role="alert">{problems.map((problem) => <li key={problem}>{problem}</li>)}</ul>}
 
           {count > 0 && <ul className="upload-previews" aria-label="Fotos elegidas">
             {photos.map((photo, index) => <li key={photo.id}>
-              <img src={photo.url} alt={`Foto ${index + 1}: ${photo.file.name}`} />
-              <button type="button" onClick={() => removePhoto(photo.id)} aria-label={`Quitar ${photo.file.name}`}>✕</button>
+              <img src={photo.url} alt={`Foto ${index + 1}: ${photo.name}`} />
+              <button type="button" onClick={() => removePhoto(photo.id)} aria-label={`Quitar ${photo.name}`}>✕</button>
             </li>)}
           </ul>}
+          {count > 0 && <p className="upload-note">Listas para enviar: {formatSize(photos.reduce((sum, photo) => sum + photo.file.size, 0))} en total (originales: {formatSize(photos.reduce((sum, photo) => sum + photo.originalSize, 0))}).</p>}
 
           <div className="upload-fields">
             <label>Tu nombre <span>(opcional, para darte crédito)</span>
@@ -119,7 +123,7 @@ export default function UploadPhotosPage({ site }) {
             <label>Tour en el que participaste <span>(opcional)</span>
               <select value={form.tour} onChange={(event) => setForm({ ...form, tour: event.target.value })}>
                 <option value="">Selecciona un tour</option>
-                {site.tours.map((tour) => <option key={tour.id} value={tour.title}>{tour.title}</option>)}
+                {site.tours.map((tour) => <option key={tour.id} value={tour.id}>{tour.title}</option>)}
               </select>
             </label>
             <label className="upload-fields__wide">Cuéntanos tu experiencia <span>(opcional)</span>
@@ -138,7 +142,7 @@ export default function UploadPhotosPage({ site }) {
 
           {status && <p className={`form-message ${status.type === 'error' ? 'form-message--error' : ''}`} role={status.type === 'error' ? 'alert' : 'status'}>
             {status.text}
-            {status.whatsapp && <> <a href={whatsappUrl('Hola, quiero compartir fotos de mi salida con Golden Ray I.')} target="_blank" rel="noopener noreferrer">Enviar por WhatsApp</a></>}
+            {status.whatsapp && <> También puedes <a href={whatsappUrl('Hola, quiero compartir fotos de mi salida con Golden Ray I.')} target="_blank" rel="noopener noreferrer">enviarlas por WhatsApp</a>.</>}
           </p>}
         </form>
 
@@ -146,6 +150,7 @@ export default function UploadPhotosPage({ site }) {
           <h2>Antes de enviar</h2>
           <ul>
             <li><strong>Hasta {MAX_PHOTOS} fotos</strong> por envío, en JPG, PNG o WEBP y de máximo {MAX_MB} MB.</li>
+            <li><strong>Optimización automática:</strong> reducimos el tamaño de las fotos y quitamos datos ocultos como la ubicación GPS antes de enviarlas.</li>
             <li><strong>Solo fotografías:</strong> el formulario rechaza archivos que no sean imágenes o que sean demasiado pequeños.</li>
             <li><strong>Revisión previa:</strong> publicamos las fotos después de revisarlas; algunas pueden no publicarse.</li>
             <li><strong>Respeta la fauna:</strong> preferimos fotos tomadas a una distancia segura de los animales.</li>

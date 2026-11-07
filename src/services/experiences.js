@@ -1,15 +1,25 @@
-// Punto de integración para "Sube tu experiencia".
-// Aquí se conectará el envío de fotos al almacenamiento (Supabase Storage).
-// El servidor también deberá validar tipo, tamaño y cantidad de fotos, y
-// guardarlas como pendientes de revisión antes de publicarlas en la galería.
-export const UPLOADS_ENABLED = false;
+import { SUPABASE_KEY, SUPABASE_URL } from '../lib/supabase.js';
 
-export class UploadsNotReadyError extends Error {}
+// Envía las fotos a la Edge Function "subir-experiencia" de Supabase, que las
+// valida de nuevo y las guarda como pendientes de revisión. Para cambiar de
+// almacenamiento más adelante (otro proveedor o un NAS) basta con cambiar esta función.
+const ENDPOINT = `${SUPABASE_URL}/functions/v1/subir-experiencia`;
 
 export async function submitExperience({ files, name, tour, comment }) {
-  if (!UPLOADS_ENABLED) {
-    throw new UploadsNotReadyError('El envío de fotos todavía no está activo. Mientras tanto, puedes enviarnos tus fotos por WhatsApp.');
+  const form = new FormData();
+  files.forEach((file) => form.append('fotos', file, file.name));
+  form.append('name', name);
+  form.append('tour', tour);
+  form.append('comment', comment);
+  form.append('consent', 'true');
+
+  let response;
+  try {
+    response = await fetch(ENDPOINT, { method: 'POST', headers: { apikey: SUPABASE_KEY }, body: form });
+  } catch {
+    throw new Error('No hay conexión con el servidor. Revisa tu internet e inténtalo de nuevo.');
   }
-  void files; void name; void tour; void comment;
-  throw new Error('Configura el envío de fotos en src/services/experiences.js.');
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || 'No se pudieron enviar las fotos. Inténtalo de nuevo.');
+  return data;
 }
