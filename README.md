@@ -105,10 +105,38 @@ El servidor sirve `dist/` y la API en el puerto `PORT` (3001 por defecto). Neces
 | `HOST` | Interfaz HTTP: `127.0.0.1` en desarrollo y `0.0.0.0` con `NODE_ENV=production` |
 | `DATA_FILE` | Ruta opcional del archivo de datos |
 
+## Base de datos (Supabase)
+
+Proyecto de Supabase: **Islas Galapagos** (`lmgecsbrkpfkeifshxot`). El esquema completo está en [`supabase/migrations/`](supabase/migrations), en el orden en que se aplicó.
+
+| Tabla | Contenido | Acceso público |
+| --- | --- | --- |
+| `tours` | Tours, con foto, dificultad, actividades, visibilidad y orden | Solo los visibles |
+| `departures` | Salidas: tour, fecha, hora, cupos y nota. No se repite un mismo tour, fecha y hora | Solo las futuras de tours visibles |
+| `gallery_photos` | Fotos de la galería; `featured` = también en el carrusel | Solo las publicadas |
+| `photo_submissions` | Envíos de «Sube tu experiencia» (nombre, tour, comentario, autorización) | Ninguno |
+| `submission_photos` | Fotos de cada envío (máximo 5, mínimo 400 px, hasta 10 MB) con estado pendiente, aprobada o rechazada | Ninguno |
+| `admins` | Usuarios de Supabase Auth que pueden usar el panel | Ninguno |
+
+| Bucket | Uso |
+| --- | --- |
+| `galeria` | Público: fotos que se muestran en la web. Solo los administradores suben o borran |
+| `envios` | Privado: fotos de visitantes pendientes de revisión. Solo los administradores las ven |
+
+- Los permisos se controlan con Row Level Security: los visitantes solo leen; crear, editar y borrar exige ser administrador (`private.is_admin()`).
+- Las fotos de los visitantes se guardarán desde una Edge Function con la clave de servicio, que repite las validaciones del formulario.
+- Las tablas de la web anterior están en el esquema `legacy`, que no se expone por la API.
+- Para dar acceso a un administrador: crea el usuario en Supabase (**Authentication → Users → Add user**) y agrégalo a la tabla `admins`:
+
+  ```sql
+  insert into public.admins (user_id, name)
+  select id, 'Nombre' from auth.users where email = 'correo@ejemplo.com';
+  ```
+
 ## Pendiente
 
-- Publicar y actualizar **Próximas salidas** desde Supabase.
-- Activar el envío de **Sube tu experiencia** y la revisión de fotos.
+- Conectar la web y el panel `/gestion` a Supabase (tours, salidas y galería).
+- Activar el envío de **Sube tu experiencia** (Edge Function) y la revisión de fotos en el panel.
 - Reemplazar las fotos de la galería por las definitivas.
 
 ## Licencia
