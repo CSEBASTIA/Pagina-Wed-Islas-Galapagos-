@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PhotoCarousel from '../PhotoCarousel.jsx';
 import { PageHero } from '../components/Layout.jsx';
-import { photoCategories, photos } from '../photos.js';
+import { photoCategories } from '../photos.js';
 import { Link, usePageTitle } from '../router.jsx';
 import { INSTAGRAM } from '../site.js';
 
@@ -37,18 +37,19 @@ function Lightbox({ items, index, onChange, onClose }) {
   </dialog>;
 }
 
-export default function GalleryPage() {
+export default function GalleryPage({ photos }) {
   usePageTitle('Galería');
   const [category, setCategory] = useState('');
   const [open, setOpen] = useState(-1);
   const visible = category ? photos.filter((photo) => photo.category === category) : photos;
+  const featured = photos.filter((photo) => photo.featured);
   const chooseCategory = (value) => { setOpen(-1); setCategory(value); };
 
   return <>
     <PageHero eyebrow="POSTALES DE NUESTRAS ISLAS" title="Galería" image="/images/GALERIA7.jpg"
       lead="Imágenes de nuestras salidas, la vida marina y los paisajes que nos inspiran." />
 
-    <PhotoCarousel />
+    {featured.length > 0 && <PhotoCarousel key={featured.map((photo) => photo.src).join('|')} photos={featured} />}
 
     <section className="gallery-section section" aria-labelledby="gallery-title">
       <div className="container">

@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { photos as allPhotos } from './photos.js';
 import { INSTAGRAM } from './site.js';
 
-const photos = allPhotos.filter((photo) => photo.featured);
-const slides = [photos.at(-1), ...photos, photos[0]];
 const duration = 5000;
 
-export default function PhotoCarousel() {
+// Recibe solo las fotos destacadas y al menos una. Para cambiar la lista,
+// vuelve a montar el carrusel con otra key.
+export default function PhotoCarousel({ photos }) {
+  const slides = [photos.at(-1), ...photos, photos[0]];
   const viewport = useRef(null);
   const root = useRef(null);
   const jumpTimer = useRef(null);

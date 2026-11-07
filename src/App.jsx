@@ -6,8 +6,9 @@ import GalleryPage from './pages/Gallery.jsx';
 import HomePage from './pages/Home.jsx';
 import TermsPage from './pages/Terms.jsx';
 import UploadPhotosPage from './pages/UploadPhotos.jsx';
+import { photos as fallbackPhotos } from './photos.js';
 import { Link, usePageTitle, useRouter } from './router.jsx';
-import { request } from './site.js';
+import { fetchGallery, fetchSite } from './services/site.js';
 
 function NotFoundPage() {
   usePageTitle('Página no encontrada');
@@ -21,23 +22,31 @@ function NotFoundPage() {
   </section>;
 }
 
+// Tours y salidas vienen de Supabase. La galería empieza con las fotos del
+// sitio (src/photos.js) y se reemplaza por las de Supabase al cargar.
 function useSiteData() {
   const [site, setSite] = useState({ tours: [], loading: true, error: '' });
+  const [gallery, setGallery] = useState(fallbackPhotos);
   useEffect(() => {
-    request('/api/site')
-      .then((data) => setSite({ tours: data.tours || [], loading: false, error: '' }))
-      .catch((error) => setSite({ tours: [], loading: false, error: error.message }));
+    let alive = true;
+    fetchSite()
+      .then((tours) => { if (alive) setSite({ tours, loading: false, error: '' }); })
+      .catch((error) => { if (alive) setSite({ tours: [], loading: false, error: error.message }); });
+    fetchGallery()
+      .then((photos) => { if (alive) setGallery(photos); })
+      .catch(() => {});
+    return () => { alive = false; };
   }, []);
-  return site;
+  return { site, gallery };
 }
 
 export default function App() {
   const { path } = useRouter();
-  const site = useSiteData();
+  const { site, gallery } = useSiteData();
   const pages = {
     '/': <HomePage site={site} />,
     '/salidas': <DeparturesPage site={site} />,
-    '/galeria': <GalleryPage />,
+    '/galeria': <GalleryPage photos={gallery} />,
     '/galeria/subir': <UploadPhotosPage site={site} />,
     '/contacto': <ContactPage />,
     '/terminos': <TermsPage />,
