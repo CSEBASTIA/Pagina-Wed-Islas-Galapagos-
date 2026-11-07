@@ -86,7 +86,7 @@ El envío todavía no está conectado: `src/services/experiences.js` es el punto
 
 ## Gestión
 
-`/gestion` permite crear, editar, ocultar y eliminar tours y salidas con una clave única (`ADMIN_SECRET`). No hay usuarios: la sesión usa una cookie `HttpOnly` y `SameSite=Strict` que caduca a las ocho horas, el servidor limita los intentos fallidos y valida todos los cambios.
+`/gestion` permite crear, editar, ocultar y eliminar tours y salidas. Se entra con una cuenta de **Supabase Auth** (correo y contraseña) que esté registrada en la tabla `admins`; una cuenta que no esté en esa tabla ve «Cuenta sin acceso». Los cambios se guardan directamente en Supabase y la base de datos rechaza cualquier escritura que no venga de un administrador. Los identificadores de los tours nuevos se generan a partir del título (por ejemplo, `los-tuneles`).
 
 ## Producción
 
