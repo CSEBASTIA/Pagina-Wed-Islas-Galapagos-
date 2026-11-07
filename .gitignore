@@ -9,7 +9,9 @@ __pycache__/
 
 # Node
 node_modules/
-package-lock.json
+dist/
+data/site.json
+data/*.tmp
 
 # Entorno
 .env
