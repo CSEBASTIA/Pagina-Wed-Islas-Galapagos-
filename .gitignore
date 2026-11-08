@@ -1,29 +1,24 @@
-# Ejecutables
-*.exe
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# Node
+# Dependencias y compilación
 node_modules/
 dist/
-data/site.json
-data/*.tmp
 
-# Entorno
+# Variables de entorno: nunca se suben (el .env guarda la ruta secreta del panel)
 .env
+.env.*
 !.env.example
 
-# Base de datos local
+# Herramientas y archivos locales
+.claude/
+.vscode/
+*.log
+.DS_Store
+Thumbs.db
+
+# Restos de versiones anteriores (no deben volver al repositorio)
+__pycache__/
+*.pyc
 *.db
 *.db-shm
 *.db-wal
-
-# Subidas locales (galerias)
-assets/images/galleries/
-
-# Carpeta de subidas locales
+data/
 uploads/

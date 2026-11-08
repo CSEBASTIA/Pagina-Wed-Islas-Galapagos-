@@ -1,4 +1,4 @@
-import { imageUrl, supabase } from '../lib/supabase.js';
+import { GALLERY_BUCKET, imageUrl, supabase } from '../lib/supabase.js';
 import { friendlyError, slugify, toDeparture, toGalleryPhoto, toTour, todayInGalapagos, uniqueSlug } from './mappers.js';
 
 // Fotos del sitio que se pueden asignar a un tour (además de las de la galería).
@@ -153,7 +153,6 @@ export async function saveDeparture(form, editingId) {
 // Galería
 // ---------------------------------------------------------------------------
 const SUBMISSIONS_BUCKET = 'envios';
-const GALLERY_BUCKET = 'galeria';
 
 export async function loadGallery() {
   const { data, error } = await supabase.from('gallery_photos')

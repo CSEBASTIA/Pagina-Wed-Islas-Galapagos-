@@ -69,7 +69,7 @@ No hace falta configurar nada: la web se conecta al proyecto de Supabase «Islas
 ## Contenido editable
 
 - **Contactos, licencia y mapa:** constantes en `src/site.js` (`WHATSAPP`, `EMAIL`, `INSTAGRAM`, `FACEBOOK`, `LICENSE_HOLDER`, `LICENSE_URL`). Al completar `LICENSE_URL`, «Zallox» se convierte en un enlace en el pie de página y en los términos.
-- **Icono y logo:** la orca de `assets/images/logo-orca.png` se usa como icono de la pestaña (`assets/icons/`) y como logo junto a «GOLDEN RAY I» (`assets/images/orca-marca.png`).
+- **Icono y logo:** la orca original (`docs/logo-orca-original.jpg`, solo como archivo fuente) se usa como icono de la pestaña (`assets/icons/`) y como logo junto a «GOLDEN RAY I» (`assets/images/orca-marca.png`).
 - **Galería y carrusel:** tabla `gallery_photos` de Supabase. Las fotos con `featured` también aparecen en el carrusel. `src/photos.js` solo se usa mientras carga o si Supabase no responde.
 - **Isla Isabela:** `src/components/IsabelaSection.jsx`.
 - **Aviso «Cuidemos Galápagos» de cada tour:** función `careTip` en `src/pages/Home.jsx`; elige el consejo según las actividades del tour.
