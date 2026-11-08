@@ -119,7 +119,6 @@ Proyecto de Supabase: **Islas Galapagos** (`lmgecsbrkpfkeifshxot`). El esquema c
 
 - Los permisos se controlan con Row Level Security: los visitantes solo leen; crear, editar y borrar exige ser administrador (`private.is_admin()`).
 - Las fotos de los visitantes llegan por la Edge Function `subir-experiencia`, que usa la clave de servicio y repite las validaciones del formulario.
-- Las tablas de la web anterior están en el esquema `legacy`, que no se expone por la API.
 - Para dar acceso a un administrador: crea el usuario en Supabase (**Authentication → Users → Add user**) y agrégalo a la tabla `admins`:
 
   ```sql
