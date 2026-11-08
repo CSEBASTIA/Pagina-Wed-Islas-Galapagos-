@@ -1,5 +1,5 @@
-import { supabase } from '../lib/supabase.js';
-import { friendlyError, slugify, toDeparture, toTour, todayInGalapagos, uniqueSlug } from './mappers.js';
+import { imageUrl, supabase } from '../lib/supabase.js';
+import { friendlyError, slugify, toDeparture, toGalleryPhoto, toTour, todayInGalapagos, uniqueSlug } from './mappers.js';
 
 // Fotos del sitio que se pueden asignar a un tour (además de las de la galería).
 const siteImages = [
@@ -114,10 +114,70 @@ export async function saveDeparture(form, editingId) {
 }
 
 // ---------------------------------------------------------------------------
-// Fotos enviadas por visitantes
+// Galería
 // ---------------------------------------------------------------------------
 const SUBMISSIONS_BUCKET = 'envios';
 const GALLERY_BUCKET = 'galeria';
+
+export async function loadGallery() {
+  const { data, error } = await supabase.from('gallery_photos')
+    .select('id,image,title,detail,category,featured,published,sort_order,source,credit')
+    .order('sort_order').order('created_at');
+  if (error) fail(error);
+  return data.map((row) => ({
+    ...toGalleryPhoto(row, imageUrl), path: row.image, published: row.published,
+    source: row.source, credit: row.credit, sortOrder: row.sort_order,
+  }));
+}
+
+async function nextGalleryOrder() {
+  const { data } = await supabase.from('gallery_photos').select('sort_order').order('sort_order', { ascending: false }).limit(1);
+  return (data?.[0]?.sort_order || 0) + 10;
+}
+
+export async function addGalleryPhotos(items) {
+  let order = await nextGalleryOrder();
+  for (const item of items) {
+    if (item.title.trim().length < 2) throw new Error('Cada foto necesita un título de al menos 2 letras.');
+    const path = `equipo/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.jpg`;
+    const upload = await supabase.storage.from(GALLERY_BUCKET).upload(path, item.file, { contentType: item.file.type, upsert: false });
+    if (upload.error) fail(upload.error);
+    const insert = await supabase.from('gallery_photos').insert({
+      image: path, title: item.title.trim().slice(0, 80), detail: item.detail.trim().slice(0, 120),
+      category: item.category, featured: item.featured, sort_order: order, source: 'equipo',
+    });
+    if (insert.error) {
+      await supabase.storage.from(GALLERY_BUCKET).remove([path]);
+      fail(insert.error);
+    }
+    order += 10;
+  }
+}
+
+export async function updateGalleryPhoto(id, fields) {
+  const { data, error } = await supabase.from('gallery_photos').update(fields).eq('id', id).select('id');
+  if (error) fail(error);
+  requireRows(data, 'No se guardó la foto: puede que ya no exista o que tu sesión no tenga permisos.');
+}
+
+export async function swapGalleryOrder(first, second) {
+  await updateGalleryPhoto(first.id, { sort_order: second.sortOrder });
+  await updateGalleryPhoto(second.id, { sort_order: first.sortOrder });
+}
+
+export async function deleteGalleryPhoto(photo, tours) {
+  if (tours.some((tour) => tour.imagePath === photo.path)) {
+    throw new Error('Esta foto se usa como imagen de un tour. Cambia la foto del tour antes de borrarla.');
+  }
+  const { data, error } = await supabase.from('gallery_photos').delete().eq('id', photo.id).select('id');
+  if (error) fail(error);
+  requireRows(data, 'No se borró la foto: puede que ya no exista o que tu sesión no tenga permisos.');
+  if (!photo.path.startsWith('/')) await supabase.storage.from(GALLERY_BUCKET).remove([photo.path]);
+}
+
+// ---------------------------------------------------------------------------
+// Fotos enviadas por visitantes
+// ---------------------------------------------------------------------------
 
 export async function loadSubmissions() {
   const { data, error } = await supabase.from('photo_submissions')
@@ -171,7 +231,6 @@ export async function approvePhoto(submission, photo, { title, category, feature
   const destination = `visitantes/${photo.path}`;
   const copy = await supabase.storage.from(SUBMISSIONS_BUCKET).copy(photo.path, destination, { destinationBucket: GALLERY_BUCKET });
   if (copy.error) fail(copy.error);
-  const last = await supabase.from('gallery_photos').select('sort_order').order('sort_order', { ascending: false }).limit(1);
   const insert = await supabase.from('gallery_photos').insert({
     image: destination,
     title: title.trim().slice(0, 80),
@@ -181,7 +240,7 @@ export async function approvePhoto(submission, photo, { title, category, feature
     source: 'visitante',
     credit: submission.name || null,
     submission_photo_id: photo.id,
-    sort_order: (last.data?.[0]?.sort_order || 0) + 10,
+    sort_order: await nextGalleryOrder(),
   });
   if (insert.error) {
     await supabase.storage.from(GALLERY_BUCKET).remove([destination]);

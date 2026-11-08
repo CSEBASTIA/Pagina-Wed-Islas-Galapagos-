@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Brand } from '../components/Layout.jsx';
+import GalleryTab from './admin/GalleryTab.jsx';
 import { photoCategories } from '../photos.js';
 import {
-  approvePhoto, currentAdmin, deleteDeparture, deleteTour, loadAdminData, loadSubmissions, onSignedOut, rejectPhoto,
+  approvePhoto, currentAdmin, deleteDeparture, deleteTour, loadAdminData, loadGallery, loadSubmissions, onSignedOut, rejectPhoto,
   saveDeparture, saveTour, signIn, signOut,
 } from '../services/admin.js';
 import { todayInGalapagos } from '../services/mappers.js';
@@ -46,21 +47,27 @@ export default function ManageSite() {
   const [message, setMessage] = useState(null);
   const [busy, setBusy] = useState(false);
   const [submissions, setSubmissions] = useState([]);
+  const [gallery, setGallery] = useState([]);
+  const [tab, setTab] = useState('salidas');
   const today = todayInGalapagos();
 
+  // Recarga todo y devuelve cuántas fotos de visitantes esperan revisión.
   const refresh = async () => {
-    const [adminData, pending] = await Promise.all([loadAdminData(), loadSubmissions()]);
+    const [adminData, pending, photos] = await Promise.all([loadAdminData(), loadSubmissions(), loadGallery()]);
     setData(adminData);
     setSubmissions(pending);
+    setGallery(photos);
+    return pending.reduce((sum, item) => sum + item.photos.length, 0);
   };
+  const openPanel = async () => { const pending = await refresh(); setTab(pending ? 'fotos' : 'salidas'); };
   const notify = (type, text) => setMessage({ type, text });
 
   useEffect(() => {
     currentAdmin()
-      .then(async (found) => { setAccount(found); if (found?.isAdmin) await refresh(); })
+      .then(async (found) => { setAccount(found); if (found?.isAdmin) await openPanel(); })
       .catch((error) => notify('error', error.message))
       .finally(() => setChecking(false));
-    return onSignedOut(() => { setAccount(null); setData(emptyData); setSubmissions([]); });
+    return onSignedOut(() => { setAccount(null); setData(emptyData); setSubmissions([]); setGallery([]); });
   }, []);
 
   async function submitLogin(event) {
@@ -70,7 +77,7 @@ export default function ManageSite() {
       const found = await signIn(login.email, login.password);
       setLogin({ email: login.email, password: '' });
       setAccount(found);
-      if (found?.isAdmin) await refresh();
+      if (found?.isAdmin) await openPanel();
     } catch (error) { notify('error', error.message); } finally { setBusy(false); }
   }
 
@@ -138,13 +145,20 @@ export default function ManageSite() {
 
   async function logout() {
     await signOut();
-    setAccount(null); setData(emptyData); setSubmissions([]); setMessage(null);
+    setAccount(null); setData(emptyData); setSubmissions([]); setGallery([]); setMessage(null);
   }
 
   const imageChoices = data.imageChoices.some((choice) => choice.value === tourForm.image)
     ? data.imageChoices
     : [{ value: tourForm.image, label: decodeURIComponent(tourForm.image.split('/').pop()) }, ...data.imageChoices];
   const upcoming = data.departures.filter((departure) => departure.date >= today).length;
+  const pendingPhotos = submissions.reduce((sum, item) => sum + item.photos.length, 0);
+  const tabs = [
+    ['fotos', 'Fotos de visitantes', pendingPhotos],
+    ['galeria', 'Galería', 0],
+    ['salidas', 'Salidas', 0],
+    ['tours', 'Tours', 0],
+  ];
   const messageView = message && <p className={`form-message ${message.type === 'error' ? 'form-message--error' : ''}`} role={message.type === 'error' ? 'alert' : 'status'}>{message.text}</p>;
 
   if (checking) return <main className="manage-shell"><p>Comprobando acceso…</p></main>;
@@ -177,49 +191,17 @@ export default function ManageSite() {
         <div><p className="eyebrow">GOLDEN RAY I</p><h1>Gestionar contenido</h1><p>Los cambios se publican al guardar. Las salidas pasadas dejan de mostrarse automáticamente.</p></div>
         <div className="manage-account"><span>{account.name || account.email}</span><button className="plain-button" type="button" onClick={logout}>Cerrar sesión</button></div>
       </div>
+      <nav className="manage-tabs" role="tablist" aria-label="Secciones del panel">
+        {tabs.map(([id, label, count]) => <button type="button" role="tab" key={id} aria-selected={tab === id}
+          className={`manage-tabs__tab ${tab === id ? 'manage-tabs__tab--active' : ''}`} onClick={() => { setTab(id); setMessage(null); }}>
+          {label}{count > 0 && <span className="manage-tabs__badge" aria-label={`${count} pendientes`}>{count}</span>}
+        </button>)}
+      </nav>
       {messageView}
-      <div className="manage-grid">
-        <section className="manage-panel"><div className="manage-panel__heading"><h2>{editingTour ? 'Editar tour' : 'Agregar tour'}</h2><p>Elige una foto del sitio o de la galería.</p></div>
-          <form onSubmit={submitTour} className="form-grid">
-            <label>Título<input required minLength="3" maxLength="100" value={tourForm.title} onChange={(e) => setTourForm({ ...tourForm, title: e.target.value })} /></label>
-            <label>Destino<input required minLength="2" maxLength="80" value={tourForm.destination} onChange={(e) => setTourForm({ ...tourForm, destination: e.target.value })} /></label>
-            <label>Duración (uso interno)<input maxLength="60" placeholder="Ej. 4 horas" value={tourForm.duration} onChange={(e) => setTourForm({ ...tourForm, duration: e.target.value })} /></label>
-            <label>Dificultad<select value={tourForm.difficulty} onChange={(e) => setTourForm({ ...tourForm, difficulty: e.target.value })}><option>Fácil</option><option>Moderado</option><option>Difícil</option><option>A consultar</option></select></label>
-            <label className="form-grid__wide">Actividades destacadas, separadas por comas (máx. 4)<input maxLength="140" placeholder="Ej. Snorkel, Fauna marina" value={tourForm.highlightsText} onChange={(e) => setTourForm({ ...tourForm, highlightsText: e.target.value })} /></label>
-            <label className="form-grid__wide">Foto<select value={tourForm.image} onChange={(e) => setTourForm({ ...tourForm, image: e.target.value })}>{imageChoices.map((choice) => <option key={choice.value} value={choice.value}>{choice.label}</option>)}</select></label>
-            <label className="form-grid__wide">Descripción<textarea required minLength="15" maxLength="600" rows="4" value={tourForm.description} onChange={(e) => setTourForm({ ...tourForm, description: e.target.value })} /></label>
-            <label className="checkbox-label form-grid__wide"><input type="checkbox" checked={tourForm.active} onChange={(e) => setTourForm({ ...tourForm, active: e.target.checked })} /> Mostrar en el sitio público</label>
-            <div className="form-actions"><button className="button button--dark" disabled={busy}>Guardar tour</button>{editingTour && <button type="button" className="plain-button" onClick={() => { setEditingTour(''); setTourForm(blankTour); }}>Cancelar</button>}</div>
-          </form>
-        </section>
-        <section className="manage-panel"><div className="manage-panel__heading"><h2>{editingDeparture ? 'Editar salida' : 'Agregar salida'}</h2><p>Publica fechas concretas y cupos disponibles.</p></div>
-          <form onSubmit={submitDeparture} className="form-grid">
-            <label className="form-grid__wide">Tour<select required value={departureForm.tourId} onChange={(e) => setDepartureForm({ ...departureForm, tourId: e.target.value })}><option value="">Selecciona un tour</option>{data.tours.map((tour) => <option key={tour.id} value={tour.id}>{tour.title}{tour.active ? '' : ' (oculto)'}</option>)}</select></label>
-            <label>Fecha<input required type="date" min={today} value={departureForm.date} onChange={(e) => setDepartureForm({ ...departureForm, date: e.target.value })} /></label>
-            <label>Hora<input required type="time" value={departureForm.time} onChange={(e) => setDepartureForm({ ...departureForm, time: e.target.value })} /></label>
-            <label>Cupos<input required type="number" min="1" max="99" value={departureForm.spots} onChange={(e) => setDepartureForm({ ...departureForm, spots: e.target.value })} /></label>
-            <label>Nota opcional<input maxLength="120" value={departureForm.note} onChange={(e) => setDepartureForm({ ...departureForm, note: e.target.value })} /></label>
-            <div className="form-actions"><button className="button button--dark" disabled={busy}>Guardar salida</button>{editingDeparture && <button type="button" className="plain-button" onClick={() => { setEditingDeparture(''); setDepartureForm(blankDeparture); }}>Cancelar</button>}</div>
-          </form>
-        </section>
-      </div>
-      <div className="manage-grid manage-grid--lists">
-        <section className="manage-panel"><h2>Tours ({data.tours.length})</h2>
-          <div className="manage-list">{data.tours.map((tour) => <div className="manage-row" key={tour.id}>
-            <div><strong>{tour.title}</strong><span>{tour.destination} · {tour.active ? 'Visible' : 'Oculto'}</span></div>
-            <div><button type="button" onClick={() => editTour(tour)}>Editar</button><button type="button" className="danger" onClick={() => removeTour(tour)}>Eliminar</button></div>
-          </div>)}</div>
-        </section>
-        <section className="manage-panel"><h2>Salidas ({upcoming} próximas)</h2>
-          <div className="manage-list">{data.departures.map((departure) => <div className={`manage-row ${departure.date < today ? 'manage-row--past' : ''}`} key={departure.id}>
-            <div><strong>{formatDate(departure.date)} · {departure.time}</strong><span>{data.tours.find((tour) => tour.id === departure.tourId)?.title || 'Tour eliminado'} · {departure.spots} cupos{departure.date < today ? ' · Pasada' : ''}</span></div>
-            <div><button type="button" onClick={() => editDeparture(departure)}>Editar</button><button type="button" className="danger" onClick={() => removeDeparture(departure)}>Eliminar</button></div>
-          </div>)}{data.departures.length === 0 && <p>Todavía no hay salidas publicadas.</p>}</div>
-        </section>
-      </div>
+      {tab === 'fotos' && <>
       <section className="manage-panel review-panel" aria-labelledby="review-title">
         <div className="manage-panel__heading">
-          <h2 id="review-title">Fotos de visitantes ({submissions.reduce((sum, item) => sum + item.photos.length, 0)} pendientes)</h2>
+          <h2 id="review-title">Fotos de visitantes ({pendingPhotos} pendientes)</h2>
           <p>Las fotos aprobadas pasan a la galería y las rechazadas se borran. Los envíos sin revisar se borran solos a los 30 días.</p>
         </div>
         {submissions.length === 0 && <p>No hay fotos pendientes de revisión.</p>}
@@ -239,6 +221,47 @@ export default function ManageSite() {
           </article>;
         })}
       </section>
+      </>}
+      {tab === 'galeria' && <GalleryTab photos={gallery} tours={data.tours} busy={busy} act={act} />}
+      {tab === 'salidas' && <div className="manage-grid">
+        <section className="manage-panel"><div className="manage-panel__heading"><h2>{editingDeparture ? 'Editar salida' : 'Agregar salida'}</h2><p>Publica fechas concretas y cupos disponibles.</p></div>
+          <form onSubmit={submitDeparture} className="form-grid">
+            <label className="form-grid__wide">Tour<select required value={departureForm.tourId} onChange={(e) => setDepartureForm({ ...departureForm, tourId: e.target.value })}><option value="">Selecciona un tour</option>{data.tours.map((tour) => <option key={tour.id} value={tour.id}>{tour.title}{tour.active ? '' : ' (oculto)'}</option>)}</select></label>
+            <label>Fecha<input required type="date" min={today} value={departureForm.date} onChange={(e) => setDepartureForm({ ...departureForm, date: e.target.value })} /></label>
+            <label>Hora<input required type="time" value={departureForm.time} onChange={(e) => setDepartureForm({ ...departureForm, time: e.target.value })} /></label>
+            <label>Cupos<input required type="number" min="1" max="99" value={departureForm.spots} onChange={(e) => setDepartureForm({ ...departureForm, spots: e.target.value })} /></label>
+            <label>Nota opcional<input maxLength="120" value={departureForm.note} onChange={(e) => setDepartureForm({ ...departureForm, note: e.target.value })} /></label>
+            <div className="form-actions"><button className="button button--dark" disabled={busy}>Guardar salida</button>{editingDeparture && <button type="button" className="plain-button" onClick={() => { setEditingDeparture(''); setDepartureForm(blankDeparture); }}>Cancelar</button>}</div>
+          </form>
+        </section>
+        <section className="manage-panel"><h2>Salidas ({upcoming} próximas)</h2>
+          <div className="manage-list">{data.departures.map((departure) => <div className={`manage-row ${departure.date < today ? 'manage-row--past' : ''}`} key={departure.id}>
+            <div><strong>{formatDate(departure.date)} · {departure.time}</strong><span>{data.tours.find((tour) => tour.id === departure.tourId)?.title || 'Tour eliminado'} · {departure.spots} cupos{departure.date < today ? ' · Pasada' : ''}</span></div>
+            <div><button type="button" onClick={() => editDeparture(departure)}>Editar</button><button type="button" className="danger" onClick={() => removeDeparture(departure)}>Eliminar</button></div>
+          </div>)}{data.departures.length === 0 && <p>Todavía no hay salidas publicadas.</p>}</div>
+        </section>
+      </div>}
+      {tab === 'tours' && <div className="manage-grid">
+        <section className="manage-panel"><div className="manage-panel__heading"><h2>{editingTour ? 'Editar tour' : 'Agregar tour'}</h2><p>Elige una foto del sitio o de la galería.</p></div>
+          <form onSubmit={submitTour} className="form-grid">
+            <label>Título<input required minLength="3" maxLength="100" value={tourForm.title} onChange={(e) => setTourForm({ ...tourForm, title: e.target.value })} /></label>
+            <label>Destino<input required minLength="2" maxLength="80" value={tourForm.destination} onChange={(e) => setTourForm({ ...tourForm, destination: e.target.value })} /></label>
+            <label>Duración (uso interno)<input maxLength="60" placeholder="Ej. 4 horas" value={tourForm.duration} onChange={(e) => setTourForm({ ...tourForm, duration: e.target.value })} /></label>
+            <label>Dificultad<select value={tourForm.difficulty} onChange={(e) => setTourForm({ ...tourForm, difficulty: e.target.value })}><option>Fácil</option><option>Moderado</option><option>Difícil</option><option>A consultar</option></select></label>
+            <label className="form-grid__wide">Actividades destacadas, separadas por comas (máx. 4)<input maxLength="140" placeholder="Ej. Snorkel, Fauna marina" value={tourForm.highlightsText} onChange={(e) => setTourForm({ ...tourForm, highlightsText: e.target.value })} /></label>
+            <label className="form-grid__wide">Foto<select value={tourForm.image} onChange={(e) => setTourForm({ ...tourForm, image: e.target.value })}>{imageChoices.map((choice) => <option key={choice.value} value={choice.value}>{choice.label}</option>)}</select></label>
+            <label className="form-grid__wide">Descripción<textarea required minLength="15" maxLength="600" rows="4" value={tourForm.description} onChange={(e) => setTourForm({ ...tourForm, description: e.target.value })} /></label>
+            <label className="checkbox-label form-grid__wide"><input type="checkbox" checked={tourForm.active} onChange={(e) => setTourForm({ ...tourForm, active: e.target.checked })} /> Mostrar en el sitio público</label>
+            <div className="form-actions"><button className="button button--dark" disabled={busy}>Guardar tour</button>{editingTour && <button type="button" className="plain-button" onClick={() => { setEditingTour(''); setTourForm(blankTour); }}>Cancelar</button>}</div>
+          </form>
+        </section>
+        <section className="manage-panel"><h2>Tours ({data.tours.length})</h2>
+          <div className="manage-list">{data.tours.map((tour) => <div className="manage-row" key={tour.id}>
+            <div><strong>{tour.title}</strong><span>{tour.destination} · {tour.active ? 'Visible' : 'Oculto'}</span></div>
+            <div><button type="button" onClick={() => editTour(tour)}>Editar</button><button type="button" className="danger" onClick={() => removeTour(tour)}>Eliminar</button></div>
+          </div>)}</div>
+        </section>
+      </div>}
     </>}
   </main>;
 }
