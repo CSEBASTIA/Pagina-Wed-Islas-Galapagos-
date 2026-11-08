@@ -11,18 +11,33 @@ const MAX_PER_DAY = 60;
 const PENDING_DAYS = 30;
 const BUCKET = 'envios';
 
-const cors = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-};
+// Sitios desde los que un navegador puede enviar fotos. Si la web se publica en
+// otro dominio, agrégalo aquí y vuelve a desplegar la función.
+const ALLOWED_ORIGINS = new Set([
+  'https://golden-ray-1-galapagos.vercel.app',
+  'http://localhost:5173', 'http://127.0.0.1:5173',
+  'http://localhost:3001', 'http://127.0.0.1:3001',
+]);
+
+function corsHeaders(origin: string | null) {
+  return {
+    'Access-Control-Allow-Origin': origin && ALLOWED_ORIGINS.has(origin) ? origin : 'https://golden-ray-1-galapagos.vercel.app',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Vary': 'Origin',
+  };
+}
+
+// IP del visitante: primero las cabeceras que pone el proxy de la plataforma y
+// que el visitante no puede falsear.
+function clientIp(req: Request) {
+  const direct = req.headers.get('cf-connecting-ip') ?? req.headers.get('x-real-ip');
+  if (direct) return direct.trim();
+  return (req.headers.get('x-forwarded-for') ?? '').split(',')[0].trim() || 'desconocida';
+}
 
 type Kind = { mime: string; ext: string };
 type Photo = { bytes: Uint8Array; kind: Kind; width: number; height: number };
-
-function json(body: unknown, status = 200) {
-  return new Response(JSON.stringify(body), { status, headers: { ...cors, 'Content-Type': 'application/json' } });
-}
 
 // Detecta el formato por su firma binaria, no por el nombre ni el tipo declarado.
 function detect(b: Uint8Array): Kind | null {
@@ -88,6 +103,12 @@ async function cleanupOldPending(db: SupabaseClient) {
 }
 
 Deno.serve(async (req) => {
+  const origin = req.headers.get('origin');
+  const cors = corsHeaders(origin);
+  const json = (body: unknown, status = 200) =>
+    new Response(JSON.stringify(body), { status, headers: { ...cors, 'Content-Type': 'application/json' } });
+
+  if (origin && !ALLOWED_ORIGINS.has(origin)) return json({ error: 'Origen no permitido.' }, 403);
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
   if (req.method !== 'POST') return json({ error: 'Método no permitido.' }, 405);
 
@@ -124,8 +145,7 @@ Deno.serve(async (req) => {
   const db = createClient(Deno.env.get('SUPABASE_URL')!, serviceKey, { auth: { persistSession: false } });
 
   // La IP se guarda solo como huella con sal secreta, para limitar envíos.
-  const ip = (req.headers.get('x-forwarded-for') ?? '').split(',')[0].trim() || 'desconocida';
-  const ipHash = await sha256Hex(`${ip}|${serviceKey}`);
+  const ipHash = await sha256Hex(`${clientIp(req)}|${serviceKey}`);
   const [byIp, byDay] = await Promise.all([
     db.from('photo_submissions').select('id', { count: 'exact', head: true })
       .eq('ip_hash', ipHash).gte('created_at', new Date(Date.now() - 3_600_000).toISOString()),
