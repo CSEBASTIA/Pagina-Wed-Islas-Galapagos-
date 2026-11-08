@@ -21,7 +21,13 @@ export function Router({ children }) {
   }, []);
 
   useEffect(() => {
-    const target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    let id = '';
+    try {
+      id = decodeURIComponent(location.hash.slice(1));
+    } catch {
+      // Un "#" mal codificado en la dirección no debe romper la página.
+    }
+    const target = id && document.getElementById(id);
     if (target) target.scrollIntoView({ behavior: location.behavior });
     else window.scrollTo({ top: 0, behavior: location.behavior });
   }, [location]);
