@@ -36,17 +36,36 @@ const sections = [
     id: 'uso',
     title: 'Uso permitido',
     body: [
-      'Te comprometes a usar el sitio de forma lícita y respetuosa. No está permitido intentar acceder a áreas restringidas, interferir con su funcionamiento, extraer contenido de forma automatizada ni utilizarlo para fines fraudulentos.',
+      'Te comprometes a usar el sitio de forma lícita y respetuosa. No está permitido intentar acceder al área de administración o a cuentas ajenas, eludir o manipular las medidas de seguridad (también desde las herramientas del navegador), interferir con el funcionamiento del sitio, extraer contenido de forma automatizada, enviar fotos de forma masiva o utilizar el sitio con fines fraudulentos.',
+      'Tampoco está permitido enviar archivos que no sean fotografías, programas maliciosos ni contenido ilegal, ofensivo, sexual, violento o que vulnere derechos de terceros. Podemos bloquear envíos y retirar contenido que incumpla estas condiciones, y conservar la información necesaria para denunciarlo ante las autoridades.',
     ],
   },
   {
     id: 'fotos',
     title: 'Fotos enviadas por los visitantes',
     body: [
-      'Desde la página «Sube tu experiencia» puedes enviarnos hasta cinco fotografías por envío. Al enviarlas confirmas que eres su autor o que tienes permiso para compartirlas, y que las personas que aparecen en ellas están de acuerdo. Si aparecen menores de edad, debes contar con la autorización de sus padres o representantes.',
+      'Desde la página «Sube tu experiencia» puedes enviarnos hasta cinco fotografías por envío, con un límite de envíos por hora para evitar abusos. Al enviarlas confirmas que eres su autor o que tienes permiso para compartirlas, y que las personas que aparecen en ellas están de acuerdo. Si aparecen menores de edad, debes contar con la autorización de sus padres o representantes.',
       'Al enviar tus fotos autorizas, de forma gratuita y no exclusiva, su publicación en este sitio web. Conservas la autoría de tus fotografías. Todas las fotos se revisan antes de publicarse y podemos no publicar las que no correspondan a una salida, tengan baja calidad, muestren conductas que dañen la fauna o el medio ambiente, o resulten inapropiadas.',
       'Antes de enviarse, las fotos se reducen de tamaño y pierden los metadatos que guardan los teléfonos, como la ubicación GPS. Se almacenan en los servidores de Supabase, nuestro proveedor de base de datos. Las fotos rechazadas se borran al momento y las que no se revisan se borran automáticamente a los 30 días.',
       `Si quieres que retiremos una foto que enviaste, escríbenos a ${EMAIL} y la quitaremos del sitio.`,
+    ],
+  },
+  {
+    id: 'privacidad',
+    title: 'Privacidad y datos personales',
+    body: [
+      'Este sitio no tiene registro de visitantes ni utiliza cookies de seguimiento o publicidad. La información que compartas al escribirnos por WhatsApp, correo o redes sociales se utiliza únicamente para responder tu consulta.',
+      'En «Sube tu experiencia» solo pedimos tus fotos y, de forma opcional, tu nombre, el tour y un comentario, para revisar las fotos y publicarlas con el crédito correspondiente. Para evitar abusos, de tu dirección IP solo guardamos una huella cifrada que no permite identificarte. Los envíos rechazados se borran al momento, los que no se revisan se borran a los 30 días y las fotos publicadas permanecen hasta que pidas retirarlas.',
+      'Para funcionar, el sitio usa estos proveedores: Vercel, que aloja la web; Supabase, que guarda la información del sitio y las fotos enviadas; y Google Fonts, que sirve las tipografías. Como cualquier servicio en internet, pueden registrar datos técnicos de la conexión, como la dirección IP, para entregar la página y protegerla.',
+      `De acuerdo con la Ley Orgánica de Protección de Datos Personales del Ecuador, puedes pedir el acceso, la rectificación o la eliminación de tus datos, o oponerte a su uso, escribiendo a ${EMAIL}.`,
+    ],
+  },
+  {
+    id: 'seguridad',
+    title: 'Seguridad',
+    body: [
+      'La conexión con el sitio está cifrada (HTTPS). El área de administración está protegida con contraseña y verificación en dos pasos, y los permisos para ver o cambiar información se comprueban en el servidor, no en tu navegador.',
+      `Ningún sistema es infalible. Si encuentras una vulnerabilidad, escríbenos a ${EMAIL} para que podamos corregirla; no intentes aprovecharla ni acceder a información que no es tuya.`,
     ],
   },
   {
@@ -57,19 +76,17 @@ const sections = [
     ],
   },
   {
-    id: 'privacidad',
-    title: 'Privacidad',
-    body: [
-      'Este sitio no tiene formularios de registro ni utiliza cookies de seguimiento o publicidad para los visitantes. La información que compartas al escribirnos por WhatsApp, correo o redes sociales se utiliza únicamente para responder tu consulta.',
-      'En la página «Sube tu experiencia» solo pedimos tus fotos y, de forma opcional, tu nombre, el tour y un comentario. Usamos esos datos únicamente para revisar las fotos y publicarlas con el crédito correspondiente. Para evitar abusos, de tu dirección IP solo guardamos una huella cifrada que no permite identificarte.',
-      'Las tipografías del sitio se cargan desde Google Fonts, por lo que tu navegador se conecta a servidores de Google al visitar la página.',
-    ],
-  },
-  {
     id: 'responsabilidad',
     title: 'Responsabilidad',
     body: [
       'El sitio se ofrece tal como está. No garantizamos que esté libre de errores o interrupciones, y no somos responsables de los daños derivados del uso de la información publicada sin haberla confirmado previamente con Golden Ray I.',
+    ],
+  },
+  {
+    id: 'ley',
+    title: 'Ley aplicable',
+    body: [
+      'Estos términos se rigen por las leyes de la República del Ecuador.',
     ],
   },
   {
