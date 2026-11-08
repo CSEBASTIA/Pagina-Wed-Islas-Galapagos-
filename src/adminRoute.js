@@ -1,8 +1,8 @@
 // El panel no tiene una dirección visible en el código: solo se guarda la huella
 // SHA-256 de su ruta. La ruta real está en el archivo .env local (no se sube a GitHub).
-// Para cambiarla, calcula la huella de la nueva ruta (por ejemplo "/mi-ruta") con:
-//   node -e "console.log(require('crypto').createHash('sha256').update('/mi-ruta').digest('hex'))"
-const ADMIN_PATH_HASH = '43585790f9fe308a6a4db0ad959818960a64f16f8495a28d3d2886af0f357158';
+// Para cambiarla, calcula la huella de la nueva ruta (por ejemplo "/codigo/gestion", sin barra final) con:
+//   node -e "console.log(require('crypto').createHash('sha256').update('/codigo/gestion').digest('hex'))"
+const ADMIN_PATH_HASH = '438caa52e7a33c7cc4f01173715d31204c1a2e0eeef81a4a80a16c5bda77fa57';
 
 export async function isAdminPath(pathname) {
   const path = pathname.replace(/\/+$/, '') || '/';
