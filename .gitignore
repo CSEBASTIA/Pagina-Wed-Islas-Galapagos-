@@ -1,24 +1,61 @@
+# ------------------------------------------------------------------
 # Dependencias y compilación
+# ------------------------------------------------------------------
 node_modules/
 dist/
+dist-ssr/
+.vite/
+coverage/
+*.tsbuildinfo
 
-# Variables de entorno: nunca se suben (el .env guarda la ruta secreta del panel)
+# ------------------------------------------------------------------
+# Secretos: nunca se suben
+# (.env guarda la dirección secreta del panel de administración)
+# ------------------------------------------------------------------
 .env
 .env.*
 !.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+secrets/
 
-# Herramientas y archivos locales
+# ------------------------------------------------------------------
+# Herramientas de despliegue y de Supabase (guardan datos locales)
+# ------------------------------------------------------------------
+.vercel/
+supabase/.temp/
+supabase/.branches/
+
+# ------------------------------------------------------------------
+# Editores, asistentes y sistema operativo
+# ------------------------------------------------------------------
 .claude/
 .vscode/
-*.log
+.idea/
+*.swp
+*~
 .DS_Store
 Thumbs.db
+desktop.ini
 
+# ------------------------------------------------------------------
+# Registros
+# ------------------------------------------------------------------
+*.log
+npm-debug.log*
+
+# ------------------------------------------------------------------
 # Restos de versiones anteriores (no deben volver al repositorio)
+# ------------------------------------------------------------------
 __pycache__/
 *.pyc
 *.db
 *.db-shm
 *.db-wal
+*.sqlite
+*.sqlite3
 data/
 uploads/
