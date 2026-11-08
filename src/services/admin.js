@@ -58,7 +58,7 @@ export async function startMfaEnrollment() {
     factorType: 'totp', issuer: 'Golden Ray I', friendlyName: `Panel ${new Date().toISOString().slice(0, 16)}`,
   });
   if (error) fail(error);
-  return { step: 'enroll', factorId: data.id, qr: data.totp.qr_code, secret: data.totp.secret };
+  return { step: 'enroll', factorId: data.id, qr: data.totp.qr_code, secret: data.totp.secret, uri: data.totp.uri };
 }
 
 export async function verifyMfaCode(factorId, code) {

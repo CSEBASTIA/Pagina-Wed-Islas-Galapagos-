@@ -379,6 +379,7 @@ body:has(dialog[open]){overflow:hidden}
 .mfa-steps{margin:18px 0 22px;padding-left:20px;color:#4f6965;font-size:.9rem;line-height:1.6}
 .mfa-steps li+li{margin-top:6px}
 .mfa-qr{display:block;width:200px;height:200px;margin:18px auto;padding:10px;background:#fff;border:1px solid #dce7de;border-radius:8px}
+.mfa-phone{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:14px;margin:0 0 16px}
 .mfa-secret{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
 .mfa-secret small{font-size:.7rem;font-weight:800;letter-spacing:.12em;color:#5a8b7d;text-transform:uppercase}
 .mfa-secret code{font-size:.82rem;word-break:break-all;background:#eef3ee;padding:6px 10px;border-radius:5px}

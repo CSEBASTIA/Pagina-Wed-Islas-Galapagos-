@@ -4,8 +4,18 @@ import React, { useState } from 'react';
 // o escribir el código de 6 dígitos (las siguientes).
 export default function MfaCard({ email, mfa, busy, message, onStart, onVerify, onLogout }) {
   const [code, setCode] = useState('');
+  const [copied, setCopied] = useState(false);
   const enrolling = mfa.step === 'enroll';
   const ready = !enrolling || Boolean(mfa.qr);
+
+  async function copySecret() {
+    try {
+      await navigator.clipboard.writeText(mfa.secret);
+      setCopied(true);
+    } catch {
+      setCopied(false);
+    }
+  }
 
   function submit(event) {
     event.preventDefault();
@@ -27,8 +37,12 @@ export default function MfaCard({ email, mfa, busy, message, onStart, onVerify, 
     </>}
 
     {enrolling && mfa.qr && <>
-      <p>Escanea este código con tu app de autenticación. Si no puedes escanearlo, escribe la clave manualmente.</p>
+      <p>Escanea este código con tu app de autenticación. Si estás en el mismo teléfono, usa «Abrir en mi app» o copia la clave y pégala en la app.</p>
       <img className="mfa-qr" src={mfa.qr} alt="Código QR para la app de autenticación" />
+      <div className="mfa-phone">
+        {mfa.uri?.startsWith('otpauth://') && <a className="button button--dark" href={mfa.uri}>Abrir en mi app</a>}
+        <button type="button" className="plain-button" onClick={copySecret}>{copied ? 'Clave copiada' : 'Copiar clave'}</button>
+      </div>
       <p className="mfa-secret"><small>Clave manual</small><code>{mfa.secret}</code></p>
     </>}
 
