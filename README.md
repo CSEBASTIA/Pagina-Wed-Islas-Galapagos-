@@ -91,6 +91,8 @@ El panel privado permite crear, editar, ocultar y eliminar tours y salidas.
 
 **Dirección oculta:** el panel no tiene una ruta pública. En el código solo está la huella SHA-256 de su dirección (`src/adminRoute.js`), así que no se puede deducir leyendo el repositorio ni inspeccionando la web; la dirección real está en el `.env` local. El código del panel se descarga aparte, con nombre aleatorio, solo al entrar por esa ruta, y la página lleva `noindex` y `no-referrer`. Para cambiar la dirección, calcula la huella de la nueva ruta con el comando que indica `src/adminRoute.js`.
 
+**Verificación en dos pasos:** después de la contraseña, el panel pide un código de 6 dígitos de una app de autenticación (Google Authenticator, Microsoft Authenticator, etc.). La primera vez se configura escaneando un código QR. La base de datos solo da permisos de administrador a sesiones verificadas con ese código (nivel `aal2`), así que una contraseña robada no basta. Si un administrador pierde el teléfono, elimina su factor en Supabase (**Authentication → Users**, o con `delete from auth.mfa_factors where user_id = '...';`) y la próxima vez que entre configurará uno nuevo.
+
 **Acceso:** Se entra con una cuenta de **Supabase Auth** (correo y contraseña) que esté registrada en la tabla `admins`; una cuenta que no esté en esa tabla ve «Cuenta sin acceso». Los cambios se guardan directamente en Supabase y la base de datos rechaza cualquier escritura que no venga de un administrador. Los identificadores de los tours nuevos se generan a partir del título (por ejemplo, `los-tuneles`).
 
 ## Producción
