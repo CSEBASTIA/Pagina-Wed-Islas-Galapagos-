@@ -35,6 +35,42 @@ export async function signOut() {
   await supabase.auth.signOut();
 }
 
+// ---------------------------------------------------------------------------
+// Verificación en dos pasos (TOTP). La base de datos solo reconoce como
+// administradora una sesión verificada con el segundo paso (nivel aal2).
+// ---------------------------------------------------------------------------
+export async function mfaStatus() {
+  const level = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (level.error) fail(level.error);
+  if (level.data.currentLevel === 'aal2') return { step: 'ok' };
+  const factors = await supabase.auth.mfa.listFactors();
+  if (factors.error) fail(factors.error);
+  const verified = factors.data.totp || [];
+  return verified.length ? { step: 'verify', factorId: verified[0].id } : { step: 'enroll' };
+}
+
+export async function startMfaEnrollment() {
+  const factors = await supabase.auth.mfa.listFactors();
+  for (const factor of factors.data?.all ?? []) {
+    if (factor.status === 'unverified') await supabase.auth.mfa.unenroll({ factorId: factor.id });
+  }
+  const { data, error } = await supabase.auth.mfa.enroll({
+    factorType: 'totp', issuer: 'Golden Ray I', friendlyName: `Panel ${new Date().toISOString().slice(0, 16)}`,
+  });
+  if (error) fail(error);
+  return { step: 'enroll', factorId: data.id, qr: data.totp.qr_code, secret: data.totp.secret };
+}
+
+export async function verifyMfaCode(factorId, code) {
+  const clean = String(code).replace(/\D/g, '');
+  if (clean.length !== 6) throw new Error('El código tiene 6 dígitos.');
+  const { error } = await supabase.auth.mfa.challengeAndVerify({ factorId, code: clean });
+  if (error) {
+    if (/invalid|expired/i.test(error.message || '')) throw new Error('Código incorrecto o vencido. Escribe el código que muestra ahora tu app.');
+    fail(error);
+  }
+}
+
 export function onSignedOut(callback) {
   const { data } = supabase.auth.onAuthStateChange((event) => { if (event === 'SIGNED_OUT') callback(); });
   return () => data.subscription.unsubscribe();

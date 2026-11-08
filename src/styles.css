@@ -376,6 +376,14 @@ body:has(dialog[open]){overflow:hidden}
 .gallery-admin__buttons button{border:1px solid #c9dad1;background:#fff;border-radius:5px;padding:6px 10px;font-weight:800;font-size:.75rem;color:#226d60}
 .gallery-admin__buttons button.danger{color:#b4483e}
 .gallery-admin__buttons button:disabled{opacity:.45;cursor:default}
+.mfa-steps{margin:18px 0 22px;padding-left:20px;color:#4f6965;font-size:.9rem;line-height:1.6}
+.mfa-steps li+li{margin-top:6px}
+.mfa-qr{display:block;width:200px;height:200px;margin:18px auto;padding:10px;background:#fff;border:1px solid #dce7de;border-radius:8px}
+.mfa-secret{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.mfa-secret small{font-size:.7rem;font-weight:800;letter-spacing:.12em;color:#5a8b7d;text-transform:uppercase}
+.mfa-secret code{font-size:.82rem;word-break:break-all;background:#eef3ee;padding:6px 10px;border-radius:5px}
+.mfa-card #mfa-code{font-size:1.4rem;letter-spacing:.3em;text-align:center}
+.mfa-logout{margin-top:18px}
 @keyframes driftOne{to{transform:translate(100px,60px) scale(1.1)}}
 @keyframes driftTwo{to{transform:translate(-90px,-50px) scale(.9)}}
 @keyframes riseIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Brand } from '../components/Layout.jsx';
 import GalleryTab from './admin/GalleryTab.jsx';
+import MfaCard from './admin/MfaCard.jsx';
 import { photoCategories } from '../photos.js';
 import {
-  approvePhoto, currentAdmin, deleteDeparture, deleteTour, loadAdminData, loadGallery, loadSubmissions, onSignedOut, rejectPhoto,
-  saveDeparture, saveTour, signIn, signOut,
+  approvePhoto, currentAdmin, deleteDeparture, deleteTour, loadAdminData, loadGallery, loadSubmissions, mfaStatus, onSignedOut,
+  rejectPhoto, saveDeparture, saveTour, signIn, signOut, startMfaEnrollment, verifyMfaCode,
 } from '../services/admin.js';
 import { todayInGalapagos } from '../services/mappers.js';
 import { formatDate } from '../site.js';
@@ -49,6 +50,7 @@ export default function ManageSite() {
   const [submissions, setSubmissions] = useState([]);
   const [gallery, setGallery] = useState([]);
   const [tab, setTab] = useState('salidas');
+  const [mfa, setMfa] = useState(null);
   const today = todayInGalapagos();
 
   // Recarga todo y devuelve cuántas fotos de visitantes esperan revisión.
@@ -62,23 +64,47 @@ export default function ManageSite() {
   const openPanel = async () => { const pending = await refresh(); setTab(pending ? 'fotos' : 'salidas'); };
   const notify = (type, text) => setMessage({ type, text });
 
+  // Orden de acceso: contraseña → segundo paso (código) → comprobar que es administrador.
+  async function resolveAccess() {
+    const found = await currentAdmin();
+    if (!found) { setAccount(null); setMfa(null); return; }
+    const status = await mfaStatus();
+    if (status.step !== 'ok') { setAccount({ ...found, isAdmin: false }); setMfa(status); return; }
+    setMfa(null);
+    const verified = await currentAdmin();
+    setAccount(verified);
+    if (verified?.isAdmin) await openPanel();
+  }
+
   useEffect(() => {
-    currentAdmin()
-      .then(async (found) => { setAccount(found); if (found?.isAdmin) await openPanel(); })
+    resolveAccess()
       .catch((error) => notify('error', error.message))
       .finally(() => setChecking(false));
-    return onSignedOut(() => { setAccount(null); setData(emptyData); setSubmissions([]); setGallery([]); });
+    return onSignedOut(() => { setAccount(null); setMfa(null); setData(emptyData); setSubmissions([]); setGallery([]); });
   }, []);
 
   async function submitLogin(event) {
     event.preventDefault();
     setBusy(true); setMessage(null);
     try {
-      const found = await signIn(login.email, login.password);
+      await signIn(login.email, login.password);
       setLogin({ email: login.email, password: '' });
-      setAccount(found);
-      if (found?.isAdmin) await openPanel();
+      await resolveAccess();
     } catch (error) { notify('error', error.message); } finally { setBusy(false); }
+  }
+
+  async function startMfa() {
+    setBusy(true); setMessage(null);
+    try { setMfa(await startMfaEnrollment()); }
+    catch (error) { notify('error', error.message); }
+    finally { setBusy(false); }
+  }
+
+  async function submitMfa(code) {
+    setBusy(true); setMessage(null);
+    try { await verifyMfaCode(mfa.factorId, code); await resolveAccess(); }
+    catch (error) { notify('error', error.message); }
+    finally { setBusy(false); }
   }
 
   async function act(callback, success) {
@@ -145,7 +171,7 @@ export default function ManageSite() {
 
   async function logout() {
     await signOut();
-    setAccount(null); setData(emptyData); setSubmissions([]); setGallery([]); setMessage(null);
+    setAccount(null); setMfa(null); setData(emptyData); setSubmissions([]); setGallery([]); setMessage(null);
   }
 
   const imageChoices = data.imageChoices.some((choice) => choice.value === tourForm.image)
@@ -179,7 +205,9 @@ export default function ManageSite() {
       {messageView}
     </section>}
 
-    {account && !account.isAdmin && <section className="login-card">
+    {account && mfa && <MfaCard email={account.email} mfa={mfa} busy={busy} message={messageView} onStart={startMfa} onVerify={submitMfa} onLogout={logout} />}
+
+    {account && !mfa && !account.isAdmin && <section className="login-card">
       <p className="eyebrow">SIN PERMISOS</p><h1>Cuenta sin acceso</h1>
       <p>La cuenta {account.email} no está registrada como administradora. Pide que la agreguen a la tabla de administradores.</p>
       <button className="button button--dark" type="button" onClick={logout}>Cerrar sesión</button>
