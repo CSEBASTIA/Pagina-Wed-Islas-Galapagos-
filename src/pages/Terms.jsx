@@ -1,9 +1,10 @@
 import React from 'react';
-import { LicenseLink, PageHero } from '../components/Layout.jsx';
-import { Link, usePageTitle } from '../router.jsx';
-import { EMAIL, LICENSE_HOLDER } from '../site.js';
+import LegalPage from '../components/LegalPage.jsx';
+import { LicenseLink } from '../components/Layout.jsx';
+import { Link } from '../router.jsx';
+import { EMAIL, LICENSE_HOLDER, WHATSAPP_DISPLAY } from '../site.js';
 
-const UPDATED = '7 de noviembre de 2026';
+const UPDATED = '13 de noviembre de 2026';
 
 const sections = [
   {
@@ -12,6 +13,14 @@ const sections = [
     body: [
       'Al acceder y navegar por este sitio web aceptas estos términos y condiciones. Si no estás de acuerdo con ellos, te pedimos no utilizar el sitio.',
       'Estos términos regulan únicamente el uso del sitio web y de la información publicada en él. Las condiciones de los tours (precios, reservas, pagos, cancelaciones y seguridad durante las salidas) no forman parte de este documento y se acuerdan directamente con Golden Ray I.',
+    ],
+  },
+  {
+    id: 'titular',
+    title: 'Quién está detrás del sitio',
+    body: [
+      `Este es el sitio web de Golden Ray I, operador de tours con base en Puerto Villamil, isla Isabela, Galápagos, Ecuador. Puedes contactarnos en ${EMAIL} o por WhatsApp al ${WHATSAPP_DISPLAY}.`,
+      <>El sitio fue desarrollado por <LicenseLink />, que es titular de la licencia del diseño y del código.</>,
     ],
   },
   {
@@ -29,7 +38,16 @@ const sections = [
     body: [
       'El sitio tiene una finalidad informativa: presenta los tours, las próximas salidas, una galería de fotografías y los canales de contacto de Golden Ray I. Publicar una fecha o un cupo no constituye una reserva ni una oferta vinculante.',
       'Procuramos que la información esté actualizada, pero las fechas, horarios, cupos y descripciones pueden cambiar sin previo aviso por condiciones del clima o del mar, disposiciones del Parque Nacional Galápagos u otras causas. La disponibilidad se confirma siempre por contacto directo.',
+      'Una misma salida puede recorrer varios sitios el mismo día. Los sitios y el orden publicados son orientativos y pueden ajustarse según los permisos del Parque Nacional y las condiciones del mar.',
       'Las fotografías ilustran los lugares y experiencias, y pueden no reflejar exactamente lo que se observará en cada salida, ya que la vida silvestre y el clima son variables.',
+    ],
+  },
+  {
+    id: 'reservas',
+    title: 'Reservas y pagos',
+    body: [
+      'En este sitio no se hacen reservas ni se reciben pagos, y nunca te pediremos datos de tarjetas o cuentas bancarias a través de él. Los botones «Consultar» abren una conversación de WhatsApp con Golden Ray I.',
+      'Una salida solo queda reservada cuando Golden Ray I te la confirma directamente. El precio, la forma de pago, lo que incluye el tour y las condiciones de cambio o cancelación son los que se acuerden en esa conversación.',
     ],
   },
   {
@@ -47,17 +65,15 @@ const sections = [
       'Desde la página «Sube tu experiencia» puedes enviarnos hasta cinco fotografías por envío, con un límite de envíos por hora para evitar abusos. Al enviarlas confirmas que eres su autor o que tienes permiso para compartirlas, y que las personas que aparecen en ellas están de acuerdo. Si aparecen menores de edad, debes contar con la autorización de sus padres o representantes.',
       'Al enviar tus fotos autorizas, de forma gratuita y no exclusiva, su publicación en este sitio web. Conservas la autoría de tus fotografías. Todas las fotos se revisan antes de publicarse y podemos no publicar las que no correspondan a una salida, tengan baja calidad, muestren conductas que dañen la fauna o el medio ambiente, o resulten inapropiadas.',
       'Antes de enviarse, las fotos se reducen de tamaño y pierden los metadatos que guardan los teléfonos, como la ubicación GPS. Se almacenan en los servidores de Supabase, nuestro proveedor de base de datos. Las fotos rechazadas se borran al momento y las que no se revisan se borran automáticamente a los 30 días.',
-      `Si quieres que retiremos una foto que enviaste, escríbenos a ${EMAIL} y la quitaremos del sitio.`,
+      `Si quieres que retiremos una foto que enviaste, escríbenos a ${EMAIL} y la quitaremos del sitio en un máximo de 15 días.`,
     ],
   },
   {
     id: 'privacidad',
-    title: 'Privacidad y datos personales',
+    title: 'Privacidad y cookies',
     body: [
-      'Este sitio no tiene registro de visitantes ni utiliza cookies de seguimiento o publicidad. La información que compartas al escribirnos por WhatsApp, correo o redes sociales se utiliza únicamente para responder tu consulta.',
-      'En «Sube tu experiencia» solo pedimos tus fotos y, de forma opcional, tu nombre, el tour y un comentario, para revisar las fotos y publicarlas con el crédito correspondiente. Para evitar abusos, de tu dirección IP solo guardamos una huella cifrada que no permite identificarte. Los envíos rechazados se borran al momento, los que no se revisan se borran a los 30 días y las fotos publicadas permanecen hasta que pidas retirarlas.',
-      'Para funcionar, el sitio usa estos proveedores: Vercel, que aloja la web; Supabase, que guarda la información del sitio y las fotos enviadas; y Google Fonts, que sirve las tipografías. Como cualquier servicio en internet, pueden registrar datos técnicos de la conexión, como la dirección IP, para entregar la página y protegerla.',
-      `De acuerdo con la Ley Orgánica de Protección de Datos Personales del Ecuador, puedes pedir el acceso, la rectificación o la eliminación de tus datos, o oponerte a su uso, escribiendo a ${EMAIL}.`,
+      'Este sitio no tiene registro de visitantes y no utiliza cookies de publicidad, de seguimiento ni de analítica. Solo tratamos datos personales cuando nos escribes o cuando envías fotos desde «Sube tu experiencia».',
+      <>Qué datos recogemos, para qué los usamos, cuánto tiempo los guardamos y cómo puedes pedir que se borren está explicado en la <Link to="/privacidad">política de privacidad y cookies</Link>, que forma parte de estos términos.</>,
     ],
   },
   {
@@ -76,17 +92,26 @@ const sections = [
     ],
   },
   {
+    id: 'disponibilidad',
+    title: 'Disponibilidad del sitio',
+    body: [
+      'Procuramos que el sitio esté disponible de forma continua, pero puede interrumpirse por mantenimiento, por fallos de los proveedores o por la conexión a internet, que en Galápagos es limitada. Podemos modificar, suspender o retirar el sitio o cualquiera de sus secciones sin previo aviso.',
+    ],
+  },
+  {
     id: 'responsabilidad',
     title: 'Responsabilidad',
     body: [
       'El sitio se ofrece tal como está. No garantizamos que esté libre de errores o interrupciones, y no somos responsables de los daños derivados del uso de la información publicada sin haberla confirmado previamente con Golden Ray I.',
+      'Nada de lo anterior limita los derechos que la ley ecuatoriana reconoce a las personas consumidoras y que no pueden excluirse por acuerdo.',
     ],
   },
   {
     id: 'ley',
     title: 'Ley aplicable',
     body: [
-      'Estos términos se rigen por las leyes de la República del Ecuador.',
+      'Estos términos se rigen por las leyes de la República del Ecuador. Cualquier controversia que no pueda resolverse directamente con Golden Ray I se someterá a los jueces competentes del Ecuador.',
+      'Si alguna parte de estos términos resultara inválida, el resto seguirá vigente.',
     ],
   },
   {
@@ -96,32 +121,16 @@ const sections = [
       'Podemos actualizar estos términos en cualquier momento. La versión vigente es la publicada en esta página, con su fecha de actualización.',
     ],
   },
+  {
+    id: 'contacto',
+    title: 'Contacto',
+    body: [
+      <>Si tienes preguntas sobre estos términos o sobre la información del sitio, escríbenos a <a href={`mailto:${EMAIL}`}>{EMAIL}</a> o visita la página de <Link to="/contacto">contacto</Link>.</>,
+    ],
+  },
 ];
 
 export default function TermsPage() {
-  usePageTitle('Términos y condiciones');
-  return <>
-    <PageHero eyebrow="INFORMACIÓN LEGAL" title="Términos y condiciones"
-      lead={<>Condiciones de uso de este sitio web y de su información. Sitio publicado bajo la licencia de <LicenseLink />.</>} />
-
-    <section className="terms-section section">
-      <div className="container terms__grid">
-        <nav className="terms__toc" aria-label="Contenido">
-          <p className="eyebrow">CONTENIDO</p>
-          <ol>{sections.map((section) => <li key={section.id}><Link to={`/terminos#termino-${section.id}`}>{section.title}</Link></li>)}<li><Link to="/terminos#termino-contacto">Contacto</Link></li></ol>
-        </nav>
-        <article className="terms__body">
-          <p className="terms__updated">Última actualización: {UPDATED}</p>
-          {sections.map((section, index) => <section id={`termino-${section.id}`} key={section.id}>
-            <h2><span>{String(index + 1).padStart(2, '0')}</span>{section.title}</h2>
-            {section.body.map((paragraph, paragraphIndex) => <p key={paragraphIndex}>{paragraph}</p>)}
-          </section>)}
-          <section id="termino-contacto">
-            <h2><span>{String(sections.length + 1).padStart(2, '0')}</span>Contacto</h2>
-            <p>Si tienes preguntas sobre estos términos o sobre la información del sitio, escríbenos a <a href={`mailto:${EMAIL}`}>{EMAIL}</a> o visita la página de <Link to="/contacto">contacto</Link>.</p>
-          </section>
-        </article>
-      </div>
-    </section>
-  </>;
+  return <LegalPage title="Términos y condiciones" path="/terminos" prefix="termino" updated={UPDATED} sections={sections}
+    lead={<>Condiciones de uso de este sitio web y de su información. Sitio publicado bajo la licencia de <LicenseLink />.</>} />;
 }

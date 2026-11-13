@@ -4,7 +4,9 @@ import ContactPage from './pages/Contact.jsx';
 import DeparturesPage from './pages/Departures.jsx';
 import GalleryPage from './pages/Gallery.jsx';
 import HomePage from './pages/Home.jsx';
+import PrivacyPage from './pages/Privacy.jsx';
 import TermsPage from './pages/Terms.jsx';
+import CookieNotice from './components/CookieNotice.jsx';
 import UploadPhotosPage from './pages/UploadPhotos.jsx';
 import { photos as fallbackPhotos } from './photos.js';
 import { Link, usePageTitle, useRouter } from './router.jsx';
@@ -50,10 +52,12 @@ export default function App() {
     '/galeria/subir': <UploadPhotosPage site={site} />,
     '/contacto': <ContactPage />,
     '/terminos': <TermsPage />,
+    '/privacidad': <PrivacyPage />,
   };
   return <>
     <Header />
     <main key={path}>{pages[path] || <NotFoundPage />}</main>
     <SiteFooter />
+    <CookieNotice />
   </>;
 }

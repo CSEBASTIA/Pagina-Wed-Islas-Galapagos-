@@ -58,7 +58,7 @@ export function SiteFooter() {
         <a href={FACEBOOK} target="_blank" rel="noopener noreferrer">Facebook</a>
       </div>
       <p className="footer__location">Puerto Villamil · Isla Isabela · Galápagos</p>
-      <p className="footer__copyright">© {new Date().getFullYear()} Golden Ray I · Sitio web bajo licencia de <LicenseLink /> · <Link to="/terminos">Términos y condiciones</Link></p>
+      <p className="footer__copyright">© {new Date().getFullYear()} Golden Ray I · Sitio web bajo licencia de <LicenseLink /> · <Link to="/terminos">Términos y condiciones</Link> · <Link to="/privacidad">Privacidad y cookies</Link></p>
     </div>
   </footer>;
 }

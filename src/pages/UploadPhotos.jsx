@@ -133,7 +133,7 @@ export default function UploadPhotosPage({ site }) {
 
           <label className="upload-consent">
             <input type="checkbox" checked={form.consent} onChange={(event) => setForm({ ...form, consent: event.target.checked })} />
-            <span>Confirmo que soy autor de estas fotos o tengo permiso para compartirlas, que las personas que aparecen están de acuerdo, y autorizo a Golden Ray I a publicarlas en este sitio. Acepto los <Link to="/terminos#termino-fotos">términos y condiciones</Link>.</span>
+            <span>Confirmo que soy autor de estas fotos o tengo permiso para compartirlas, que las personas que aparecen están de acuerdo, y autorizo a Golden Ray I a publicarlas en este sitio. Acepto los <Link to="/terminos#termino-fotos">términos y condiciones</Link> y la <Link to="/privacidad">política de privacidad</Link>.</span>
           </label>
 
           <button className="button button--dark" type="submit" disabled={sending || checking}>

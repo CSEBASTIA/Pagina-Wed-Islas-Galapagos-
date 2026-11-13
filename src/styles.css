@@ -305,6 +305,19 @@ body:has(dialog[open]){overflow:hidden}
 .terms__body p{color:#4f6965;font-size:.95rem}
 .terms__body p:last-child{margin-bottom:0}
 .terms__body a{color:#1d685f;text-decoration:underline}
+.terms__table{overflow-x:auto;margin:0 0 1em;border:1px solid #dae4df;border-radius:10px;background:#fff}
+.terms__table table{width:100%;border-collapse:collapse;font-size:.88rem;color:#4f6965}
+.terms__table th,.terms__table td{text-align:left;vertical-align:top;padding:13px 16px;border-top:1px solid #e5ece8}
+.terms__table thead th{border-top:0;background:#eef4ef;color:#183b40;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase}
+.terms__table tbody th{font-weight:700;color:#24484a;width:44%}
+.cookie-notice{position:fixed;left:16px;right:16px;bottom:16px;z-index:60;max-width:760px;margin:0 auto;display:flex;align-items:center;gap:20px;background:#fff;border:1px solid #cfdfd6;border-radius:14px;padding:18px 22px;box-shadow:0 22px 44px -22px rgba(17,52,49,.55)}
+.cookie-notice__text{flex:1;min-width:0}
+.cookie-notice__text strong{font:800 .95rem Manrope,sans-serif;color:#183b40}
+.cookie-notice__text p{margin:4px 0 0;font-size:.84rem;color:#4f6965}
+.cookie-notice__text a{color:#1d685f;text-decoration:underline;white-space:nowrap}
+.cookie-notice .button{flex:none}
+@media(max-width:560px){.cookie-notice{flex-direction:column;align-items:stretch;gap:14px;padding:16px}.cookie-notice__text a{white-space:normal}}
+@media print{.cookie-notice{display:none}}
 .footer__copyright a{text-decoration:underline}
 .footer__copyright a:hover{color:#fff}
 .about-section+.isabela-section{padding-top:0}
