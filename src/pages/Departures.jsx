@@ -27,11 +27,11 @@ function groupByMonth(departures) {
   return [...months].map(([key, items]) => ({ key, items }));
 }
 
+const listFormat = new Intl.ListFormat('es', { style: 'long', type: 'conjunction' });
+
 function summary(items) {
-  const counts = new Map();
-  for (const item of items) counts.set(item.tourTitle, (counts.get(item.tourTitle) || 0) + 1);
-  return [...counts].map(([title, count], index) =>
-    (index === 0 ? `${count} ${count === 1 ? 'salida' : 'salidas'} a ${title}` : `${count} a ${title}`)).join(' · ');
+  const places = [...new Set(items.flatMap((item) => item.names))];
+  return `${places.length === 1 ? 'Visitamos' : 'Este mes visitamos'} ${listFormat.format(places)}.`;
 }
 
 function weekdayShort(date) {
@@ -54,9 +54,12 @@ function MonthCard({ month }) {
           <small>{weekdayShort(trip.date)}</small>
         </span>
         <span className="trip__info">
-          <strong>{trip.tourTitle}</strong>
+          {trip.names.length > 1 && <span className="trip__badge">{trip.names.length} tours en una salida</span>}
+          <strong className="trip__route">{trip.names.map((name, index) => <span className="trip__stop" key={name}>
+            {index > 0 && <span className="trip__arrow" aria-hidden="true">→</span>}{name}<span className="visually-hidden">{index < trip.names.length - 1 ? ', ' : ''}</span>
+          </span>)}</strong>
           <span className="visually-hidden">{formatDate(trip.date, { weekday: 'long' })}</span>
-          <span>{trip.time} · {trip.spots} cupos</span>
+          <span className="trip__meta">Sale a las {trip.time} · {trip.spots} cupos</span>
           {trip.note && <em>{trip.note}</em>}
         </span>
         <a className="trip__cta" href={whatsappUrl(`Hola, quisiera consultar la salida de ${trip.tourTitle} del ${formatDate(trip.date)} a las ${trip.time}.`)} target="_blank" rel="noopener noreferrer" aria-label={`Consultar la salida de ${trip.tourTitle} del ${formatDate(trip.date)}`}>Consultar <span aria-hidden="true">→</span></a>
@@ -70,7 +73,10 @@ export default function DeparturesPage({ site }) {
   const { tours, loading, error } = site;
   const seen = new Set();
   const departures = tours.flatMap((tour) =>
-    (tour.departures || []).map((departure) => ({ ...departure, tourTitle: departure.stops.length ? departure.stops.join(' · ') : tour.title })))
+    (tour.departures || []).map((departure) => {
+      const names = departure.stops.length ? departure.stops : [tour.title];
+      return { ...departure, names, tourTitle: listFormat.format(names) };
+    }))
     .filter((departure) => !seen.has(departure.id) && seen.add(departure.id))
     .sort((a, b) => `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`));
   const months = groupByMonth(departures);
