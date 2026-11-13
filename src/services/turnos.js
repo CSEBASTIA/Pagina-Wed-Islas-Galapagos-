@@ -52,7 +52,16 @@ export function matchTour(name, tours) {
   if (wanted.length < 3) return null;
   return tours.find((tour) => normalize(tour.title) === wanted)
     || tours.find((tour) => { const title = normalize(tour.title); return title.includes(wanted) || wanted.includes(title); })
+    || tours.find((tour) => sameWords(wanted, normalize(tour.title)))
     || null;
+}
+
+// «Cormorant» y «Cormoranes» son el mismo sitio: basta con que cada palabra
+// escrita empiece igual (6 letras) que alguna palabra del título.
+function sameWords(wanted, title) {
+  const words = wanted.split(' ').filter((word) => word.length >= 6);
+  const titleWords = title.split(' ');
+  return words.length > 0 && words.every((word) => titleWords.some((other) => other.slice(0, 6) === word.slice(0, 6)));
 }
 
 // Convierte los nombres escritos en una salida: el primer tour reconocido es el

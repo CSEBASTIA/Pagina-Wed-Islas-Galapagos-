@@ -30,6 +30,11 @@ test('reconoce el tour aunque el nombre venga abreviado o sin tildes', () => {
   assert.equal(matchTour('Cormorant', tours).id, 'punta-cormorant');
   assert.equal(matchTour('tuneles', tours).id, 'los-tuneles');
   assert.equal(matchTour('Finado', tours), null);
+  const renamed = [{ id: 'punta-cormorant', title: 'Playa de los Cormoranes' }, { id: 'el-finado', title: 'El Finado' }, { id: 'caleta-iguana', title: 'Caleta Iguana' }];
+  assert.equal(matchTour('Cormorant', renamed).id, 'punta-cormorant');
+  assert.equal(matchTour('Caleta iguana', renamed).id, 'caleta-iguana');
+  assert.equal(matchTour('Finado', renamed).id, 'el-finado');
+  assert.equal(matchTour('Tintoreras', renamed), null);
 });
 
 test('arma una salida de varios tours o de uno solo', () => {
