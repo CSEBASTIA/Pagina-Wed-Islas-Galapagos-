@@ -68,8 +68,10 @@ function MonthCard({ month }) {
 export default function DeparturesPage({ site }) {
   usePageTitle('Próximas salidas');
   const { tours, loading, error } = site;
+  const seen = new Set();
   const departures = tours.flatMap((tour) =>
-    (tour.departures || []).map((departure) => ({ ...departure, tourTitle: tour.title })))
+    (tour.departures || []).map((departure) => ({ ...departure, tourTitle: departure.stops.length ? departure.stops.join(' · ') : tour.title })))
+    .filter((departure) => !seen.has(departure.id) && seen.add(departure.id))
     .sort((a, b) => `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`));
   const months = groupByMonth(departures);
 

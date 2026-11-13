@@ -27,6 +27,7 @@ export function toDeparture(row) {
   return {
     id: row.id,
     tourId: row.tour_id,
+    stops: row.stops || [],
     date: row.departs_on,
     time: String(row.departs_at).slice(0, 5),
     spots: row.spots,
@@ -40,7 +41,8 @@ export function buildSite(tourRows, departureRows, resolveImage) {
   const departures = departureRows.map(toDeparture).sort(byDateTime);
   return tourRows.map((row) => ({
     ...toTour(row, resolveImage),
-    departures: departures.filter((departure) => departure.tourId === row.id),
+    // Una salida combinada aparece en cada uno de los tours que recorre.
+    departures: departures.filter((departure) => departure.tourId === row.id || departure.stops.includes(row.title)),
   }));
 }
 

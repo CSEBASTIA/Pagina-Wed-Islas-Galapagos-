@@ -21,6 +21,14 @@ test('agrupa las salidas por tour, ordenadas y con la hora en HH:MM', () => {
   assert.equal(site[1].departures.length, 0);
 });
 
+test('una salida combinada aparece en cada tour que recorre', () => {
+  const site = buildSite([tourRow, { ...tourRow, id: 'tintoreras', title: 'Tintoreras' }, { ...tourRow, id: 'sierra-negra', title: 'Sierra Negra' }], [
+    { id: 'a', tour_id: 'los-tuneles', stops: ['Los Túneles', 'Tintoreras', 'Finado'], departs_on: '2026-12-04', departs_at: '08:00:00', spots: 10, note: '' },
+  ]);
+  assert.deepEqual(site.map((tour) => tour.departures.length), [1, 1, 0]);
+  assert.deepEqual(site[1].departures[0].stops, ['Los Túneles', 'Tintoreras', 'Finado']);
+});
+
 test('convierte fotos de la galería', () => {
   const photo = toGalleryPhoto({ id: '1', image: 'equipo/a.jpg', title: 'A', detail: null, category: 'Paisajes', featured: true }, (p) => `/x/${p}`);
   assert.deepEqual(photo, { id: '1', src: '/x/equipo/a.jpg', title: 'A', detail: '', category: 'Paisajes', featured: true });

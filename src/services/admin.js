@@ -1,5 +1,6 @@
 import { GALLERY_BUCKET, imageUrl, supabase } from '../lib/supabase.js';
 import { friendlyError, slugify, toDeparture, toGalleryPhoto, toTour, todayInGalapagos, uniqueSlug } from './mappers.js';
+import { MAX_STOPS } from './turnos.js';
 
 // Fotos del sitio que se pueden asignar a un tour (además de las de la galería).
 const siteImages = [
@@ -130,15 +131,20 @@ export async function deleteTour(id) {
   requireRows(data, 'No se eliminó el tour: puede que ya no exista o que tu sesión no tenga permisos.');
 }
 
-export async function saveDeparture(form, editingId) {
-  if (!form.tourId) throw new Error('Selecciona un tour.');
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(form.date) || form.date < todayInGalapagos()) {
-    throw new Error('Elige una fecha desde hoy en adelante.');
-  }
+function departureRow(form, today) {
+  if (!form.tourId) throw new Error('Cada salida necesita al menos un tour del sitio. Revisa cómo está escrito el nombre.');
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(form.date) || form.date < today) throw new Error('Elige una fecha desde hoy en adelante.');
   if (!/^\d{2}:\d{2}/.test(form.time)) throw new Error('Indica la hora de salida.');
   const spots = Number(form.spots);
   if (!Number.isInteger(spots) || spots < 1 || spots > 99) throw new Error('Los cupos deben estar entre 1 y 99.');
-  const row = { tour_id: form.tourId, departs_on: form.date, departs_at: form.time, spots, note: form.note.trim() };
+  const stops = form.stops || [];
+  if (stops.length > MAX_STOPS) throw new Error(`Una salida puede tener hasta ${MAX_STOPS} tours.`);
+  if (stops.some((stop) => stop.length > 40)) throw new Error('Cada nombre de tour puede tener hasta 40 caracteres.');
+  return { tour_id: form.tourId, stops, departs_on: form.date, departs_at: form.time, spots, note: (form.note || '').trim() };
+}
+
+export async function saveDeparture(form, editingId) {
+  const row = departureRow(form, todayInGalapagos());
   if (editingId) {
     const { data, error } = await supabase.from('departures').update(row).eq('id', editingId).select('id');
     if (error) fail(error);
@@ -146,6 +152,15 @@ export async function saveDeparture(form, editingId) {
     return;
   }
   const { error } = await supabase.from('departures').insert(row);
+  if (error) fail(error);
+}
+
+// Todas o ninguna: un solo insert para que un error no deje la lista a medias.
+export async function saveDepartures(forms) {
+  if (!forms.length) throw new Error('No hay salidas para guardar.');
+  const today = todayInGalapagos();
+  const rows = forms.map((form) => departureRow(form, today));
+  const { error } = await supabase.from('departures').insert(rows);
   if (error) fail(error);
 }
 

@@ -2,7 +2,7 @@ import { imageUrl, supabase } from '../lib/supabase.js';
 import { buildSite, todayInGalapagos, toGalleryPhoto } from './mappers.js';
 
 const TOUR_FIELDS = 'id,title,destination,description,duration,difficulty,highlights,image,active,sort_order';
-const DEPARTURE_FIELDS = 'id,tour_id,departs_on,departs_at,spots,note';
+const DEPARTURE_FIELDS = 'id,tour_id,stops,departs_on,departs_at,spots,note';
 
 export async function fetchSite() {
   const [tours, departures] = await Promise.all([

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Brand } from '../components/Layout.jsx';
 import GalleryTab from './admin/GalleryTab.jsx';
+import ImportTurnos from './admin/ImportTurnos.jsx';
 import MfaCard from './admin/MfaCard.jsx';
 import { photoCategories } from '../photos.js';
 import {
@@ -8,12 +9,13 @@ import {
   rejectPhoto, saveDeparture, saveTour, signIn, signOut, startMfaEnrollment, verifyMfaCode,
 } from '../services/admin.js';
 import { todayInGalapagos } from '../services/mappers.js';
+import { departureTitle, resolveStops, splitStops } from '../services/turnos.js';
 import { formatDate } from '../site.js';
 
 const blankTour = {
   title: '', destination: '', description: '', duration: '', difficulty: 'Fácil', highlightsText: '', image: '/images/Cuatro hermanos.jpeg', active: true,
 };
-const blankDeparture = { tourId: '', date: '', time: '08:00', spots: 10, note: '' };
+const blankDeparture = { route: '', date: '', time: '08:00', spots: 10, note: '' };
 const emptyData = { tours: [], departures: [], imageChoices: [] };
 const formatDateTime = (value) => new Intl.DateTimeFormat('es-EC', {
   day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit', timeZone: 'Pacific/Galapagos',
@@ -125,7 +127,7 @@ export default function ManageSite() {
   function submitDeparture(event) {
     event.preventDefault();
     act(async () => {
-      await saveDeparture(departureForm, editingDeparture);
+      await saveDeparture({ ...departureForm, tourId: route.tourId, stops: route.stops }, editingDeparture);
       setEditingDeparture(''); setDepartureForm(blankDeparture);
     }, editingDeparture ? 'Salida actualizada.' : 'Salida agregada.');
   }
@@ -151,7 +153,7 @@ export default function ManageSite() {
 
   function editDeparture(departure) {
     setEditingDeparture(departure.id);
-    setDepartureForm({ tourId: departure.tourId, date: departure.date, time: departure.time, spots: departure.spots, note: departure.note });
+    setDepartureForm({ route: departureTitle(departure, data.tours).replaceAll(' · ', '. '), date: departure.date, time: departure.time, spots: departure.spots, note: departure.note });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -177,7 +179,9 @@ export default function ManageSite() {
   const imageChoices = data.imageChoices.some((choice) => choice.value === tourForm.image)
     ? data.imageChoices
     : [{ value: tourForm.image, label: decodeURIComponent(tourForm.image.split('/').pop()) }, ...data.imageChoices];
-  const upcoming = data.departures.filter((departure) => departure.date >= today).length;
+  const route = resolveStops(splitStops(departureForm.route), data.tours);
+  const addToRoute = (tour) => setDepartureForm({ ...departureForm, route: [...splitStops(departureForm.route), tour.title].join('. ') });
+  const upcoming =data.departures.filter((departure) => departure.date >= today).length;
   const pendingPhotos = submissions.reduce((sum, item) => sum + item.photos.length, 0);
   const tabs = [
     ['fotos', 'Fotos de visitantes', pendingPhotos],
@@ -251,10 +255,17 @@ export default function ManageSite() {
       </section>
       </>}
       {tab === 'galeria' && <GalleryTab photos={gallery} tours={data.tours} busy={busy} act={act} />}
+      {tab === 'salidas' && <ImportTurnos tours={data.tours} departures={data.departures} today={today} busy={busy} act={act} />}
       {tab === 'salidas' && <div className="manage-grid">
         <section className="manage-panel"><div className="manage-panel__heading"><h2>{editingDeparture ? 'Editar salida' : 'Agregar salida'}</h2><p>Publica fechas concretas y cupos disponibles.</p></div>
           <form onSubmit={submitDeparture} className="form-grid">
-            <label className="form-grid__wide">Tour<select required value={departureForm.tourId} onChange={(e) => setDepartureForm({ ...departureForm, tourId: e.target.value })}><option value="">Selecciona un tour</option>{data.tours.map((tour) => <option key={tour.id} value={tour.id}>{tour.title}{tour.active ? '' : ' (oculto)'}</option>)}</select></label>
+            <label className="form-grid__wide">Tour o tours de la salida (varios: sepáralos con puntos)<input required maxLength="200" placeholder="Ej. Túneles — o varios: Cormorant. Túneles. Finado" value={departureForm.route} onChange={(e) => setDepartureForm({ ...departureForm, route: e.target.value })} /></label>
+            <div className="route-picker form-grid__wide">
+              <div className="route-picker__tours">{data.tours.map((tour) => <button type="button" key={tour.id} onClick={() => addToRoute(tour)}>+ {tour.title}{tour.active ? '' : ' (oculto)'}</button>)}</div>
+              {route.title && <p role="status">{route.tourId
+                ? <>Se publicará como <strong>{route.title}</strong>{route.unknown.length > 0 && ` (${route.unknown.join(', ')} no ${route.unknown.length === 1 ? 'es un tour' : 'son tours'} del sitio: se muestra con ese nombre)`}</>
+                : 'Ningún nombre coincide con un tour del sitio. Incluye al menos uno de los tours de arriba.'}</p>}
+            </div>
             <label>Fecha<input required type="date" min={today} value={departureForm.date} onChange={(e) => setDepartureForm({ ...departureForm, date: e.target.value })} /></label>
             <label>Hora<input required type="time" value={departureForm.time} onChange={(e) => setDepartureForm({ ...departureForm, time: e.target.value })} /></label>
             <label>Cupos<input required type="number" min="1" max="99" value={departureForm.spots} onChange={(e) => setDepartureForm({ ...departureForm, spots: e.target.value })} /></label>
@@ -264,7 +275,7 @@ export default function ManageSite() {
         </section>
         <section className="manage-panel"><h2>Salidas ({upcoming} próximas)</h2>
           <div className="manage-list">{data.departures.map((departure) => <div className={`manage-row ${departure.date < today ? 'manage-row--past' : ''}`} key={departure.id}>
-            <div><strong>{formatDate(departure.date)} · {departure.time}</strong><span>{data.tours.find((tour) => tour.id === departure.tourId)?.title || 'Tour eliminado'} · {departure.spots} cupos{departure.date < today ? ' · Pasada' : ''}</span></div>
+            <div><strong>{formatDate(departure.date)} · {departure.time}</strong><span>{departureTitle(departure, data.tours)} · {departure.spots} cupos{departure.date < today ? ' · Pasada' : ''}</span></div>
             <div><button type="button" onClick={() => editDeparture(departure)}>Editar</button><button type="button" className="danger" onClick={() => removeDeparture(departure)}>Eliminar</button></div>
           </div>)}{data.departures.length === 0 && <p>Todavía no hay salidas publicadas.</p>}</div>
         </section>

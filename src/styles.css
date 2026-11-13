@@ -193,6 +193,11 @@ p{line-height:1.7}
 .manage-row>div:last-child{display:flex;gap:11px;align-items:center}
 .manage-row button{background:transparent;border:0;color:#226d60;font-weight:800;font-size:.75rem}
 .manage-row button.danger{color:#b4483e}
+.turnos-list{margin-top:0}
+.route-picker{margin-top:-8px}
+.route-picker__tours{display:flex;flex-wrap:wrap;gap:8px}
+.route-picker__tours button{background:#eef5f0;border:1px solid #cfe0d4;border-radius:999px;color:#226d60;font-weight:700;font-size:.75rem;padding:6px 12px;cursor:pointer}
+.route-picker p{font-size:.8rem;color:#55706a;margin:12px 0 0}
 .page-hero{position:relative;min-height:400px;display:flex;align-items:flex-end;overflow:hidden;background:#14343a;color:#fff}
 .page-hero__image,.page-hero__shade{position:absolute;inset:0;width:100%;height:100%}
 .page-hero__image{object-fit:cover}
