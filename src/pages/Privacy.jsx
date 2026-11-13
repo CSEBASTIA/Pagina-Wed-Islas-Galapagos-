@@ -39,14 +39,14 @@ const sections = [
     id: 'conservacion',
     title: 'Cuánto tiempo guardamos los datos',
     body: [
-      'Guardamos cada dato solo el tiempo necesario para la finalidad con la que se recogió. Estos son los plazos:',
+      'Estos son los plazos de cada dato. En todos los casos puedes pedirnos que lo borremos antes:',
       {
         head: ['Dato', 'Cuánto tiempo se guarda'],
         rows: [
           ['Fotos enviadas que aún no hemos revisado, con su nombre y comentario', 'Hasta 30 días. Si no se revisan en ese plazo, se borran.'],
-          ['Fotos rechazadas', 'El archivo se borra en el momento del rechazo. El registro del envío (nombre y comentario) se borra como máximo 30 días después.'],
+          ['Fotos rechazadas', 'El archivo se borra en el momento del rechazo. El registro del envío (nombre y comentario) se conserva mientras el sitio esté activo; si pides que lo borremos, lo hacemos en un máximo de 15 días.'],
           ['Fotos publicadas en la galería, con su crédito y la fecha de autorización', 'Mientras la foto esté publicada. Si pides retirarla, la quitamos y borramos sus datos en un máximo de 15 días.'],
-          ['Huella cifrada de la dirección IP', '30 días desde el envío.'],
+          ['Huella cifrada de la dirección IP', 'Junto con el registro del envío, mientras el sitio esté activo. Si pides que la borremos, lo hacemos en un máximo de 15 días.'],
           ['Conversaciones por WhatsApp, correo o redes sociales', 'Mientras dure tu consulta o tu salida y hasta 12 meses después de la última conversación.'],
           ['Aviso de cookies visto', 'Se guarda solo en tu navegador, hasta que borres los datos del sitio.'],
           ['Registros técnicos de la conexión', 'Los guardan nuestros proveedores durante el plazo que fijan sus propias políticas.'],
